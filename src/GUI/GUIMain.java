@@ -57,5 +57,9 @@ public void start(Stage primaryStage){
             graphics.draw(new Line2D.Double(i,0,i,900));
         }
 
+        for (int i = 0; i < 900; i+=50) {
+            graphics.setColor(Color.blue);
+            graphics.draw(new Line2D.Double(0,i,1200,i));
+        }
     }
 }
