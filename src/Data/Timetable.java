@@ -5,22 +5,22 @@ import java.util.ArrayList;
 
 public class Timetable implements Serializable {
 
-    private ArrayList<Event> events;
+    private ArrayList<Lesson> lessons;
 
     public Timetable(){
-        this.events = new ArrayList<Event>();
-    }
-
-    public void addEvent(Event event){
-        this.events.add(event);
+        this.lessons = new ArrayList<Lesson>();
     }
 
     public ArrayList<Room> getAllRooms(){
         ArrayList<Room> rooms = new ArrayList<>();
-        for (Event event : events){
-            rooms.add(event.getRoom());
+        for (Lesson lesson : lessons) {
+            rooms.add(lesson.getRoom());
         }
         return rooms;
+    }
+
+    public void addLesson(Lesson lesson){
+        lessons.add(lesson);
     }
 
     public void loadTimetableFromFila(String filepath){
