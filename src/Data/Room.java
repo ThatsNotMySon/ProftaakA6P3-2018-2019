@@ -28,9 +28,8 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room{" +
+        return "\nRoom: " +
                 "name='" + name + '\'' +
-                ", capacity=" + capacity +
-                '}';
+                ", capacity=" + capacity;
     }
 }
