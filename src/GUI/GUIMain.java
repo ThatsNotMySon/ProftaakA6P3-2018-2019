@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.*;
 import java.awt.geom.Line2D;
 
 public class GUIMain  extends Application {
@@ -52,6 +53,9 @@ public void start(Stage primaryStage){
 
     public void draw(FXGraphics2D graphics) {
 
+        for (int i = 0; i < 1200 ; i+= 300) {
+            graphics.draw(new Line2D.Double(i,0,i,900));
+        }
 
     }
 }
