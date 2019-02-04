@@ -30,4 +30,27 @@ public class Timetable implements Serializable {
     public void saveTimetableToFile(String filepath){
 
     }
+
+    @Override
+    public String toString() {
+        String output = "Timetable:" +
+                "\n";
+        for (Lesson lesson : lessons){
+            int amountOfStudents = 0;
+
+
+            output += "\nLesson: " + "startTime = " + lesson.getStartTime() +
+                    ", duration = " + lesson.getDuration() +
+                    ", teacher = " + lesson.getTeacher() +
+                    ", subject = " + lesson.getSubject() +
+                    "\nRoom: name = " + lesson.getRoom().getName() +
+                    ", capacity = " + lesson.getRoom().getCapacity();
+
+            for (Group group: lesson.getGroup()){
+                output += group;
+            }
+            output += "\n";
+        }
+        return output;
+    }
 }
