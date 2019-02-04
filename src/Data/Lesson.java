@@ -1,8 +1,9 @@
 package Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Lesson {
+public class Lesson implements Serializable {
 
     private LocalDateTime startTime;
     private int duration;
