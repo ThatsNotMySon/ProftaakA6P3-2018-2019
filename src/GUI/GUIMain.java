@@ -38,9 +38,9 @@ public void start(Stage primaryStage){
         Menu simulation = new Menu("Simulation");
 
         menubar.getMenus().add(file);
-        menubar.getMenus().add(rooms);
-        menubar.getMenus().add(group);
-        menubar.getMenus().add(simulation);
+ //       menubar.getMenus().add(rooms);
+ //       menubar.getMenus().add(group);
+    //      menubar.getMenus().add(simulation);
 
         draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
         primaryStage.setScene(scene);
