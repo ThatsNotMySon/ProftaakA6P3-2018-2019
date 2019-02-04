@@ -2,11 +2,12 @@ package Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Lesson implements Serializable {
 
-    private LocalDateTime startTime;
+    private LocalTime startTime;
     private int duration;
     private String teacher;
     private String subject;
@@ -14,7 +15,7 @@ public class Lesson implements Serializable {
     private ArrayList<Group> group;
 
 
-    public Lesson(LocalDateTime startTime, int duration, String teacher, String subject, Room room, ArrayList<Group> group) {
+    public Lesson(LocalTime startTime, int duration, String teacher, String subject, Room room, ArrayList<Group> group) {
         this.startTime = startTime;
         this.duration = duration;
         this.teacher = teacher;
@@ -23,7 +24,7 @@ public class Lesson implements Serializable {
         this.group = group;
     }
 
-    public Lesson(LocalDateTime startTime, int duration, String teacher, String subject, Room room, Group group) {
+    public Lesson(LocalTime startTime, int duration, String teacher, String subject, Room room, Group group) {
         this.startTime = startTime;
         this.duration = duration;
         this.teacher = teacher;
@@ -33,11 +34,11 @@ public class Lesson implements Serializable {
         this.group.add(group);
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
@@ -51,14 +52,13 @@ public class Lesson implements Serializable {
 
     @Override
     public String toString() {
-        return "Lesson{" +
+        return "\nLesson: " +
                 "startTime=" + startTime +
                 ", duration=" + duration +
                 ", teacher='" + teacher + '\'' +
                 ", subject='" + subject + '\'' +
-                ", room=" + room +
-                ", group=" + group +
-                '}';
+                room +
+                group ;
     }
 
     public String getTeacher() {

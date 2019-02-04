@@ -30,9 +30,8 @@ public class Group implements Serializable {
 
     @Override
     public String toString() {
-        return "Group{" +
+        return "\nGroup: " +
                 "name='" + name + '\'' +
-                ", amountOfStudents=" + amountOfStudents +
-                '}';
+                ", amountOfStudents=" + amountOfStudents;
     }
 }
