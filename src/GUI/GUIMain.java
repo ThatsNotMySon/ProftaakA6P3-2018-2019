@@ -1,34 +1,34 @@
 package GUI;
 
-import Data.Group;
-import Data.Lesson;
-import Data.Room;
-import Data.Timetable;
+import Data.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
-import java.awt.*;
 import java.awt.geom.Line2D;
 import java.time.LocalTime;
 
 public class GUIMain  extends Application {
 
     private Canvas canvas;
+    private DataController dataController;
 
-@Override
+    private void onStart() {
+        this.dataController = new DataController();
+    }
+
+    @Override
 public void start(Stage primaryStage){
 
-        this.canvas = new Canvas(1200  ,900);
+        this.onStart();
 
+        this.canvas = new Canvas(1200  ,900);
 
         MenuBar menubar = new MenuBar();
         VBox vBox = new VBox(menubar);
@@ -64,12 +64,7 @@ public void start(Stage primaryStage){
     int hours = 0;
     int minuten = 0;
 
-    Timetable timetable = new Timetable();
-        timetable.addLesson(new Lesson(LocalTime.of(9,30), 60, "Johan Talboom", "JavaFX", new Room("ld120", 15), new Group("A6", 6)));
-        timetable.addLesson(new Lesson(LocalTime.of(10,30), 60, "Johan Talboom", "JavaFX", new Room("ld121", 15), new Group("A5", 6)));
-        timetable.addLesson(new Lesson(LocalTime.of(11,30), 60, "Johan Talboom", "JavaFX", new Room("ld122", 15), new Group("A4", 6)));
-
-
+    Timetable timetable = dataController.getTimeTable();
 
         graphics.draw(new Line2D.Double(50, 0, 50, this.canvas.getHeight()));
 
