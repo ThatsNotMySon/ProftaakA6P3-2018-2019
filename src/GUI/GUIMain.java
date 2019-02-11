@@ -14,6 +14,7 @@ import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.time.LocalTime;
 
 public class GUIMain  extends Application {
 
@@ -52,14 +53,32 @@ public void start(Stage primaryStage){
 
 
     public void draw(FXGraphics2D graphics) {
+    int time = 300;
+    int pixelVerticaal = 0;
+    int hours = 0;
+    int minuten = 0;
 
         for (int i = 0; i < 1200 ; i+= 300) {
             graphics.draw(new Line2D.Double(i,0,i,900));
         }
 
-        for (int i = 0; i < 900; i+=50) {
-            graphics.setColor(Color.blue);
-            graphics.draw(new Line2D.Double(0,i,1200,i));
+
+
+        for (int i = 0; i <26; i++) {
+            time = time + 30;
+            pixelVerticaal = i*((int)this.canvas.getHeight()/26); //gedeeld door de maximum i
+
+
+            if (time%60 == 0){
+                hours = time/60;
+                minuten = 00;
+            } else {
+                hours = time/60;
+                minuten = 30;
+            }
+
+            graphics.draw(new Line2D.Double(0,pixelVerticaal,1200,pixelVerticaal));
+            graphics.drawString(LocalTime.of(hours, minuten).toString(), 0, pixelVerticaal);
         }
     }
 }
