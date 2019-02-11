@@ -42,6 +42,8 @@ public class GUIMain  extends Application {
 
         tabPane.getTabs().addAll(agendaTab, tableTab, roomTab, groupTab, lessonTab, simulationTab);
 
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(tabPane);
         borderPane.setCenter(canvas);
