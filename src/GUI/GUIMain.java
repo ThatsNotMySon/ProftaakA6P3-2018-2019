@@ -10,11 +10,12 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.time.LocalTime;
 
@@ -54,9 +55,25 @@ public void start(Stage primaryStage){
         BorderPane agendaPane = new BorderPane(canvas);
         BorderPane tablePane = new BorderPane(new Label("Tabel"));
         BorderPane roomPane = new BorderPane(new Label("Lokaal"));
-        BorderPane groupPane = new BorderPane(new Label("Klas"));
+        GridPane groupPane = new GridPane();
         BorderPane lessonPane = new BorderPane(new Label("Les"));
         BorderPane simulationPane = new BorderPane(new Label("Work in progress :)"));
+
+        Label nameClassLabel = new Label("Name class: ");
+        Label amountOfStudentsLabel = new Label("Amount of students: ");
+
+        TextField nameClassField = new TextField("class");
+        TextField amountOfStudentsField = new TextField("amount");
+
+        Button buttonAddClass = new Button("add");
+
+        groupPane.add(nameClassLabel, 1, 1);
+        groupPane.add(nameClassField, 2,1);
+        groupPane.add(amountOfStudentsLabel, 1,2);
+        groupPane.add(amountOfStudentsField, 2, 2);
+        groupPane.add(buttonAddClass, 2,3);
+
+
 
         agendaTab.setContent(agendaPane);
         tableTab.setContent(tablePane);
