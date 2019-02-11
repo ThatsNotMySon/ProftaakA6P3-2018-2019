@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -24,29 +26,27 @@ public class GUIMain  extends Application {
 
     private Canvas canvas;
 
-@Override
-public void start(Stage primaryStage){
+    @Override
+    public void start(Stage primaryStage){
 
         this.canvas = new Canvas(1200  ,900);
 
+        TabPane tabPane = new TabPane();
 
-        MenuBar menubar = new MenuBar();
-        VBox vBox = new VBox(menubar);
+        Tab agendaTab = new Tab("Agenda");
+        Tab tableTab = new Tab("Tabel");
+        Tab roomTab = new Tab("Lokalen");
+        Tab groupTab = new Tab("Klassen");
+        Tab lessonTab = new Tab("Lessen");
+        Tab simulationTab = new Tab("Simulatie");
+
+        tabPane.getTabs().addAll(agendaTab, tableTab, roomTab, groupTab, lessonTab, simulationTab);
+
         BorderPane borderPane = new BorderPane();
-        borderPane.setTop(vBox);
+        borderPane.setTop(tabPane);
         borderPane.setCenter(canvas);
 
         Scene scene = new Scene(borderPane);
-
-        Menu file = new Menu("File");
-        Menu rooms = new Menu("Rooms");
-        Menu group = new Menu("Group");
-        Menu simulation = new Menu("Simulation");
-
-        menubar.getMenus().add(file);
- //       menubar.getMenus().add(rooms);
- //       menubar.getMenus().add(group);
-    //      menubar.getMenus().add(simulation);
 
         draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
         primaryStage.setScene(scene);

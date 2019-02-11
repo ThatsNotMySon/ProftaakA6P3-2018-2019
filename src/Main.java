@@ -18,7 +18,7 @@ import static javafx.application.Application.launch;
 public class Main {
 
     public static void main(String[] args) {
-       //launch(GUIMain.class);
+       launch(GUIMain.class);
 
         Timetable timetable = new Timetable();
         timetable.loadTimetableFromFile("src/Data/standaardLessen.txt");
