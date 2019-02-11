@@ -90,9 +90,27 @@ public void start(Stage primaryStage){
         vBoxLessons.setSpacing(5);
         hBoxLessons.setSpacing(25);
 
+        Button openFile = new Button("Open File");
+        Button saveFile = new Button("Save File");
+
+        TableView tableViewTableTab = new TableView();
+
+        TableColumn columnGroups = new TableColumn("Klas");
+        TableColumn columnRooms = new TableColumn("Lokaal");
+        TableColumn columnStartTime = new TableColumn("Starttijd");
+        TableColumn columnEndTime = new TableColumn("Eindtijd");
+        TableColumn columnLengthTime = new TableColumn("Lengte");
+
+        tableViewTableTab.getColumns().addAll(columnGroups, columnRooms, columnStartTime, columnEndTime, columnLengthTime);
+
+        HBox hBoxTableFiles = new HBox(openFile, saveFile);
+        VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab);
+        hBoxTableFiles.setSpacing(50);
+        vBoxTable.setSpacing(25);
+
 
         BorderPane agendaPane = new BorderPane(canvas);
-        BorderPane tablePane = new BorderPane(new Label("Tabel"));
+        BorderPane tablePane = new BorderPane(vBoxTable);
         BorderPane roomPane = new BorderPane(new Label("Lokaal"));
         BorderPane groupPane = new BorderPane(new Label("Klas"));
         BorderPane lessonPane = new BorderPane(hBoxLessons);
