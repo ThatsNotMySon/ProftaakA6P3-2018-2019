@@ -30,11 +30,11 @@ public void start(Stage primaryStage){
         this.onStart();
 
         ArrayList<String> roomsArray = new ArrayList<>();
+        ArrayList<Room> rooms = this.dataController.getTimeTable().getAllRooms();
+        for (int i = 0; i < rooms.size(); i++) {
+            roomsArray.add(rooms.get(i).getName());
+        }
         ArrayList<String> groupsArray = new ArrayList<>();
-
-        roomsArray.add(new  Room("LD129", 36).getName());
-        roomsArray.add(new  Room("HA418", 36).getName());
-        roomsArray.add(new  Room("LD136", 36).getName());
 
         groupsArray.add(new Group("A6", 6).getName());
         groupsArray.add(new Group("B5", 6).getName());
