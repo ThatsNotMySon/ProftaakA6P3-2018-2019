@@ -7,8 +7,12 @@ import Data.Timetable;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -16,7 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
-import java.awt.*;
 import java.awt.geom.Line2D;
 import java.time.LocalTime;
 
@@ -24,29 +27,41 @@ public class GUIMain  extends Application {
 
     private Canvas canvas;
 
-@Override
-public void start(Stage primaryStage){
+    @Override
+    public void start(Stage primaryStage){
 
         this.canvas = new Canvas(1200  ,900);
 
+        TabPane tabPane = new TabPane();
 
-        MenuBar menubar = new MenuBar();
-        VBox vBox = new VBox(menubar);
+        Tab agendaTab = new Tab("Agenda");
+        Tab tableTab = new Tab("Tabel");
+        Tab roomTab = new Tab("Lokalen");
+        Tab groupTab = new Tab("Klassen");
+        Tab lessonTab = new Tab("Lessen");
+        Tab simulationTab = new Tab("Simulatie");
+
+        tabPane.getTabs().addAll(agendaTab, tableTab, roomTab, groupTab, lessonTab, simulationTab);
+
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
         BorderPane borderPane = new BorderPane();
-        borderPane.setTop(vBox);
-        borderPane.setCenter(canvas);
-
+        borderPane.setTop(tabPane);
         Scene scene = new Scene(borderPane);
 
-        Menu file = new Menu("File");
-        Menu rooms = new Menu("Rooms");
-        Menu group = new Menu("Group");
-        Menu simulation = new Menu("Simulation");
+        BorderPane agendaPane = new BorderPane(canvas);
+        BorderPane tablePane = new BorderPane(new Label("Tabel"));
+        BorderPane roomPane = new BorderPane(new Label("Lokaal"));
+        BorderPane groupPane = new BorderPane(new Label("Klas"));
+        BorderPane lessonPane = new BorderPane(new Label("Les"));
+        BorderPane simulationPane = new BorderPane(new Label("Work in progress :)"));
 
-        menubar.getMenus().add(file);
- //       menubar.getMenus().add(rooms);
- //       menubar.getMenus().add(group);
-    //      menubar.getMenus().add(simulation);
+        agendaTab.setContent(agendaPane);
+        tableTab.setContent(tablePane);
+        roomTab.setContent(roomPane);
+        groupTab.setContent(groupPane);
+        lessonTab.setContent(lessonPane);
+        simulationTab.setContent(simulationPane);
 
         draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
         primaryStage.setScene(scene);
@@ -58,6 +73,7 @@ public void start(Stage primaryStage){
 
 
     public void draw(FXGraphics2D graphics) {
+
     int time = 300;
     int pixelVertical = (int)this.canvas.getHeight()/27;
     int pixelHorizontal = 0;
