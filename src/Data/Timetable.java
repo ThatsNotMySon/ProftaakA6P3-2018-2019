@@ -11,9 +11,13 @@ import java.util.Scanner;
 public class Timetable implements Serializable {
 
     private ArrayList<Lesson> lessons;
+    private ArrayList<Room> rooms;
+    private ArrayList<Group> groups;
 
     public Timetable(){
-        this.lessons = new ArrayList<Lesson>();
+        this.lessons = new ArrayList<>();
+        this.rooms = new ArrayList<>();
+        this.groups = new ArrayList<>();
     }
 
     public ArrayList<Room> getAllRooms(){
@@ -62,7 +66,7 @@ public class Timetable implements Serializable {
                         groupName = lineParts[1];
                         amountOfStudents = Integer.parseInt(lineParts[2]);
                     } else if (lineParts[0].equals("endLesson")){
-                        addLesson(new Lesson(time, duration,teacher,subject, new Room(roomName,capacity), new Group(groupName, amountOfStudents)));
+                        addLesson(new Lesson(time, duration,teacher,subject, addRoom(roomName,capacity), addGroup(groupName, amountOfStudents)));
                     }
                 }
             }
@@ -101,6 +105,31 @@ public class Timetable implements Serializable {
             e.printStackTrace();
         }
     }
+
+    public Room addRoom(String name, int capacity){
+        for (Room room : rooms) {
+            if(room.getName().equals(name)){
+                return room;
+            }
+        }
+        Room newRoom = new Room(name, capacity);
+        this.rooms.add(newRoom);
+        return newRoom;
+
+    }
+
+    public Group addGroup(String name, int amountOfStudents){
+        for (Group group : groups) {
+            if(group.getName().equals(name)){
+                return group;
+            }
+        }
+
+        Group newGroup = new Group(name, amountOfStudents);
+        this.groups.add(newGroup);
+        return newGroup;
+    }
+
 
     @Override
     public String toString() {
