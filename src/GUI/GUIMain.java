@@ -59,7 +59,7 @@ public void start(Stage primaryStage){
 
     public void draw(FXGraphics2D graphics) {
     int time = 300;
-    int pixelVertical = 0;
+    int pixelVertical = (int)this.canvas.getHeight()/26;
     int pixelHorizontal = 0;
     int hours = 0;
     int minuten = 0;
@@ -73,7 +73,7 @@ public void start(Stage primaryStage){
         for (int i = 0; i < timetable.getAllRooms().size() ; i++) {
    //         graphics.draw(new Line2D.Double(i,0,i,900));
             pixelHorizontal = i* ((int)(this.canvas.getWidth()/timetable.getAllRooms().size())+1);
-            graphics.drawString(timetable.getAllRooms().get(i).getName(), pixelHorizontal+50, 10);
+            graphics.drawString(timetable.getAllRooms().get(i).getName(), pixelHorizontal+50, pixelVertical);
             graphics.draw(new Line2D.Double(pixelHorizontal, 0,  pixelHorizontal, 900));
         }
 
@@ -82,6 +82,8 @@ public void start(Stage primaryStage){
         for (int i = 0; i <26; i++) {
             time = time + 30;
             pixelVertical = i*((int)this.canvas.getHeight()/26); //gedeeld door de maximum i
+
+
 
 
             if (time%60 == 0){
