@@ -1,0 +1,13 @@
+Timetable
+Lesson#09:30#60#Ettienne Goossens#JavaFX#
+Room#ld120#15#
+Group#A6#6#
+endLesson
+Lesson#10:30#60#Johan Talboom#JavaFX#
+Room#ld121#15#
+Group#A5#6#
+endLesson
+Lesson#11:30#60#Maurice Snoeren#JavaFX#
+Room#ld122#15#
+Group#A4#6#
+endLesson
