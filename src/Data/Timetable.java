@@ -31,6 +31,14 @@ public class Timetable implements Serializable {
         return this.rooms;
     }
 
+    public ArrayList<Group> getAllGroups(){
+        return this.groups;
+    }
+
+    public ArrayList<Lesson> getLessons() {
+        return lessons;
+    }
+
     public void addLesson(Lesson lesson){
         lessons.add(lesson);
     }
