@@ -37,11 +37,11 @@ public void start(Stage primaryStage){
         TabPane tabPane = new TabPane();
 
         Tab agendaTab = new Tab("Agenda");
-        Tab tableTab = new Tab("Tabel");
-        Tab roomTab = new Tab("Lokalen");
-        Tab groupTab = new Tab("Klassen");
-        Tab lessonTab = new Tab("Lessen");
-        Tab simulationTab = new Tab("Simulatie");
+        Tab tableTab = new Tab("Table");
+        Tab roomTab = new Tab("Rooms");
+        Tab groupTab = new Tab("Groups");
+        Tab lessonTab = new Tab("Lesson");
+        Tab simulationTab = new Tab("Simulation");
 
         tabPane.getTabs().addAll(agendaTab, tableTab, roomTab, groupTab, lessonTab, simulationTab);
 
@@ -53,7 +53,7 @@ public void start(Stage primaryStage){
 
         BorderPane agendaPane = new BorderPane(canvas);
         BorderPane tablePane = new BorderPane(new Label("Tabel"));
-        BorderPane roomPane = new BorderPane(new Label("Lokaal"));
+        GridPane roomPane = new GridPane();
         GridPane groupPane = new GridPane();
         BorderPane lessonPane = new BorderPane(new Label("Les"));
         BorderPane simulationPane = new BorderPane(new Label("Work in progress :)"));
@@ -65,8 +65,8 @@ public void start(Stage primaryStage){
         TextField amountOfStudentsField = new TextField("amount");
         ListView listGroups = new ListView();
 
-        Button buttonAddClass = new Button("add");
-        Button buttonDeleteClass = new Button("Delete");
+        Button buttonAddClass = new Button("Add class");
+        Button buttonDeleteClass = new Button("Delete Class");
 
         groupPane.add(nameClassLabel, 1, 1);
         groupPane.add(nameClassField, 2,1);
@@ -76,6 +76,24 @@ public void start(Stage primaryStage){
         groupPane.add(listGroups, 1,4);
         groupPane.add(buttonDeleteClass, 1, 5);
 
+        Label nameRoomLabel = new Label("Room name: ");
+        TextField nameRoom = new TextField("LA111");
+
+        Label capacityRoomLabel = new Label("Capacity Room");
+        TextField capacityRoom = new TextField("0");
+
+        Button addRoom = new Button("Add Room");
+        Button deleteRoom = new Button("Delete Room");
+
+        ListView listRooms = new ListView();
+
+        roomPane.add(nameRoomLabel,1,1);
+        roomPane.add(nameRoom, 2,1);
+        roomPane.add(capacityRoomLabel, 1,2);
+        roomPane.add(capacityRoom,2,2);
+        roomPane.add(addRoom, 2,3);
+        roomPane.add(listRooms, 1, 4);
+        roomPane.add(deleteRoom, 1,5);
 
         agendaTab.setContent(agendaPane);
         tableTab.setContent(tablePane);
