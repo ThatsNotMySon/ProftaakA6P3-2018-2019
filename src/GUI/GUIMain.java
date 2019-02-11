@@ -4,12 +4,11 @@ import Data.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -64,15 +63,18 @@ public void start(Stage primaryStage){
 
         TextField nameClassField = new TextField("class");
         TextField amountOfStudentsField = new TextField("amount");
+        ListView listGroups = new ListView();
 
         Button buttonAddClass = new Button("add");
+        Button buttonDeleteClass = new Button("Delete");
 
         groupPane.add(nameClassLabel, 1, 1);
         groupPane.add(nameClassField, 2,1);
         groupPane.add(amountOfStudentsLabel, 1,2);
         groupPane.add(amountOfStudentsField, 2, 2);
         groupPane.add(buttonAddClass, 2,3);
-
+        groupPane.add(listGroups, 1,4);
+        groupPane.add(buttonDeleteClass, 1, 5);
 
 
         agendaTab.setContent(agendaPane);
