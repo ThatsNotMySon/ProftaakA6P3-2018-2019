@@ -1,5 +1,9 @@
 package GUI;
 
+import Data.Group;
+import Data.Lesson;
+import Data.Room;
+import Data.Timetable;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -24,6 +28,7 @@ public class GUIMain  extends Application {
 public void start(Stage primaryStage){
 
         this.canvas = new Canvas(1200  ,900);
+
 
         MenuBar menubar = new MenuBar();
         VBox vBox = new VBox(menubar);
@@ -54,19 +59,29 @@ public void start(Stage primaryStage){
 
     public void draw(FXGraphics2D graphics) {
     int time = 300;
-    int pixelVerticaal = 0;
+    int pixelVertical = 0;
+    int pixelHorizontal = 0;
     int hours = 0;
     int minuten = 0;
+    Timetable timetable = new Timetable();
+        timetable.addLesson(new Lesson(LocalTime.of(9,30), 60, "Johan Talboom", "JavaFX", new Room("ld120", 15), new Group("A6", 6)));
+        timetable.addLesson(new Lesson(LocalTime.of(10,30), 60, "Johan Talboom", "JavaFX", new Room("ld121", 15), new Group("A5", 6)));
+        timetable.addLesson(new Lesson(LocalTime.of(11,30), 60, "Johan Talboom", "JavaFX", new Room("ld122", 15), new Group("A4", 6)));
 
-        for (int i = 0; i < 1200 ; i+= 300) {
-            graphics.draw(new Line2D.Double(i,0,i,900));
+
+
+        for (int i = 0; i < timetable.getAllRooms().size() ; i++) {
+   //         graphics.draw(new Line2D.Double(i,0,i,900));
+            pixelHorizontal = i* ((int)(this.canvas.getWidth()/timetable.getAllRooms().size())+1);
+            graphics.drawString(timetable.getAllRooms().get(i).getName(), pixelHorizontal+50, 10);
+            graphics.draw(new Line2D.Double(pixelHorizontal, 0,  pixelHorizontal, 900));
         }
 
 
 
         for (int i = 0; i <26; i++) {
             time = time + 30;
-            pixelVerticaal = i*((int)this.canvas.getHeight()/26); //gedeeld door de maximum i
+            pixelVertical = i*((int)this.canvas.getHeight()/26); //gedeeld door de maximum i
 
 
             if (time%60 == 0){
@@ -77,8 +92,8 @@ public void start(Stage primaryStage){
                 minuten = 30;
             }
 
-            graphics.draw(new Line2D.Double(0,pixelVerticaal,1200,pixelVerticaal));
-            graphics.drawString(LocalTime.of(hours, minuten).toString(), 0, pixelVerticaal);
+            graphics.draw(new Line2D.Double(0,pixelVertical,1200,pixelVertical));
+            graphics.drawString(LocalTime.of(hours, minuten).toString(), 0, pixelVertical);
         }
     }
 }
