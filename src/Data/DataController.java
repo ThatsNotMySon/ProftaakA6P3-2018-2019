@@ -5,8 +5,7 @@ public class DataController {
     private Timetable timeTable;
 
     public DataController(){
-        this.timeTable = new Timetable();
-        this.timeTable.loadTimetableFromFile("src/Data/standaardLessen.txt");
+        this.timeTable = new Timetable("src/Data/standaardLessen.txt");
     }
 
     public DataController(Timetable timeTable) {

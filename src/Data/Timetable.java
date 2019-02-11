@@ -20,12 +20,15 @@ public class Timetable implements Serializable {
         this.groups = new ArrayList<>();
     }
 
+    public Timetable(String filepath){
+        this.lessons = new ArrayList<>();
+        this.rooms = new ArrayList<>();
+        this.groups = new ArrayList<>();
+        this.loadTimetableFromFile(filepath);
+    }
+
     public ArrayList<Room> getAllRooms(){
-        ArrayList<Room> rooms = new ArrayList<>();
-        for (Lesson lesson : lessons) {
-            rooms.add(lesson.getRoom());
-        }
-        return rooms;
+        return this.rooms;
     }
 
     public void addLesson(Lesson lesson){
@@ -107,6 +110,7 @@ public class Timetable implements Serializable {
     }
 
     public Room addRoom(String name, int capacity){
+
         for (Room room : rooms) {
             if(room.getName().equals(name)){
                 return room;

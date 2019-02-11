@@ -62,23 +62,23 @@ public void start(Stage primaryStage){
     int pixelVertical = (int)this.canvas.getHeight()/27;
     int pixelHorizontal = 0;
     int hours = 0;
-    int minuten = 0;
+    int minutes = 0;
 
     Timetable timetable = dataController.getTimeTable();
 
         graphics.draw(new Line2D.Double(50, 0, 50, this.canvas.getHeight()));
 
-        int whidthRoom = (int) (this.canvas.getWidth() - 50) / timetable.getAllRooms().size();
+        int widthRoom = (int) (this.canvas.getWidth() - 50) / timetable.getAllRooms().size();
 
         for (int i = 0; i < timetable.getAllRooms().size()-1 ; i++) {
    //         graphics.draw(new Line2D.Double(i,0,i,900));
-            pixelHorizontal = 50 + whidthRoom + whidthRoom*i;
+            pixelHorizontal = 50 + widthRoom + widthRoom*i;
             graphics.draw(new Line2D.Double(pixelHorizontal, 0,  pixelHorizontal, this.canvas.getHeight()));
         }
 
 
         for (int i = 0; i < timetable.getAllRooms().size(); i++) {
-            graphics.drawString(timetable.getAllRooms().get(i).getName(), 75 + whidthRoom * i, pixelVertical-10);
+            graphics.drawString(timetable.getAllRooms().get(i).getName(), 75 + widthRoom * i, pixelVertical-10);
         }
 
 
@@ -89,14 +89,14 @@ public void start(Stage primaryStage){
 
             if (time%60 == 0){
                 hours = time/60;
-                minuten = 00;
+                minutes = 00;
             } else {
                 hours = time/60;
-                minuten = 30;
+                minutes = 30;
             }
 
             graphics.draw(new Line2D.Double(0,pixelVertical,this.canvas.getWidth(),pixelVertical));
-            graphics.drawString(LocalTime.of(hours, minuten).toString(), 0, pixelVertical+23);
+            graphics.drawString(LocalTime.of(hours, minutes).toString(), 0, pixelVertical+23);
         }
     }
 }
