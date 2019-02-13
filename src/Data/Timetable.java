@@ -14,6 +14,8 @@ public class Timetable implements Serializable {
     private ArrayList<Room> rooms;
     private ArrayList<Group> groups;
 
+
+
     public Timetable(){
         this.lessons = new ArrayList<>();
         this.rooms = new ArrayList<>();
@@ -27,13 +29,7 @@ public class Timetable implements Serializable {
         this.loadTimetableFromFile(filepath);
     }
 
-    public ArrayList<Room> getAllRooms(){
-        return this.rooms;
-    }
 
-    public void addLesson(Lesson lesson){
-        lessons.add(lesson);
-    }
 
     public void loadTimetableFromFile(String filepath){
         this.lessons.clear();
@@ -156,5 +152,99 @@ public class Timetable implements Serializable {
             output += "\n";
         }
         return output;
+    }
+
+
+
+
+
+
+    //
+    // Getters and Setters
+    //
+
+    public ArrayList<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public ArrayList<Room> getAllRooms(){
+        return this.rooms;
+    }
+
+    public ArrayList<Group> getAllGroups(){
+        return this.groups;
+    }
+
+
+
+    public void addLesson(Lesson lesson){
+        lessons.add(lesson);
+    }
+
+    public void addRoom(Room room) {
+        this.rooms.add(room);
+    }
+
+    public void addGroup(Group groups) {
+        this.groups.add(groups);
+    }
+
+    //
+    // Removing
+    //
+
+    public boolean removeLesson(Lesson lesson){
+        if(this.lessons.contains(lesson)) {
+            this.lessons.remove(lesson);
+            System.out.println("Lesson removed!");
+            return true;
+        }else{
+            System.out.println("Lesson not found!");
+            return false;
+        }
+    }
+
+    public boolean removeRoom(Room room){
+        if(this.rooms.contains(room)) {
+            this.rooms.remove(room);
+            System.out.println("Room removed!");
+            return true;
+        }else{
+            System.out.println("Room not found!");
+            return false;
+        }
+    }
+
+    public boolean removeRoom(String name){
+        for (Room room : rooms) {
+            if(room.getName().equals(name)){
+                System.out.println("Room " + room.getName() + " removed!");
+                rooms.remove(room);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeGroup(Group group){
+        if(this.groups.contains(group)) {
+            this.groups.remove(group);
+            System.out.println("Group removed!");
+            return true;
+        }else{
+            System.out.println("Group not found!");
+            return false;
+        }
+    }
+
+    public boolean removeGroup(String name){
+        for (Group group : groups) {
+            if(group.getName().equals(name)){
+                System.out.println("Group " + group.getName() + " removed!");
+                groups.remove(group);
+                return true;
+            }
+        }
+        return false;
     }
 }
