@@ -2,6 +2,7 @@ package GUI;
 
 import Data.*;
 import javafx.application.Application;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
@@ -19,28 +20,44 @@ import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class GUIMain  extends Application {
+public class GUIMain extends Application {
+
 
     private Canvas canvas;
     private DataController dataController;
+    private Timetable timetable;
+    private Point2D offset;
+    private ArrayList<LessonBlock> lessonBlocks;
+    private DraggedBlock dragged;
+    private ArrayList<Lesson> lessons;
 
     private void onStart() {
         this.dataController = new DataController();
     }
 
     @Override
-public void start(Stage primaryStage){
+    public void start(Stage primaryStage) {
 
         this.onStart();
+        this.canvas = new Canvas(1200, 900);
+
+        timetable = dataController.getTimeTable();
+        lessons = timetable.getLessons();
+        lessonBlocks = new ArrayList<>();
+        dragged = null;
+
+        this.createLessonBlocks();
 
         ArrayList<String> roomsArray = new ArrayList<>();
         ArrayList<Room> rooms = this.dataController.getTimeTable().getAllRooms();
         for (int i = 0; i < rooms.size(); i++) {
             roomsArray.add(rooms.get(i).getName());
         }
+
         ArrayList<String> groupsArray = new ArrayList<>();
 
         groupsArray.add(new Group("A6", 6).getName());
@@ -48,7 +65,35 @@ public void start(Stage primaryStage){
         groupsArray.add(new Group("A3", 6).getName());
 
 
-        this.canvas = new Canvas(1200  ,900);
+//Auteur : Sebastiaan
+        canvas.setOnMousePressed(e ->
+        {
+            for (LessonBlock lessonBlock : lessonBlocks) {
+                if (lessonBlock.getTransformedShape().contains(e.getX(), e.getY())) {
+                    dragged = lessonBlock.getDraggedBlock();
+                    offset = new Point2D(lessonBlock.getPosition().getX() - e.getX(), lessonBlock.getPosition().getY() - e.getY());
+                }// offset werkt wel, maar niet goed met meerdere shapes die onder 1 muisklik zitten.
+            }
+
+        });
+
+        canvas.setOnMouseReleased(e -> {
+
+
+            dragged = null;
+            draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+            System.out.println("Change Lesson Data here");
+        });
+
+        canvas.setOnMouseDragged(e ->
+        {
+            Point2D position = new Point2D(e.getX(), e.getY());
+            if (dragged != null) {
+                dragged.setPosition(offset.add(position));
+            }
+            draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+        });
+
 
         TabPane tabPane = new TabPane();
 
@@ -149,11 +194,11 @@ public void start(Stage primaryStage){
         Button buttonDeleteClass = new Button("Delete Class");
 
         groupPane.add(nameClassLabel, 1, 1);
-        groupPane.add(nameClassField, 2,1);
-        groupPane.add(amountOfStudentsLabel, 1,2);
+        groupPane.add(nameClassField, 2, 1);
+        groupPane.add(amountOfStudentsLabel, 1, 2);
         groupPane.add(amountOfStudentsField, 2, 2);
-        groupPane.add(buttonAddClass, 2,3);
-        groupPane.add(listGroups, 1,4);
+        groupPane.add(buttonAddClass, 2, 3);
+        groupPane.add(listGroups, 1, 4);
         groupPane.add(buttonDeleteClass, 1, 5);
 
         listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
@@ -191,13 +236,13 @@ public void start(Stage primaryStage){
 
         ListView listRooms = new ListView();
 
-        roomPane.add(nameRoomLabel,1,1);
-        roomPane.add(nameRoom, 2,1);
-        roomPane.add(capacityRoomLabel, 1,2);
-        roomPane.add(capacityRoom,2,2);
-        roomPane.add(addRoom, 2,3);
+        roomPane.add(nameRoomLabel, 1, 1);
+        roomPane.add(nameRoom, 2, 1);
+        roomPane.add(capacityRoomLabel, 1, 2);
+        roomPane.add(capacityRoom, 2, 2);
+        roomPane.add(addRoom, 2, 3);
         roomPane.add(listRooms, 1, 4);
-        roomPane.add(deleteRoom, 1,5);
+        roomPane.add(deleteRoom, 1, 5);
 
         listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
 
@@ -246,38 +291,81 @@ public void start(Stage primaryStage){
         int minutes = 0;
 
     Timetable timetable = dataController.getTimeTable();
+        graphics.setBackground(Color.WHITE);
+        graphics.clearRect(0, 0, (int) canvas.getHeight() * 2, (int) canvas.getWidth() * 2);
 
+
+//Auteur: Marleen
+        //Hieronder wordt het rooster getekend
         graphics.draw(new Line2D.Double(50, 0, 50, this.canvas.getHeight()));
 
         int widthRoom = (int) (this.canvas.getWidth() - 50) / timetable.getAllRooms().size();
 
-        for (int i = 0; i < timetable.getAllRooms().size()-1 ; i++) {
-   //         graphics.draw(new Line2D.Double(i,0,i,900));
-            pixelHorizontal = 50 + widthRoom + widthRoom*i;
-            graphics.draw(new Line2D.Double(pixelHorizontal, 0,  pixelHorizontal, this.canvas.getHeight()));
+        for (int i = 0; i < timetable.getAllRooms().size() - 1; i++) {
+            //         graphics.draw(new Line2D.Double(i,0,i,900));
+            pixelHorizontal = 50 + widthRoom + widthRoom * i;
+            graphics.draw(new Line2D.Double(pixelHorizontal, 0, pixelHorizontal, this.canvas.getHeight()));
         }
 
 
         for (int i = 0; i < timetable.getAllRooms().size(); i++) {
-            graphics.drawString(timetable.getAllRooms().get(i).getName(), 75 + widthRoom * i, pixelVertical-10);
+            graphics.drawString(timetable.getAllRooms().get(i).getName(), 75 + widthRoom * i, pixelVertical - 10);
         }
 
 
-
-        for (int i = 0; i <27-1; i++) {
+        for (int i = 0; i < 27 - 1; i++) {
             time += 30;
-            pixelVertical = ((int)this.canvas.getHeight()/27) + i*((int)this.canvas.getHeight()/27); //gedeeld door de maximum i
+            pixelVertical = ((int) this.canvas.getHeight() / 27) + i * ((int) this.canvas.getHeight() / 27); //gedeeld door de maximum i
 
-            if (time%60 == 0){
-                hours = time/60;
+            if (time % 60 == 0) {
+                hours = time / 60;
                 minutes = 00;
             } else {
-                hours = time/60;
+                hours = time / 60;
                 minutes = 30;
             }
 
-            graphics.draw(new Line2D.Double(0,pixelVertical,this.canvas.getWidth(),pixelVertical));
-            graphics.drawString(LocalTime.of(hours, minutes).toString(), 0, pixelVertical+23);
+            graphics.draw(new Line2D.Double(0, pixelVertical, this.canvas.getWidth(), pixelVertical));
+            graphics.drawString(LocalTime.of(hours, minutes).toString(), 0, pixelVertical + 23);
+
+            //auteur : Sebastiaan
+            for (LessonBlock lessonBlock : lessonBlocks) {
+                graphics.fill(lessonBlock.getTransformedShape());
+            }
+            if (dragged != null) {
+                graphics.setColor(Color.GRAY);
+                graphics.fill(dragged.getTransformedShape());
+                graphics.setColor(Color.BLACK);
+                graphics.draw(dragged.getTransformedShape());
+
+            }
+
         }
+    }
+
+    //Auteur: Sebastiaan
+    // Deze methode kreert de lesblokken voor in d e
+    private void createLessonBlocks() {
+
+        int pixelVertical = (int) this.canvas.getHeight() / 27;
+        int widthRoom = (int) (this.canvas.getWidth() - 50) / timetable.getAllRooms().size();
+
+        for (Room room : timetable.getAllRooms()) {
+
+            for (Lesson lesson : lessons) {
+                if (lesson.getRoom().equals(room)) {
+                    Point2D lessonOriginPoint = new Point2D(50 + widthRoom * timetable.getAllRooms().indexOf(room), (lesson.getStartTime().getHour() - 6) * 2 * (double) pixelVertical + 2 * (double) pixelVertical * lesson.getDuration() / 60);
+                    lessonBlocks.add(new LessonBlock(new Rectangle2D.Double(0, 0, widthRoom, 2 * (double) pixelVertical * lesson.getDuration() / 60), lessonOriginPoint, 0, 1, lesson));
+                }
+            }
+        }
+    }
+
+    private LocalTime getTimeAtMouse(Point2D mousePosition){
+        return null;
+    }
+
+    private Room getRoomAtMouse(Point2D mousePosition){
+        return null;
     }
 }
