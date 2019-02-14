@@ -5,6 +5,7 @@ public class DataController {
     private Timetable timeTable;
 
     public DataController(){
+
         this.timeTable = new Timetable("src/Data/standaardLessen.txt");
     }
 
@@ -16,5 +17,7 @@ public class DataController {
         return timeTable;
     }
 
-
+    public void clear(){
+        this.timeTable.clear();
+    }
 }
