@@ -8,6 +8,8 @@ import java.awt.geom.AffineTransform;
 
 
 //Auteur: Sebastiaan
+//Deze klasse dient om een versleepbaar blok te creeren, met een vaste positie.
+
 class LessonBlock
 {
     private Shape shape;
