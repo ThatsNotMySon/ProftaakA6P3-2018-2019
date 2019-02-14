@@ -1,0 +1,17 @@
+Timetable
+Lesson#10:30#60#Paul Lindelauf#Word#
+Room#la130#20#
+Group#B4#6#
+endLesson
+Lesson#10:30#60#Johan Talboom#2D graphics#
+Room#la131#20#
+Group#B5#6#
+endLesson
+Lesson#11:30#60#Mark Baaij#How to be Awesome#
+Room#la132#20#
+Group#B4#6#
+endLesson
+Lesson#12:30#60#Maurice Snoeren#JavaFX#
+Room#la120#20#
+Group#B3#6#
+endLesson
