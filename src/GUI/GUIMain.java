@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
+import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -43,27 +44,13 @@ public class GUIMain extends Application {
     public void start(Stage primaryStage) {
 
         this.onStart();
-        this.canvas = new Canvas(1200, 900);
-
+        
+        this.canvas = new Canvas(1200  ,900);
         timetable = dataController.getTimeTable();
         lessonBlocks = new ArrayList<>();
         dragged = null;
 
         this.createLessonBlocks();
-
-        ArrayList<String> roomsArray = new ArrayList<>();
-        ArrayList<Room> rooms = this.dataController.getTimeTable().getAllRooms();
-        for (int i = 0; i < rooms.size(); i++) {
-            roomsArray.add(rooms.get(i).getName());
-        }
-
-        ArrayList<String> groupsArray = new ArrayList<>();
-
-        groupsArray.add(new Group("A6", 6).getName());
-        groupsArray.add(new Group("B5", 6).getName());
-        groupsArray.add(new Group("A3", 6).getName());
-
-
 //Auteur : Sebastiaan
         canvas.setOnMousePressed(e ->
         {
@@ -132,27 +119,26 @@ public class GUIMain extends Application {
         ListView lessonGroupsListView = new ListView();
         ListView lessonRoomsListView = new ListView();
 
-        lessonGroupsListView.getItems().addAll(groupsArray);
-        lessonRoomsListView.getItems().addAll(roomsArray);
-
         TextField lessonTeacherInput = new TextField();
         TextField lessonSubjectInput = new TextField();
         TextField lessonStartTimeInput = new TextField();
+        TextField lessonStartTimeInput2 = new TextField();
         TextField lessonLengthTimeInput = new TextField();
 
         Label lessonTeacherLabel = new Label("Teacher");
         Label lessonSubjectLabel = new Label("Subject");
         Label lessonStartTimeLabel = new Label("Start time");
         Label lessonLengthTimeLabel = new Label("Length");
+        Label errorLabel = new Label("");
 
         Button confirmLesson = new Button("Create Lesson");
 
         HBox hBoxLessonsTeacher = new HBox(lessonTeacherInput, lessonTeacherLabel);
         HBox hBoxLessonsSubject = new HBox(lessonSubjectInput, lessonSubjectLabel);
-        HBox hBoxLessonsStartTime = new HBox(lessonStartTimeInput, lessonStartTimeLabel);
+        HBox hBoxLessonsStartTime = new HBox(lessonStartTimeInput, lessonStartTimeInput2, lessonStartTimeLabel);
         HBox hBoxLessonsLengthTime = new HBox(lessonLengthTimeInput, lessonLengthTimeLabel);
 
-        VBox vBoxLessonsInput = new VBox(hBoxLessonsTeacher, hBoxLessonsSubject, hBoxLessonsStartTime, hBoxLessonsLengthTime);
+        VBox vBoxLessonsInput = new VBox(hBoxLessonsTeacher, hBoxLessonsSubject, hBoxLessonsStartTime, hBoxLessonsLengthTime, errorLabel);
 
         VBox vBoxLessons = new VBox(vBoxLessonsInput, confirmLesson);
         HBox hBoxLessons = new HBox(lessonGroupsListView, lessonRoomsListView, vBoxLessons);
@@ -176,6 +162,31 @@ public class GUIMain extends Application {
         VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab);
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
+        /*
+        * De volgende code laat de knoppen op de Lesson Tab
+        * Als deze code stuk is moet je bij Marleen zijn
+        * */
+
+        lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+        lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+
+        confirmLesson.setOnAction(event -> {
+            try {
+                errorLabel.setText("");
+                this.dataController.getTimeTable().addLesson(new Lesson((LocalTime.of(Integer.parseInt(
+                        lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
+                        Integer.parseInt(lessonLengthTimeInput.getText()), lessonTeacherInput.getText(),
+                        lessonSubjectInput.getText(), (Room) lessonRoomsListView.getSelectionModel().getSelectedItem(),
+                        (Group) lessonGroupsListView.getSelectionModel().getSelectedItem()));
+            } catch (Exception e) {
+                errorLabel.setText("Check input");
+                e.printStackTrace();
+
+            }
+
+        });
+
+
 
 
         /*
@@ -213,6 +224,11 @@ public class GUIMain extends Application {
         groupPane.add(listGroups, 1, 4);
         groupPane.add(buttonDeleteClass, 1, 5);
 
+        /*
+         * De volgende code laat de knoppen op de Lesson Tab
+         * Als deze code stuk is moet je bij Marleen zijn
+         * */
+
         listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
 
         buttonAddClass.setOnAction(event -> {
@@ -227,7 +243,8 @@ public class GUIMain extends Application {
         });
 
         buttonDeleteClass.setOnAction(event -> {
-            this.dataController.getTimeTable().removeGroup(listGroups.selectionModelProperty().getName());
+            listGroups.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            this.dataController.getTimeTable().removeGroup((Group) listGroups.getSelectionModel().getSelectedItem());
             listGroups.getItems().clear();
             listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
         });
@@ -265,7 +282,9 @@ public class GUIMain extends Application {
         });
 
         deleteRoom.setOnAction(event -> {
-      //      this.dataController.getTimeTable().removeRoom();
+            listRooms.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+            this.dataController.getTimeTable().removeRoom((Room) listRooms.getSelectionModel().getSelectedItem());
             listRooms.getItems().clear();
             listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
         });
