@@ -247,4 +247,10 @@ public class Timetable implements Serializable {
         }
         return false;
     }
+
+    public void clear(){
+        this.lessons.clear();
+        this.groups.clear();
+        this.rooms.clear();
+    }
 }
