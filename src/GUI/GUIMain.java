@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
+import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -170,7 +171,8 @@ public void start(Stage primaryStage){
         });
 
         buttonDeleteClass.setOnAction(event -> {
-            this.dataController.getTimeTable().removeGroup(listGroups.selectionModelProperty().getName());
+            listGroups.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            this.dataController.getTimeTable().removeGroup((Group) listGroups.getSelectionModel().getSelectedItem());
             listGroups.getItems().clear();
             listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
         });
@@ -208,7 +210,9 @@ public void start(Stage primaryStage){
         });
 
         deleteRoom.setOnAction(event -> {
-      //      this.dataController.getTimeTable().removeRoom();
+            listRooms.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+            this.dataController.getTimeTable().removeRoom((Room) listRooms.getSelectionModel().getSelectedItem());
             listRooms.getItems().clear();
             listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
         });
