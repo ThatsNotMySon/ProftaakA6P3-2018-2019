@@ -107,14 +107,23 @@ public class DataController {
         return LocalTime.of(totalMinutes/60, totalMinutes%60);
     }
 
-    public boolean checkAvailableTime(String roomName, LocalTime startTime){
+    public boolean checkAvailableTime(String roomName, LocalTime startTime, int duration){
         for (Lesson lesson : timeTable.getLessons()){
             if (lesson.getRoom().getName().equals(roomName)){
                 int startingMinutes = getMinutesOfLocalTime(lesson.getStartTime());
                 int endingMinutes = startingMinutes + lesson.getDuration();
                 int startingMinutesAvailable = getMinutesOfLocalTime(startTime);
+                int endingMinutesAvailable = startingMinutesAvailable + duration;
 
                 if (startingMinutes <= startingMinutesAvailable && startingMinutesAvailable < endingMinutes){
+                    return false;
+                } else if (startingMinutes <= endingMinutesAvailable && endingMinutes < endingMinutesAvailable){
+                    return false;
+                } else if (startingMinutes <= startingMinutesAvailable + duration/2 && endingMinutes < startingMinutesAvailable + duration/2){
+                    return false;
+                } else if (startingMinutes <= startingMinutesAvailable + duration/4 && endingMinutes < startingMinutesAvailable + duration/4){
+                    return false;
+                } else if (startingMinutes <= startingMinutesAvailable + (duration/4)*3 && endingMinutes < startingMinutesAvailable + (duration/4)*3){
                     return false;
                 }
             }
