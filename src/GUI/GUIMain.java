@@ -120,6 +120,7 @@ public void start(Stage primaryStage){
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
 
+
         /*
         Meer algemene code
         * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
@@ -155,6 +156,25 @@ public void start(Stage primaryStage){
         groupPane.add(listGroups, 1,4);
         groupPane.add(buttonDeleteClass, 1, 5);
 
+        listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+
+        buttonAddClass.setOnAction(event -> {
+            try {
+                this.dataController.getTimeTable().addGroup(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText()));
+                listGroups.getItems().clear();
+                listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+            } catch (Exception e){
+                System.out.println("Please input valid value");
+                e.printStackTrace();
+            }
+        });
+
+        buttonDeleteClass.setOnAction(event -> {
+            this.dataController.getTimeTable().removeGroup(listGroups.selectionModelProperty().getName());
+            listGroups.getItems().clear();
+            listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+        });
+
         /*
         De volgende code hoort bij het tabje Room
         * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
@@ -178,6 +198,20 @@ public void start(Stage primaryStage){
         roomPane.add(addRoom, 2,3);
         roomPane.add(listRooms, 1, 4);
         roomPane.add(deleteRoom, 1,5);
+
+        listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+
+        addRoom.setOnAction(event -> {
+            this.dataController.getTimeTable().addRoom(nameRoom.getText(), Integer.parseInt(capacityRoom.getText()));
+            listRooms.getItems().clear();
+            listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+        });
+
+        deleteRoom.setOnAction(event -> {
+      //      this.dataController.getTimeTable().removeRoom();
+            listRooms.getItems().clear();
+            listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+        });
 
         /*Meer algeme code
         * Als deze code stuk is moet je bij Marleen en Rümeysa*/
