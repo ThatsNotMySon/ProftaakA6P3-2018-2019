@@ -89,6 +89,7 @@ public void start(Stage primaryStage){
         Label lessonSubjectLabel = new Label("Subject");
         Label lessonStartTimeLabel = new Label("Start time");
         Label lessonLengthTimeLabel = new Label("Length");
+        Label errorLabel = new Label("");
 
         Button confirmLesson = new Button("Create Lesson");
 
@@ -97,7 +98,7 @@ public void start(Stage primaryStage){
         HBox hBoxLessonsStartTime = new HBox(lessonStartTimeInput, lessonStartTimeInput2, lessonStartTimeLabel);
         HBox hBoxLessonsLengthTime = new HBox(lessonLengthTimeInput, lessonLengthTimeLabel);
 
-        VBox vBoxLessonsInput = new VBox(hBoxLessonsTeacher, hBoxLessonsSubject, hBoxLessonsStartTime, hBoxLessonsLengthTime);
+        VBox vBoxLessonsInput = new VBox(hBoxLessonsTeacher, hBoxLessonsSubject, hBoxLessonsStartTime, hBoxLessonsLengthTime, errorLabel);
 
         VBox vBoxLessons = new VBox(vBoxLessonsInput, confirmLesson);
         HBox hBoxLessons = new HBox(lessonGroupsListView, lessonRoomsListView, vBoxLessons);
@@ -130,11 +131,19 @@ public void start(Stage primaryStage){
         lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
 
         confirmLesson.setOnAction(event -> {
-            this.dataController.getTimeTable().addLesson(new Lesson((LocalTime.of(Integer.parseInt(
-                    lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
-                    Integer.parseInt(lessonLengthTimeInput.getText()), lessonTeacherInput.getText(),
-                    lessonSubjectInput.getText(), (Room) lessonRoomsListView.getSelectionModel().getSelectedItem(),
-                    (Group) lessonGroupsListView.getSelectionModel().getSelectedItem()));
+            try {
+                errorLabel.setText("");
+                this.dataController.getTimeTable().addLesson(new Lesson((LocalTime.of(Integer.parseInt(
+                        lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
+                        Integer.parseInt(lessonLengthTimeInput.getText()), lessonTeacherInput.getText(),
+                        lessonSubjectInput.getText(), (Room) lessonRoomsListView.getSelectionModel().getSelectedItem(),
+                        (Group) lessonGroupsListView.getSelectionModel().getSelectedItem()));
+            } catch (Exception e) {
+                errorLabel.setText("Check input");
+                e.printStackTrace();
+
+            }
+
         });
 
 
