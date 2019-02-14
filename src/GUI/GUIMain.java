@@ -82,6 +82,7 @@ public void start(Stage primaryStage){
         TextField lessonTeacherInput = new TextField();
         TextField lessonSubjectInput = new TextField();
         TextField lessonStartTimeInput = new TextField();
+        TextField lessonStartTimeInput2 = new TextField();
         TextField lessonLengthTimeInput = new TextField();
 
         Label lessonTeacherLabel = new Label("Teacher");
@@ -93,7 +94,7 @@ public void start(Stage primaryStage){
 
         HBox hBoxLessonsTeacher = new HBox(lessonTeacherInput, lessonTeacherLabel);
         HBox hBoxLessonsSubject = new HBox(lessonSubjectInput, lessonSubjectLabel);
-        HBox hBoxLessonsStartTime = new HBox(lessonStartTimeInput, lessonStartTimeLabel);
+        HBox hBoxLessonsStartTime = new HBox(lessonStartTimeInput, lessonStartTimeInput2, lessonStartTimeLabel);
         HBox hBoxLessonsLengthTime = new HBox(lessonLengthTimeInput, lessonLengthTimeLabel);
 
         VBox vBoxLessonsInput = new VBox(hBoxLessonsTeacher, hBoxLessonsSubject, hBoxLessonsStartTime, hBoxLessonsLengthTime);
@@ -120,6 +121,23 @@ public void start(Stage primaryStage){
         VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab);
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
+        /*
+        * De volgende code laat de knoppen op de Lesson Tab
+        * Als deze code stuk is moet je bij Marleen zijn
+        * */
+
+        lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+        lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+
+        confirmLesson.setOnAction(event -> {
+            this.dataController.getTimeTable().addLesson(new Lesson((LocalTime.of(Integer.parseInt(
+                    lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
+                    Integer.parseInt(lessonLengthTimeInput.getText()), lessonTeacherInput.getText(),
+                    lessonSubjectInput.getText(), (Room) lessonRoomsListView.getSelectionModel().getSelectedItem(),
+                    (Group) lessonGroupsListView.getSelectionModel().getSelectedItem()));
+        });
+
+
 
 
         /*
@@ -156,6 +174,11 @@ public void start(Stage primaryStage){
         groupPane.add(buttonAddClass, 2,3);
         groupPane.add(listGroups, 1,4);
         groupPane.add(buttonDeleteClass, 1, 5);
+
+        /*
+         * De volgende code laat de knoppen op de Lesson Tab
+         * Als deze code stuk is moet je bij Marleen zijn
+         * */
 
         listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
 
