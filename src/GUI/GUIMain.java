@@ -120,6 +120,7 @@ public void start(Stage primaryStage){
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
 
+
         /*
         Meer algemene code
         * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
@@ -154,6 +155,25 @@ public void start(Stage primaryStage){
         groupPane.add(buttonAddClass, 2,3);
         groupPane.add(listGroups, 1,4);
         groupPane.add(buttonDeleteClass, 1, 5);
+
+        listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+
+        buttonAddClass.setOnAction(event -> {
+            try {
+                this.dataController.getTimeTable().addGroup(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText()));
+                listGroups.getItems().clear();
+                listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+            } catch (Exception e){
+                System.out.println("Please input valid value");
+                e.printStackTrace();
+            }
+        });
+
+        buttonDeleteClass.setOnAction(event -> {
+            this.dataController.getTimeTable().removeGroup(listGroups.selectionModelProperty().getName());
+            listGroups.getItems().clear();
+            listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+        });
 
         /*
         De volgende code hoort bij het tabje Room
