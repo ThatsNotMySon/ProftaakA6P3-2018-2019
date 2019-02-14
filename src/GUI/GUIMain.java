@@ -2,6 +2,7 @@ package GUI;
 
 import Data.*;
 import javafx.application.Application;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
@@ -24,8 +25,13 @@ import java.util.ArrayList;
 
 public class GUIMain  extends Application {
 
+
     private Canvas canvas;
     private DataController dataController;
+    private Point2D offset;
+    private ArrayList<LessonBlock> lessonBlocks = new ArrayList<>();
+    private ArrayList<LessonBlock> dragged = new ArrayList<>();
+
 
     private void onStart() {
         this.dataController = new DataController();
@@ -49,6 +55,35 @@ public void start(Stage primaryStage){
 
 
         this.canvas = new Canvas(1200  ,900);
+
+
+//Auteur : Sebastiaan
+        canvas.setOnMousePressed(e ->
+        {
+            for (LessonBlock lessonBlock : lessonBlocks) {
+                if (lessonBlock.getTransformedShape().contains(e.getX(), e.getY())) {
+                    dragged.add(lessonBlock);
+                    offset = new Point2D(lessonBlock.getPosition().getX() - e.getX(), lessonBlock.getPosition().getY() - e.getY());
+                }// offset werkt wel, maar niet goed met meerdere shapes die onder 1 muisklik zitten.
+            }
+
+        });
+
+        canvas.setOnMouseReleased(e -> {
+            dragged.clear();
+            System.out.println("Change Lesson Data here");
+        });
+
+        canvas.setOnMouseDragged(e ->
+        {
+            Point2D position = new Point2D(e.getX(), e.getY());
+            for (LessonBlock lessonBlock : dragged) {
+                lessonBlock.setPosition(offset.add(position));
+
+            }
+            draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+        });
+
 
         TabPane tabPane = new TabPane();
 
