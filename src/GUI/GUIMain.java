@@ -199,6 +199,20 @@ public void start(Stage primaryStage){
         roomPane.add(listRooms, 1, 4);
         roomPane.add(deleteRoom, 1,5);
 
+        listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+
+        addRoom.setOnAction(event -> {
+            this.dataController.getTimeTable().addRoom(nameRoom.getText(), Integer.parseInt(capacityRoom.getText()));
+            listRooms.getItems().clear();
+            listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+        });
+
+        deleteRoom.setOnAction(event -> {
+      //      this.dataController.getTimeTable().removeRoom();
+            listRooms.getItems().clear();
+            listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+        });
+
         /*Meer algeme code
         * Als deze code stuk is moet je bij Marleen en Rümeysa*/
 
