@@ -1,5 +1,5 @@
 Timetable
-Lesson#09:30#60#Ettienne Goossens#JavaFX#
+Lesson#09:45#60#Ettienne Goossens#JavaFX#
 Room#ld120#15#
 Group#A6#6#
 endLesson

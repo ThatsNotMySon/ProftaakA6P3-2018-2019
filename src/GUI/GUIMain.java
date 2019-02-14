@@ -46,7 +46,6 @@ public class GUIMain extends Application {
         this.canvas = new Canvas(1200, 900);
 
         timetable = dataController.getTimeTable();
-        lessons = timetable.getLessons();
         lessonBlocks = new ArrayList<>();
         dragged = null;
 
@@ -80,9 +79,18 @@ public class GUIMain extends Application {
         canvas.setOnMouseReleased(e -> {
 
 
+            LocalTime newTime = getTimeAtMouse(new Point2D(e.getX(),e.getY()));
+            Room newRoom = getRoomAtMouse(new Point2D(e.getX(),e.getY()));
+            if(dragged != null){
+            if(!dragged.getLesson().getStartTime().equals(newTime) )//&& !dragged.getLesson().getRoom().equals(newRoom))
+            {
+                dragged.getLesson().setStartTime(newTime);
+                dragged.getLesson().setRoom(newRoom);
+                System.out.println(dragged.getLesson());
+                createLessonBlocks();
+            }}
             dragged = null;
             draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
-            System.out.println("Change Lesson Data here");
         });
 
         canvas.setOnMouseDragged(e ->
@@ -349,12 +357,14 @@ public class GUIMain extends Application {
 
         int pixelVertical = (int) this.canvas.getHeight() / 27;
         int widthRoom = (int) (this.canvas.getWidth() - 50) / timetable.getAllRooms().size();
+        lessonBlocks.clear();
+        lessons = timetable.getLessons();
 
         for (Room room : timetable.getAllRooms()) {
 
             for (Lesson lesson : lessons) {
                 if (lesson.getRoom().equals(room)) {
-                    Point2D lessonOriginPoint = new Point2D(50 + widthRoom * timetable.getAllRooms().indexOf(room), (lesson.getStartTime().getHour() - 6) * 2 * (double) pixelVertical + 2 * (double) pixelVertical * lesson.getDuration() / 60);
+                    Point2D lessonOriginPoint = new Point2D(50 + widthRoom * timetable.getAllRooms().indexOf(room), (lesson.getStartTime().getHour() - 5.5) * 2 * (double) pixelVertical + 2 * (double) pixelVertical * lesson.getStartTime().getMinute() / 60);
                     lessonBlocks.add(new LessonBlock(new Rectangle2D.Double(0, 0, widthRoom, 2 * (double) pixelVertical * lesson.getDuration() / 60), lessonOriginPoint, 0, 1, lesson));
                 }
             }
@@ -362,10 +372,12 @@ public class GUIMain extends Application {
     }
 
     private LocalTime getTimeAtMouse(Point2D mousePosition){
-        return null;
+        double hours = (mousePosition.getY()/2/(canvas.getHeight()/27))+5;
+        double minutes = 60*(hours%1);
+        return LocalTime.of((int) hours, (int) minutes);
     }
 
     private Room getRoomAtMouse(Point2D mousePosition){
-        return null;
+        return timetable.getAllRooms().get(0);
     }
 }
