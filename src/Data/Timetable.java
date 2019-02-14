@@ -105,8 +105,7 @@ public class Timetable implements Serializable {
         }
     }
 
-    public Room addRoom(String name, int capacity){
-
+    private Room addRoom(String name, int capacity){
         for (Room room : rooms) {
             if(room.getName().equals(name)){
                 return room;
@@ -118,7 +117,7 @@ public class Timetable implements Serializable {
 
     }
 
-    public Group addGroup(String name, int amountOfStudents){
+    private Group addGroup(String name, int amountOfStudents){
         for (Group group : groups) {
             if(group.getName().equals(name)){
                 return group;
