@@ -78,10 +78,10 @@ public void start(Stage primaryStage){
         TextField lessonStartTimeInput = new TextField();
         TextField lessonLengthTimeInput = new TextField();
 
-        Label lessonTeacherLabel = new Label("Docent");
-        Label lessonSubjectLabel = new Label("Vak");
-        Label lessonStartTimeLabel = new Label("Begintijd");
-        Label lessonLengthTimeLabel = new Label("Lengte");
+        Label lessonTeacherLabel = new Label("Teacher");
+        Label lessonSubjectLabel = new Label("Subject");
+        Label lessonStartTimeLabel = new Label("Start time");
+        Label lessonLengthTimeLabel = new Label("Length");
 
         Button confirmLesson = new Button("Create Lesson");
 
@@ -102,11 +102,11 @@ public void start(Stage primaryStage){
 
         TableView tableViewTableTab = new TableView();
 
-        TableColumn columnGroups = new TableColumn("Klas");
-        TableColumn columnRooms = new TableColumn("Lokaal");
-        TableColumn columnStartTime = new TableColumn("Starttijd");
-        TableColumn columnEndTime = new TableColumn("Eindtijd");
-        TableColumn columnLengthTime = new TableColumn("Lengte");
+        TableColumn columnGroups = new TableColumn("Group");
+        TableColumn columnRooms = new TableColumn("Room");
+        TableColumn columnStartTime = new TableColumn("Start time");
+        TableColumn columnEndTime = new TableColumn("End time");
+        TableColumn columnLengthTime = new TableColumn("Length");
 
         tableViewTableTab.getColumns().addAll(columnGroups, columnRooms, columnStartTime, columnEndTime, columnLengthTime);
 
