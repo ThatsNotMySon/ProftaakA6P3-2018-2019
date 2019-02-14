@@ -160,7 +160,7 @@ public void start(Stage primaryStage){
 
         buttonAddClass.setOnAction(event -> {
             try {
-                this.dataController.getTimeTable().addGroup(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText()));
+                this.dataController.getTimeTable().addGroup(new Group(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText())));
                 listGroups.getItems().clear();
                 listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
             } catch (Exception e){
@@ -202,7 +202,7 @@ public void start(Stage primaryStage){
         listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
 
         addRoom.setOnAction(event -> {
-            this.dataController.getTimeTable().addRoom(nameRoom.getText(), Integer.parseInt(capacityRoom.getText()));
+            this.dataController.getTimeTable().addRoom(new Room(nameRoom.getText(), Integer.parseInt(capacityRoom.getText())));
             listRooms.getItems().clear();
             listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
         });
