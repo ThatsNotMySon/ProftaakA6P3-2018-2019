@@ -36,19 +36,7 @@ public class GUIMain  extends Application {
 public void start(Stage primaryStage){
 
         this.onStart();
-
-        ArrayList<String> roomsArray = new ArrayList<>();
-        ArrayList<Room> rooms = this.dataController.getTimeTable().getAllRooms();
-        for (int i = 0; i < rooms.size(); i++) {
-            roomsArray.add(rooms.get(i).getName());
-        }
-        ArrayList<String> groupsArray = new ArrayList<>();
-
-        groupsArray.add(new Group("A6", 6).getName());
-        groupsArray.add(new Group("B5", 6).getName());
-        groupsArray.add(new Group("A3", 6).getName());
-
-
+        
         this.canvas = new Canvas(1200  ,900);
 
         TabPane tabPane = new TabPane();
@@ -75,9 +63,6 @@ public void start(Stage primaryStage){
         
         ListView lessonGroupsListView = new ListView();
         ListView lessonRoomsListView = new ListView();
-
-        lessonGroupsListView.getItems().addAll(groupsArray);
-        lessonRoomsListView.getItems().addAll(roomsArray);
 
         TextField lessonTeacherInput = new TextField();
         TextField lessonSubjectInput = new TextField();
