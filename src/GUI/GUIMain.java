@@ -66,6 +66,11 @@ public void start(Stage primaryStage){
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(tabPane);
         Scene scene = new Scene(borderPane);
+
+        /*
+        De volgende code hoort bij het tabje Lesson
+        * Als het stuk us moet je bij Tom zijn
+        * */
         
         ListView lessonGroupsListView = new ListView();
         ListView lessonRoomsListView = new ListView();
@@ -115,6 +120,10 @@ public void start(Stage primaryStage){
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
 
+        /*
+        Meer algemene code
+        * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
+        * */
 
         BorderPane agendaPane = new BorderPane(canvas);
         BorderPane tablePane = new BorderPane(vBoxTable);
@@ -122,6 +131,11 @@ public void start(Stage primaryStage){
         GridPane groupPane = new GridPane();
         BorderPane lessonPane = new BorderPane(hBoxLessons);
         BorderPane simulationPane = new BorderPane(new Label("Work in progress :)"));
+
+        /*
+        Deze code hoogt bij het tabje Class
+        * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
+        * */
 
         Label nameClassLabel = new Label("Name class: ");
         Label amountOfStudentsLabel = new Label("Amount of students: ");
@@ -140,6 +154,11 @@ public void start(Stage primaryStage){
         groupPane.add(buttonAddClass, 2,3);
         groupPane.add(listGroups, 1,4);
         groupPane.add(buttonDeleteClass, 1, 5);
+
+        /*
+        De volgende code hoort bij het tabje Room
+        * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
+        * */
 
         Label nameRoomLabel = new Label("Room name: ");
         TextField nameRoom = new TextField("LA111");
@@ -160,6 +179,9 @@ public void start(Stage primaryStage){
         roomPane.add(listRooms, 1, 4);
         roomPane.add(deleteRoom, 1,5);
 
+        /*Meer algeme code
+        * Als deze code stuk is moet je bij Marleen en Rümeysa*/
+
         agendaTab.setContent(agendaPane);
         tableTab.setContent(tablePane);
         roomTab.setContent(roomPane);
@@ -178,11 +200,16 @@ public void start(Stage primaryStage){
 
     public void draw(FXGraphics2D graphics) {
 
-    int time = 300;
-    int pixelVertical = (int)this.canvas.getHeight()/27;
-    int pixelHorizontal = 0;
-    int hours = 0;
-    int minutes = 0;
+        /*
+        De volgende code tekent het rooster template
+         * Als deze code stuk is moet je bij Marleen zijn of huilen.
+          * */
+
+        int time = 300;
+        int pixelVertical = (int)this.canvas.getHeight()/27;
+        int pixelHorizontal = 0;
+        int hours = 0;
+        int minutes = 0;
 
     Timetable timetable = dataController.getTimeTable();
 
