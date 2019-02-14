@@ -61,4 +61,8 @@ class LessonBlock
         DraggedBlock draggedBlock = new DraggedBlock(this.shape,this.position,this.position,this.rotation,this.scale, this.lesson);
         return draggedBlock;
     }
+
+    public Lesson getLesson(){
+        return this.lesson;
+    }
 }
