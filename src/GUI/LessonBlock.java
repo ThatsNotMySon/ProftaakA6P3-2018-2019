@@ -1,5 +1,6 @@
 package GUI;
 
+import Data.Lesson;
 import javafx.geometry.Point2D;
 import org.jfree.fx.FXGraphics2D;
 
@@ -16,13 +17,16 @@ class LessonBlock
     private Point2D position;
     private float rotation;
     private float scale;
+    private Lesson lesson;
 
-    public LessonBlock(Shape shape, Point2D position, float rotation, float scale)
+
+    public LessonBlock(Shape shape, Point2D position, float rotation, float scale, Lesson lesson)
     {
         this.shape = shape;
         this.position = position;
         this.rotation = rotation;
         this.scale = scale;
+        this.lesson = lesson;
     }
 
     public void draw(FXGraphics2D g2d)
@@ -51,5 +55,10 @@ class LessonBlock
         tx.rotate(rotation);
         tx.scale(scale,scale);
         return tx;
+    }
+
+    public DraggedBlock getDraggedBlock(){
+        DraggedBlock draggedBlock = new DraggedBlock(this.shape,this.position,this.position,this.rotation,this.scale, this.lesson);
+        return draggedBlock;
     }
 }
