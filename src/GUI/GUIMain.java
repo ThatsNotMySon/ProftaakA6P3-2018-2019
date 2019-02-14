@@ -2,10 +2,13 @@ package GUI;
 
 import Data.*;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -49,6 +52,14 @@ public class GUIMain extends Application {
         timetable = dataController.getTimeTable();
         lessonBlocks = new ArrayList<>();
         dragged = null;
+        lessons = dataController.getAllLessons();
+
+        //Auteurs Rümeysa en Tom
+        ArrayList<Group> groupsList = new ArrayList<>();
+        ArrayList<Room> roomsList = new ArrayList<>();
+        ArrayList<LocalTime> startList = new ArrayList<>();
+        ArrayList<LocalTime> endList = new ArrayList<>();
+        ArrayList<Integer> lengthList = new ArrayList<>();
 
         this.createLessonBlocks();
 //Auteur : Sebastiaan
@@ -109,7 +120,7 @@ public class GUIMain extends Application {
 
         /*
         De volgende code hoort bij het tabje Lesson
-        * Als het stuk us moet je bij Tom zijn
+        * Als het stuk is moet je bij Tom zijn
         * */
         
         ListView lessonGroupsListView = new ListView();
@@ -152,12 +163,31 @@ public class GUIMain extends Application {
         TableColumn columnEndTime = new TableColumn("End time");
         TableColumn columnLengthTime = new TableColumn("Length");
 
-        tableViewTableTab.getColumns().addAll(columnGroups, columnRooms, columnStartTime, columnEndTime, columnLengthTime);
+        /*
+        De volgende code hoort bij het tabje table
+        Als het stuk is moet je bij Rümeysa en Tom zijn
+         */
+        ObservableList<Lesson> tableData = FXCollections.observableArrayList(lessons);
+
+        columnGroups.setCellValueFactory(new PropertyValueFactory<Lesson, Group>("Group"));
+        columnRooms.setCellValueFactory(new PropertyValueFactory<Lesson, Room>("Room"));
+        columnStartTime.setCellValueFactory(new PropertyValueFactory<Lesson, LocalTime>("startTime"));
+//        columnEndTime.setCellValueFactory(new PropertyValueFactory<Lesson, LocalTime>("End time"));
+        columnLengthTime.setCellValueFactory(new PropertyValueFactory<Lesson, Integer>("duration"));
+
+        tableViewTableTab.setItems(tableData);
+        tableViewTableTab.getColumns().addAll(columnGroups, columnRooms, columnStartTime, columnLengthTime);
+
+        saveFile.setOnAction(e -> {
+
+            
+        });
 
         HBox hBoxTableFiles = new HBox(openFile, saveFile);
         VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab);
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
+
         /*
         * De volgende code laat de knoppen op de Lesson Tab
         * Als deze code stuk is moet je bij Marleen zijn
@@ -181,9 +211,6 @@ public class GUIMain extends Application {
             }
 
         });
-
-
-
 
         /*
         Meer algemene code
