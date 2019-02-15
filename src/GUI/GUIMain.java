@@ -54,6 +54,9 @@ public class GUIMain extends Application {
         dragged = null;
         lessons = dataController.getAllLessons();
 
+        TableView tableViewTableTab = new TableView();
+        ObservableList<Lesson> tableData = FXCollections.observableArrayList(lessons);
+
         this.createLessonBlocks();
 //Auteur : Sebastiaan
         canvas.setOnMousePressed(e ->
@@ -79,6 +82,9 @@ public class GUIMain extends Application {
                 dragged.getLesson().setRoom(newRoom);
                 System.out.println(dragged.getLesson());
                 createLessonBlocks();
+                tableData.removeAll(lessons);
+                tableData.addAll(lessons);
+                tableViewTableTab.setItems(tableData);
             }}
             dragged = null;
             draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
@@ -148,8 +154,6 @@ public class GUIMain extends Application {
         Button openFile = new Button("Open File");
         Button saveFile = new Button("Save File");
 
-        TableView tableViewTableTab = new TableView();
-
         TableColumn columnGroups = new TableColumn("Group");
         TableColumn columnRooms = new TableColumn("Room");
         TableColumn columnStartTime = new TableColumn("Start time");
@@ -159,7 +163,6 @@ public class GUIMain extends Application {
         De volgende code hoort bij het tabje table
         Als het stuk is moet je bij Rümeysa en Tom zijn
          */
-        ObservableList<Lesson> tableData = FXCollections.observableArrayList(lessons);
 
         columnGroups.setCellValueFactory(new PropertyValueFactory<Lesson, Group>("Group"));
         columnRooms.setCellValueFactory(new PropertyValueFactory<Lesson, Room>("Room"));
