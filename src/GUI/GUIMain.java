@@ -226,20 +226,24 @@ public class GUIMain extends Application {
 
         confirmLesson.setOnAction(event -> {
             try {
-                errorLabel.setText("");
-                Lesson lessonToAdd = new Lesson((LocalTime.of(Integer.parseInt(
-                        lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
-                        Integer.parseInt(lessonLengthTimeInput.getText()), lessonTeacherInput.getText(),
-                        lessonSubjectInput.getText(), (Room) lessonRoomsListView.getSelectionModel().getSelectedItem(),
-                        (Group) lessonGroupsListView.getSelectionModel().getSelectedItem());
-                if (dataController.checkAvailableTime(lessonToAdd.getRoom().getName(), lessonToAdd.getStartTime(), lessonToAdd.getDuration())) {
-                    this.dataController.getTimeTable().addLesson(lessonToAdd);
-                    tableData.add(lessons.get(lessons.size() - 1));
-                    tableViewTableTab.setItems(tableData);
-                    createLessonBlocks();
-                    draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+                if (lessonStartTimeInput.getText().isEmpty() || lessonStartTimeInput2.getText().isEmpty() || lessonLengthTimeInput.getText().isEmpty() || lessonTeacherInput.getText().isEmpty() || lessonSubjectInput.getText().isEmpty()) {
+                    errorLabel.setText("Please put a valid input in all fields");
                 } else {
-                    errorLabel.setText("Room not available at selected time");
+                    errorLabel.setText("");
+                    Lesson lessonToAdd = new Lesson((LocalTime.of(Integer.parseInt(
+                            lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
+                            Integer.parseInt(lessonLengthTimeInput.getText()), lessonTeacherInput.getText(),
+                            lessonSubjectInput.getText(), (Room) lessonRoomsListView.getSelectionModel().getSelectedItem(),
+                            (Group) lessonGroupsListView.getSelectionModel().getSelectedItem());
+                    if (dataController.checkAvailableTime(lessonToAdd.getRoom().getName(), lessonToAdd.getStartTime(), lessonToAdd.getDuration())) {
+                        this.dataController.getTimeTable().addLesson(lessonToAdd);
+                        tableData.add(lessons.get(lessons.size() - 1));
+                        tableViewTableTab.setItems(tableData);
+                        createLessonBlocks();
+                        draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+                    } else {
+                        errorLabel.setText("Room not available at selected time");
+                    }
                 }
             } catch (Exception e) {
                 errorLabel.setText("Check input");
