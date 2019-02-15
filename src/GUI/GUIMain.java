@@ -160,7 +160,6 @@ public class GUIMain extends Application {
         TableColumn columnGroups = new TableColumn("Group");
         TableColumn columnRooms = new TableColumn("Room");
         TableColumn columnStartTime = new TableColumn("Start time");
-        TableColumn columnEndTime = new TableColumn("End time");
         TableColumn columnLengthTime = new TableColumn("Length");
 
         /*
@@ -172,7 +171,6 @@ public class GUIMain extends Application {
         columnGroups.setCellValueFactory(new PropertyValueFactory<Lesson, Group>("Group"));
         columnRooms.setCellValueFactory(new PropertyValueFactory<Lesson, Room>("Room"));
         columnStartTime.setCellValueFactory(new PropertyValueFactory<Lesson, LocalTime>("startTime"));
-//        columnEndTime.setCellValueFactory(new PropertyValueFactory<Lesson, LocalTime>("End time"));
         columnLengthTime.setCellValueFactory(new PropertyValueFactory<Lesson, Integer>("duration"));
 
         tableViewTableTab.setItems(tableData);

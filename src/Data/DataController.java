@@ -118,17 +118,6 @@ public class DataController {
                 if (endingMinutesAvailable > startingMinutes && startingMinutesAvailable <= endingMinutes) {
                     return false;
                 }
-//                if (startingMinutes >= startingMinutesAvailable && startingMinutesAvailable < endingMinutes){
-//                    return false;
-//                } else if (startingMinutes >= endingMinutesAvailable && endingMinutes < endingMinutesAvailable){
-//                    return false;
-//                } else if (startingMinutes >= startingMinutesAvailable + duration/2 && endingMinutes < startingMinutesAvailable + duration/2){
-//                    return false;
-//                } else if (startingMinutes >= startingMinutesAvailable + duration/4 && endingMinutes < startingMinutesAvailable + duration/4){
-//                    return false;
-//                } else if (startingMinutes >= startingMinutesAvailable + (duration/4)*3 && endingMinutes < startingMinutesAvailable + (duration/4)*3){
-//                    return false;
-//                }
             }
         }
         return true;
