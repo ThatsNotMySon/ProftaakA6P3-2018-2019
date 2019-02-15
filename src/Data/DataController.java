@@ -115,15 +115,15 @@ public class DataController {
                 int startingMinutesAvailable = getMinutesOfLocalTime(startTime);
                 int endingMinutesAvailable = startingMinutesAvailable + duration;
 
-                if (startingMinutes <= startingMinutesAvailable && startingMinutesAvailable < endingMinutes){
+                if (startingMinutes >= startingMinutesAvailable && startingMinutesAvailable < endingMinutes){
                     return false;
-                } else if (startingMinutes <= endingMinutesAvailable && endingMinutes < endingMinutesAvailable){
+                } else if (startingMinutes >= endingMinutesAvailable && endingMinutes < endingMinutesAvailable){
                     return false;
-                } else if (startingMinutes <= startingMinutesAvailable + duration/2 && endingMinutes < startingMinutesAvailable + duration/2){
+                } else if (startingMinutes >= startingMinutesAvailable + duration/2 && endingMinutes < startingMinutesAvailable + duration/2){
                     return false;
-                } else if (startingMinutes <= startingMinutesAvailable + duration/4 && endingMinutes < startingMinutesAvailable + duration/4){
+                } else if (startingMinutes >= startingMinutesAvailable + duration/4 && endingMinutes < startingMinutesAvailable + duration/4){
                     return false;
-                } else if (startingMinutes <= startingMinutesAvailable + (duration/4)*3 && endingMinutes < startingMinutesAvailable + (duration/4)*3){
+                } else if (startingMinutes >= startingMinutesAvailable + (duration/4)*3 && endingMinutes < startingMinutesAvailable + (duration/4)*3){
                     return false;
                 }
             }
