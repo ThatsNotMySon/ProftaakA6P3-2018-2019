@@ -28,8 +28,9 @@ public class Room {
 
     @Override
     public String toString() {
-        return "\nRoom: " +
-                "name='" + name + '\'' +
-                ", capacity=" + capacity;
+            return this.name;
+//        return "\nRoom: " +
+//                "name='" + name + '\'' +
+//                ", capacity=" + capacity;
     }
 }
