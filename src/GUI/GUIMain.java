@@ -199,6 +199,14 @@ public class GUIMain extends Application {
             }
         });
 
+        saveFile.setOnAction(e -> {
+            int returnVal = chooser.showSaveDialog(null);
+            if (returnVal == chooser.APPROVE_OPTION) {
+                File file = chooser.getSelectedFile();
+                this.dataController.getTimeTable().saveTimetableToFile(file.getAbsolutePath());
+            }
+        });
+
         HBox hBoxTableFiles = new HBox(openFile, saveFile);
         VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab);
         hBoxTableFiles.setSpacing(50);

@@ -15,3 +15,7 @@ Lesson#12:30#60#Maurice Snoeren#JavaFX#
 Room#la120#20#
 Group#B3#6#
 endLesson
+Lesson#15:30#100#PieterKopJansen#WiskundeKerel#
+Room#la120#20#
+Group#B3#6#
+endLesson
