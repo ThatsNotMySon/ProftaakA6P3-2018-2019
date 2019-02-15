@@ -20,11 +20,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
-import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -56,6 +58,9 @@ public class GUIMain extends Application {
 
         TableView tableViewTableTab = new TableView();
         ObservableList<Lesson> tableData = FXCollections.observableArrayList(lessons);
+
+        ListView listGroups = new ListView();
+        ListView listRooms = new ListView();
 
         this.createLessonBlocks();
 //Auteur : Sebastiaan
@@ -172,9 +177,26 @@ public class GUIMain extends Application {
         tableViewTableTab.setItems(tableData);
         tableViewTableTab.getColumns().addAll(columnGroups, columnRooms, columnStartTime, columnLengthTime);
 
-        saveFile.setOnAction(e -> {
-
-            
+        JFileChooser chooser = new JFileChooser();
+        openFile.setOnAction(e -> {
+            int returnVal = chooser.showOpenDialog(null);
+            if (returnVal == chooser.APPROVE_OPTION) {
+                File fileChosen = chooser.getSelectedFile();
+                tableData.removeAll(lessons);
+                this.dataController.getTimeTable().loadTimetableFromFile(fileChosen.getAbsolutePath());
+                tableData.addAll(lessons);
+                tableViewTableTab.setItems(tableData);
+                listGroups.getItems().clear();
+                listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                listRooms.getItems().clear();
+                listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                lessonGroupsListView.getItems().clear();
+                lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                lessonRoomsListView.getItems().clear();
+                lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                createLessonBlocks();
+                draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+            }
         });
 
         HBox hBoxTableFiles = new HBox(openFile, saveFile);
@@ -202,6 +224,8 @@ public class GUIMain extends Application {
                     this.dataController.getTimeTable().addLesson(lessonToAdd);
                     tableData.add(lessons.get(lessons.size() - 1));
                     tableViewTableTab.setItems(tableData);
+                    createLessonBlocks();
+                    draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
                 } else {
                     errorLabel.setText("Room not available at selected time");
                 }
@@ -235,7 +259,6 @@ public class GUIMain extends Application {
 
         TextField nameClassField = new TextField("class");
         TextField amountOfStudentsField = new TextField("amount");
-        ListView listGroups = new ListView();
 
         Button buttonAddClass = new Button("Add class");
         Button buttonDeleteClass = new Button("Delete Class");
@@ -286,8 +309,6 @@ public class GUIMain extends Application {
 
         Button addRoom = new Button("Add Room");
         Button deleteRoom = new Button("Delete Room");
-
-        ListView listRooms = new ListView();
 
         roomPane.add(nameRoomLabel, 1, 1);
         roomPane.add(nameRoom, 2, 1);

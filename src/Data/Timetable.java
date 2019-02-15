@@ -33,6 +33,8 @@ public class Timetable implements Serializable {
 
     public void loadTimetableFromFile(String filepath){
         this.lessons.clear();
+        this.groups.clear();
+        this.rooms.clear();
         File file = new File(filepath);
 
         LocalTime time = LocalTime.of(0,0);
