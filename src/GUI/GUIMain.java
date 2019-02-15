@@ -70,19 +70,23 @@ public class GUIMain extends Application {
                 if (lessonBlock.getTransformedShape().contains(e.getX(), e.getY())) {
                     dragged = lessonBlock.getDraggedBlock();
                     offset = new Point2D(lessonBlock.getPosition().getX() - e.getX(), lessonBlock.getPosition().getY() - e.getY());
-                }// offset werkt wel, maar niet goed met meerdere shapes die onder 1 muisklik zitten.
+                }
             }
 
         });
 
         canvas.setOnMouseReleased(e -> {
 
-
-            LocalTime newTime = getTimeAtMouse(new Point2D(e.getX(),e.getY()));
-            Room newRoom = getRoomAtMouse(new Point2D(e.getX(),e.getY()));
             if(dragged != null){
-            if(!dragged.getLesson().getStartTime().equals(newTime) )//&& !dragged.getLesson().getRoom().equals(newRoom))
+
+            LocalTime newTime = getTimeAtMouse(offset.add(new Point2D(e.getX(),e.getY())));
+            Room newRoom = getRoomAtMouse(offset.add(new Point2D(e.getX(),e.getY())));
+                if(!dataController.checkAvailableTime(newRoom.getName(),newTime,dragged.getLesson().getDuration()))
+                    System.out.println("No free time found");
+            if(dataController.checkAvailableTime(newRoom.getName(),newTime,dragged.getLesson().getDuration()))
+                    //!dragged.getLesson().getStartTime().equals(newTime) && !dragged.getLesson().getRoom().equals(newRoom))
             {
+                System.out.println("Free time found!");
                 dragged.getLesson().setStartTime(newTime);
                 dragged.getLesson().setRoom(newRoom);
                 System.out.println(dragged.getLesson());
@@ -448,7 +452,7 @@ public class GUIMain extends Application {
 
             for (Lesson lesson : lessons) {
                 if (lesson.getRoom().equals(room)) {
-                    Point2D lessonOriginPoint = new Point2D(50 + widthRoom * timetable.getAllRooms().indexOf(room), (lesson.getStartTime().getHour() - 5.5) * 2 * (double) pixelVertical + 2 * (double) pixelVertical * lesson.getStartTime().getMinute() / 60);
+                    Point2D lessonOriginPoint = new Point2D(50 + widthRoom * timetable.getAllRooms().indexOf(room), (lesson.getStartTime().getHour() - 5) * 2 * (double) pixelVertical + 2 * (double) pixelVertical * lesson.getStartTime().getMinute() / 60);
                     lessonBlocks.add(new LessonBlock(new Rectangle2D.Double(0, 0, widthRoom, 2 * (double) pixelVertical * lesson.getDuration() / 60), lessonOriginPoint, 0, 1, lesson));
                 }
             }
@@ -462,6 +466,8 @@ public class GUIMain extends Application {
     }
 
     private Room getRoomAtMouse(Point2D mousePosition){
-        return timetable.getAllRooms().get(0);
+        double roomIndex = 0.5 + dataController.getAllRooms().size()*(mousePosition.getX()-50)/(canvas.getWidth()-50);
+        System.out.println(roomIndex);
+        return timetable.getAllRooms().get((int)roomIndex);
     }
 }
