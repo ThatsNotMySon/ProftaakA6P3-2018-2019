@@ -291,6 +291,8 @@ public class GUIMain extends Application {
                 this.dataController.getTimeTable().addGroup(new Group(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText())));
                 listGroups.getItems().clear();
                 listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                lessonGroupsListView.getItems().clear();
+                lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
             } catch (Exception e){
                 System.out.println("Please input valid value");
                 e.printStackTrace();
@@ -302,6 +304,8 @@ public class GUIMain extends Application {
             this.dataController.getTimeTable().removeGroup((Group) listGroups.getSelectionModel().getSelectedItem());
             listGroups.getItems().clear();
             listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+            lessonGroupsListView.getItems().clear();
+            lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
         });
 
         /*
@@ -332,6 +336,8 @@ public class GUIMain extends Application {
             this.dataController.getTimeTable().addRoom(new Room(nameRoom.getText(), Integer.parseInt(capacityRoom.getText())));
             listRooms.getItems().clear();
             listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+            lessonRoomsListView.getItems().clear();
+            lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
         });
 
         deleteRoom.setOnAction(event -> {
@@ -340,6 +346,8 @@ public class GUIMain extends Application {
             this.dataController.getTimeTable().removeRoom((Room) listRooms.getSelectionModel().getSelectedItem());
             listRooms.getItems().clear();
             listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+            lessonRoomsListView.getItems().clear();
+            lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
         });
 
         /*Meer algeme code
