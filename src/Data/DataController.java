@@ -115,7 +115,7 @@ public class DataController {
                 int startingMinutesAvailable = getMinutesOfLocalTime(startTime);
                 int endingMinutesAvailable = startingMinutesAvailable + duration;
 
-                if (endingMinutesAvailable > startingMinutes && startingMinutesAvailable <= endingMinutes) {
+                if (endingMinutesAvailable > startingMinutes && startingMinutesAvailable < endingMinutes) {
                     return false;
                 }
             }
