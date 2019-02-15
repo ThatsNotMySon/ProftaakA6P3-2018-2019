@@ -54,13 +54,6 @@ public class GUIMain extends Application {
         dragged = null;
         lessons = dataController.getAllLessons();
 
-        //Auteurs Rümeysa en Tom
-        ArrayList<Group> groupsList = new ArrayList<>();
-        ArrayList<Room> roomsList = new ArrayList<>();
-        ArrayList<LocalTime> startList = new ArrayList<>();
-        ArrayList<LocalTime> endList = new ArrayList<>();
-        ArrayList<Integer> lengthList = new ArrayList<>();
-
         this.createLessonBlocks();
 //Auteur : Sebastiaan
         canvas.setOnMousePressed(e ->
