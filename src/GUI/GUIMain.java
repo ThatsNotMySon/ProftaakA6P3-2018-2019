@@ -218,7 +218,8 @@ public class GUIMain extends Application {
 
         /*
         * De volgende code laat de knoppen op de Lesson Tab
-        * Als deze code stuk is moet je bij Marleen zijn
+        * Als deze code stuk is moet je bij Marleen zijn.
+        * Voor het tekengedeelde moet je bij Sebastiaan zijn.
         * */
 
         lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
@@ -226,21 +227,29 @@ public class GUIMain extends Application {
 
         confirmLesson.setOnAction(event -> {
             try {
-                errorLabel.setText("");
-                Lesson lessonToAdd = new Lesson((LocalTime.of(Integer.parseInt(
-                        lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
-                        Integer.parseInt(lessonLengthTimeInput.getText()), lessonTeacherInput.getText(),
-                        lessonSubjectInput.getText(), (Room) lessonRoomsListView.getSelectionModel().getSelectedItem(),
-                        (Group) lessonGroupsListView.getSelectionModel().getSelectedItem());
-                if (dataController.checkAvailableTime(lessonToAdd.getRoom().getName(), lessonToAdd.getStartTime(), lessonToAdd.getDuration())) {
-                    this.dataController.getTimeTable().addLesson(lessonToAdd);
-                    tableData.add(lessons.get(lessons.size() - 1));
-                    tableViewTableTab.setItems(tableData);
-                    createLessonBlocks();
-                    draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+                if(lessonRoomsListView.getSelectionModel().getSelectedItem() != null && lessonGroupsListView.getSelectionModel().getSelectedItem() != null &&
+                        lessonStartTimeInput != null && lessonStartTimeInput2 != null & lessonLengthTimeInput != null && lessonTeacherInput != null && lessonSubjectInput != null) {
+                    errorLabel.setText("");
+                    Lesson lessonToAdd = new Lesson((LocalTime.of(Integer.parseInt(
+                            lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
+                            Integer.parseInt(lessonLengthTimeInput.getText()), lessonTeacherInput.getText(),
+                            lessonSubjectInput.getText(), (Room) lessonRoomsListView.getSelectionModel().getSelectedItem(),
+                            (Group) lessonGroupsListView.getSelectionModel().getSelectedItem());
+
+                    if (dataController.checkAvailableTime(lessonToAdd.getRoom().getName(), lessonToAdd.getStartTime(), lessonToAdd.getDuration())) {
+                        this.dataController.getTimeTable().addLesson(lessonToAdd);
+                        tableData.add(lessons.get(lessons.size() - 1));
+                        tableViewTableTab.setItems(tableData);
+                        createLessonBlocks();
+                        draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+                        System.out.println("Lesson added");
+                    } else {
+                        errorLabel.setText("Room not available at selected time");
+                    }
                 } else {
-                    errorLabel.setText("Room not available at selected time");
+                    errorLabel.setText("Check input");
                 }
+
             } catch (Exception e) {
                 errorLabel.setText("Check input");
                 e.printStackTrace();
