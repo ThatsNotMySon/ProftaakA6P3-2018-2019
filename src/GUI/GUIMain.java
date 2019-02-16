@@ -301,13 +301,15 @@ public class GUIMain extends Application {
 
         buttonAddClass.setOnAction(event -> {
             try {
-                this.dataController.getTimeTable().addGroup(new Group(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText())));
-                listGroups.getItems().clear();
-                listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-                lessonGroupsListView.getItems().clear();
-                lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                if (nameClassField.getText() != null && amountOfStudentsField != null && !this.dataController.getAllGroupNames().contains(nameClassField.getText())) {
+                    this.dataController.getTimeTable().addGroup(new Group(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText())));
+                    listGroups.getItems().clear();
+                    listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                    lessonGroupsListView.getItems().clear();
+                    lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                }
             } catch (Exception e){
-                System.out.println("Please input valid value");
+                System.out.println("Check input");
                 e.printStackTrace();
             }
         });
