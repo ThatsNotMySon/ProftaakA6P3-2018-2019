@@ -82,9 +82,9 @@ public class GUIMain extends Application {
 
             LocalTime newTime = getTimeAtMouse(offset.add(new Point2D(e.getX(),e.getY())));
             Room newRoom = getRoomAtMouse(offset.add(new Point2D(e.getX(),e.getY())));
-                if(!dataController.checkAvailableTime(newRoom.getName(),newTime,dragged.getLesson().getDuration()))
+                if(!dataController.checkAvailableTime(newRoom.getName(),newTime,dragged.getLesson().getDuration(), dragged.getLesson()))
                     System.out.println("No free time found");
-            if(dataController.checkAvailableTime(newRoom.getName(),newTime,dragged.getLesson().getDuration()))
+            if(dataController.checkAvailableTime(newRoom.getName(),newTime,dragged.getLesson().getDuration(), dragged.getLesson()))
                     //!dragged.getLesson().getStartTime().equals(newTime) && !dragged.getLesson().getRoom().equals(newRoom))
             {
                 System.out.println("Free time found!");
