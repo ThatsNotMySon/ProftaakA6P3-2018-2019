@@ -348,11 +348,19 @@ public class GUIMain extends Application {
         listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
 
         addRoom.setOnAction(event -> {
-            this.dataController.getTimeTable().addRoom(new Room(nameRoom.getText(), Integer.parseInt(capacityRoom.getText())));
-            listRooms.getItems().clear();
-            listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
-            lessonRoomsListView.getItems().clear();
-            lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+            try {
+                if (nameRoom.getText() != null && capacityRoom != null && !this.dataController.getAllRoomNames().contains(nameRoom.getText()) && Integer.parseInt(capacityRoom.getText()) > 0) {
+                    this.dataController.getTimeTable().addRoom(new Room(nameRoom.getText(), Integer.parseInt(capacityRoom.getText())));
+                    listRooms.getItems().clear();
+                    listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                    lessonRoomsListView.getItems().clear();
+                    lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                }
+            }
+            catch (Exception e) {
+                System.out.println("Check input");
+                e.printStackTrace();
+            }
         });
 
         deleteRoom.setOnAction(event -> {
