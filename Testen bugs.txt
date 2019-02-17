@@ -1,7 +1,7 @@
 Zet je naam er achter als je met een bug bezig bent
 
 Ik kan in Lesson tab een les aanmaken zonder een Group geselecteerd te hebben
-Ik kan Rooms toevoegen met een capaciteit <= 0
+Ik kan Rooms toevoegen met een capaciteit <= 0 -Tom Status Gefixt
 ik kan Groups toevoegen met een capaciteit <= 0
 Ik kan Groups toevoegen met een naam die al bestaat
 Ik kan een les niet starten op het moment dat een andere les eindigt -Tom Status: Gefixt
