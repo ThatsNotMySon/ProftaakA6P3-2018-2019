@@ -366,11 +366,19 @@ public class GUIMain extends Application {
         deleteRoom.setOnAction(event -> {
             listRooms.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-            this.dataController.getTimeTable().removeRoom((Room) listRooms.getSelectionModel().getSelectedItem());
-            listRooms.getItems().clear();
-            listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
-            lessonRoomsListView.getItems().clear();
-            lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+            ArrayList<String> rooms = new ArrayList<>();
+            for (int i = 0; i < this.dataController.getAllLessons().size(); i++) {
+                rooms.add(this.dataController.getAllLessons().get(i).getRoom().getName());
+            }
+            Room selectedRoom = (Room)listRooms.getSelectionModel().getSelectedItem();
+            if (!rooms.contains(selectedRoom.getName())) {
+
+                this.dataController.getTimeTable().removeRoom((Room) listRooms.getSelectionModel().getSelectedItem());
+                listRooms.getItems().clear();
+                listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                lessonRoomsListView.getItems().clear();
+                lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+            }
         });
 
         /*Meer algeme code
