@@ -285,13 +285,16 @@ public class GUIMain extends Application {
         Button buttonAddClass = new Button("Add class");
         Button buttonDeleteClass = new Button("Delete Class");
 
+        Label errorInGroup = new Label("");
+
         groupPane.add(nameClassLabel, 1, 1);
         groupPane.add(nameClassField, 2, 1);
         groupPane.add(amountOfStudentsLabel, 1, 2);
         groupPane.add(amountOfStudentsField, 2, 2);
-        groupPane.add(buttonAddClass, 2, 3);
+        groupPane.add(buttonAddClass, 2, 4);
         groupPane.add(listGroups, 1, 4);
         groupPane.add(buttonDeleteClass, 1, 5);
+        groupPane.add(errorInGroup,2,3 );
 
         /*
          * De volgende code laat de knoppen op de Lesson Tab
@@ -308,20 +311,24 @@ public class GUIMain extends Application {
                     listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
                     lessonGroupsListView.getItems().clear();
                     lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                    errorInGroup.setText("Group added");
                 }
             } catch (Exception e){
                 System.out.println("Check input");
+                errorInGroup.setText("Check input");
                 e.printStackTrace();
             }
         });
 
         buttonDeleteClass.setOnAction(event -> {
-            listGroups.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-            this.dataController.getTimeTable().removeGroup((Group) listGroups.getSelectionModel().getSelectedItem());
-            listGroups.getItems().clear();
-            listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-            lessonGroupsListView.getItems().clear();
-            lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+            if (!this.dataController.getAllGroupNames().contains(nameClassField.getText())){
+                listGroups.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                this.dataController.getTimeTable().removeGroup((Group) listGroups.getSelectionModel().getSelectedItem());
+                listGroups.getItems().clear();
+                listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());    lessonGroupsListView.getItems().clear();
+                lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                errorInGroup.setText("Group deleted");
+        }
         });
 
         /*
@@ -347,6 +354,11 @@ public class GUIMain extends Application {
         roomPane.add(deleteRoom, 1, 5);
 
         listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+
+        /*
+        Actie van de knoppen van rooms
+        * Tom
+        * */
 
         addRoom.setOnAction(event -> {
             try {
