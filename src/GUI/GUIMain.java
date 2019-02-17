@@ -376,12 +376,12 @@ public class GUIMain extends Application {
         addRoom.setOnAction(event -> {
             try {
                 if (nameRoom.getText() != null && capacityRoom != null && !this.dataController.getAllRoomNames().contains(nameRoom.getText()) && Integer.parseInt(capacityRoom.getText()) > 0) {
-                    errorLabelRooms.setText("");
                     this.dataController.getTimeTable().addRoom(new Room(nameRoom.getText(), Integer.parseInt(capacityRoom.getText())));
                     listRooms.getItems().clear();
                     listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
                     lessonRoomsListView.getItems().clear();
                     lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                    errorLabelRooms.setText("Room added");
                 }
             }
             catch (Exception e) {
@@ -406,6 +406,9 @@ public class GUIMain extends Application {
                 listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
                 lessonRoomsListView.getItems().clear();
                 lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                errorLabelRooms.setText("Room deleted");
+            } else {
+                errorLabelRooms.setText("Cannot delete room being used by lesson");
             }
         });
 
