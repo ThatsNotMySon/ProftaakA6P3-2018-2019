@@ -302,7 +302,7 @@ public class GUIMain extends Application {
 
         buttonAddClass.setOnAction(event -> {
             try {
-                if (nameClassField.getText() != null && amountOfStudentsField != null && !this.dataController.getAllGroupNames().contains(nameClassField.getText())) {
+                if (nameClassField.getText() != null && amountOfStudentsField != null && !this.dataController.getAllGroupNames().contains(nameClassField.getText()) && Integer.parseInt(amountOfStudentsField.getText()) > 0) {
                     this.dataController.getTimeTable().addGroup(new Group(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText())));
                     listGroups.getItems().clear();
                     listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
