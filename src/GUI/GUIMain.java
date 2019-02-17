@@ -162,6 +162,7 @@ public class GUIMain extends Application {
 
         Button openFile = new Button("Open File");
         Button saveFile = new Button("Save File");
+        Button deleteLesson = new Button("Remove Lesson");
 
         TableColumn columnGroups = new TableColumn("Group");
         TableColumn columnRooms = new TableColumn("Room");
@@ -211,8 +212,17 @@ public class GUIMain extends Application {
             }
         });
 
+        deleteLesson.setOnAction(e -> {
+            tableViewTableTab.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            this.dataController.getTimeTable().removeLesson((Lesson)tableViewTableTab.getSelectionModel().getSelectedItem());
+            tableData.clear();
+            tableData.addAll(this.dataController.getAllLessons());
+            createLessonBlocks();
+            draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+        });
+
         HBox hBoxTableFiles = new HBox(openFile, saveFile);
-        VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab);
+        VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab, deleteLesson);
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
 
