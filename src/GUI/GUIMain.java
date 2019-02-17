@@ -228,7 +228,8 @@ public class GUIMain extends Application {
         confirmLesson.setOnAction(event -> {
             try {
                 if(lessonRoomsListView.getSelectionModel().getSelectedItem() != null && lessonGroupsListView.getSelectionModel().getSelectedItem() != null &&
-                        lessonStartTimeInput != null && lessonStartTimeInput2 != null & lessonLengthTimeInput != null && lessonTeacherInput != null && lessonSubjectInput != null) {
+                        lessonStartTimeInput != null && lessonStartTimeInput2 != null & lessonLengthTimeInput != null && lessonTeacherInput != null && lessonSubjectInput != null && Integer.parseInt(lessonLengthTimeInput.getText()) > 0
+                && Integer.parseInt(lessonStartTimeInput.getText()) > 5 && Integer.parseInt(lessonStartTimeInput.getText()) + (Integer.parseInt(lessonLengthTimeInput.getText())/60) < 18) {
                     errorLabel.setText("");
                     Lesson lessonToAdd = new Lesson((LocalTime.of(Integer.parseInt(
                             lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
