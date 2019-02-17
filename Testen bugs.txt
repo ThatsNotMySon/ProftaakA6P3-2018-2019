@@ -6,4 +6,4 @@ ik kan Groups toevoegen met een capaciteit <= 0
 Ik kan Groups toevoegen met een naam die al bestaat
 Ik kan een les niet starten op het moment dat een andere les eindigt -Tom Status: Gefixt
 Ik kan een les toevoegen met een duration <= 0
-Ik kan een room verwijderen die in het rooster staat, terwijl er een les in die room in het rooster staat
+Ik kan een room verwijderen die in het rooster staat, terwijl er een les in die room in het rooster staat -Tom Status: Gefixt
