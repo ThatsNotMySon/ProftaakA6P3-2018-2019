@@ -23,6 +23,7 @@ import org.jfree.fx.FXGraphics2D;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -495,13 +496,30 @@ public class GUIMain extends Application {
                 minutes = 30;
             }
 
+
             graphics.draw(new Line2D.Double(0, pixelVertical, this.canvas.getWidth(), pixelVertical));
             graphics.drawString(LocalTime.of(hours, minutes).toString(), 0, pixelVertical + 23);
 
             //auteur : Sebastiaan
+            //Het volgende blok tekent lesblokken en lestekst in blokken
+            Font font = new Font(Font.SANS_SERIF,Font.PLAIN, 20);
+
             for (LessonBlock lessonBlock : lessonBlocks) {
+                graphics.setColor(new Color(0,150,255));
                 graphics.fill(lessonBlock.getTransformedShape());
+                graphics.setColor(Color.BLACK);
+                graphics.draw(lessonBlock.getTransformedShape());
+                graphics.setColor(Color.WHITE);
+
+                Lesson lesson = lessonBlock.getLesson();
+                String lessonString = lesson.getGroup() + " " + lesson.getSubject();
+                Shape fontShape = font.createGlyphVector(graphics.getFontRenderContext(),lessonString).getOutline();
+                AffineTransform fontTransform = new AffineTransform();
+                fontTransform.translate(lessonBlock.getPosition().getX()+4,lessonBlock.getPosition().getY()+ 20);
+                graphics.fill(fontTransform.createTransformedShape(fontShape));
+                graphics.setColor(Color.BLACK);
             }
+
             if (dragged != null) {
                 graphics.setColor(Color.GRAY);
                 graphics.fill(dragged.getTransformedShape());
@@ -533,12 +551,16 @@ public class GUIMain extends Application {
         }
     }
 
+    //Auteur: Sebastiaan
+    //Deze methode vertaalt de coordinaten naar een tijd. Hardcoded
     private LocalTime getTimeAtMouse(Point2D mousePosition){
         double hours = (mousePosition.getY()/2/(canvas.getHeight()/27))+5;
         double minutes = 60*(hours%1);
         return LocalTime.of((int) hours, (int) minutes);
     }
 
+    //Auteur: Sebastiaan
+    //Deze methode vertaalt de coordinaten naar een room. Hardcoded.
     private Room getRoomAtMouse(Point2D mousePosition){
         double roomIndex = 0.5 + dataController.getAllRooms().size()*(mousePosition.getX()-50)/(canvas.getWidth()-50);
         System.out.println(roomIndex);
