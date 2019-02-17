@@ -347,11 +347,14 @@ public class GUIMain extends Application {
         Button addRoom = new Button("Add Room");
         Button deleteRoom = new Button("Delete Room");
 
+        Label errorLabelRooms = new Label("");
+
         roomPane.add(nameRoomLabel, 1, 1);
         roomPane.add(nameRoom, 2, 1);
         roomPane.add(capacityRoomLabel, 1, 2);
         roomPane.add(capacityRoom, 2, 2);
-        roomPane.add(addRoom, 2, 3);
+        roomPane.add(errorLabelRooms, 2, 3);
+        roomPane.add(addRoom, 2, 4);
         roomPane.add(listRooms, 1, 4);
         roomPane.add(deleteRoom, 1, 5);
 
@@ -360,6 +363,7 @@ public class GUIMain extends Application {
         addRoom.setOnAction(event -> {
             try {
                 if (nameRoom.getText() != null && capacityRoom != null && !this.dataController.getAllRoomNames().contains(nameRoom.getText()) && Integer.parseInt(capacityRoom.getText()) > 0) {
+                    errorLabelRooms.setText("");
                     this.dataController.getTimeTable().addRoom(new Room(nameRoom.getText(), Integer.parseInt(capacityRoom.getText())));
                     listRooms.getItems().clear();
                     listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
@@ -368,6 +372,7 @@ public class GUIMain extends Application {
                 }
             }
             catch (Exception e) {
+                errorLabelRooms.setText("Check input");
                 System.out.println("Check input");
                 e.printStackTrace();
             }
