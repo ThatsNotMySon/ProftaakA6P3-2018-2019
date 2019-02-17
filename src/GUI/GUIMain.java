@@ -322,6 +322,8 @@ public class GUIMain extends Application {
                     lessonGroupsListView.getItems().clear();
                     lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
                     errorInGroup.setText("Group added");
+                } else {
+                    errorInGroup.setText("Check input");
                 }
             } catch (Exception e){
                 System.out.println("Check input");
@@ -331,14 +333,22 @@ public class GUIMain extends Application {
         });
 
         buttonDeleteClass.setOnAction(event -> {
-            if (!this.dataController.getAllGroupNames().contains(nameClassField.getText())){
+            ArrayList<String> groupDelete = new ArrayList<>();
+            for (int i = 0; i < this.dataController.getAllLessons().size(); i++) {
+                groupDelete.add(this.dataController.getAllLessons().get(i).getGroup().get(0).getName());
+            }
+            listGroups.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            Group selectedGroup = (Group)listGroups.getSelectionModel().getSelectedItem();
+            if (!groupDelete.contains(selectedGroup.getName())){
                 listGroups.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
                 this.dataController.getTimeTable().removeGroup((Group) listGroups.getSelectionModel().getSelectedItem());
                 listGroups.getItems().clear();
                 listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());    lessonGroupsListView.getItems().clear();
                 lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
                 errorInGroup.setText("Group deleted");
-        }
+        } else {
+                errorInGroup.setText("Cannot delete group being used by lesson");
+            }
         });
 
         /*
@@ -382,6 +392,8 @@ public class GUIMain extends Application {
                     lessonRoomsListView.getItems().clear();
                     lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
                     errorLabelRooms.setText("Room added");
+                } else {
+                    errorLabelRooms.setText("Check input");
                 }
             }
             catch (Exception e) {
