@@ -392,6 +392,8 @@ public class GUIMain extends Application {
                     lessonRoomsListView.getItems().clear();
                     lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
                     errorLabelRooms.setText("Room added");
+                    createLessonBlocks();
+                    draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
                 } else {
                     errorLabelRooms.setText("Check input");
                 }
@@ -419,6 +421,8 @@ public class GUIMain extends Application {
                 lessonRoomsListView.getItems().clear();
                 lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
                 errorLabelRooms.setText("Room deleted");
+                createLessonBlocks();
+                draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
             } else {
                 errorLabelRooms.setText("Cannot delete room being used by lesson");
             }
