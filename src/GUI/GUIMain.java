@@ -337,10 +337,13 @@ public class GUIMain extends Application {
         Button addRoom = new Button("Add Room");
         Button deleteRoom = new Button("Delete Room");
 
+        Label errorLabelRooms = new Label("Test");
+
         roomPane.add(nameRoomLabel, 1, 1);
         roomPane.add(nameRoom, 2, 1);
         roomPane.add(capacityRoomLabel, 1, 2);
         roomPane.add(capacityRoom, 2, 2);
+        roomPane.add(errorLabelRooms, 1, 3);
         roomPane.add(addRoom, 2, 3);
         roomPane.add(listRooms, 1, 4);
         roomPane.add(deleteRoom, 1, 5);
