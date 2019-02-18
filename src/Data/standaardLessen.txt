@@ -14,7 +14,7 @@ Room#Melee#35#
 Group#A6#30#
 endLesson
 
-Lesson#13:15#120#Kirby#UltraSword#
+Lesson#13:15#120#Snake#Hide And Seek#
 Room#Melee#35#
 Group#B2#30#
 endLesson
@@ -24,7 +24,7 @@ Room#MarioKartCircuit#35#
 Group#A3#30#
 endLesson
 
-Lesson#11:00#120#Wii Fit Trainer#Yoga#
+Lesson#11:00#120#Incineroar#MMMoonsault#
 Room#Gym#60#
 Group#B2#30#
 endLesson
