@@ -1,17 +1,51 @@
 Timetable
-Lesson#09:45#60#Ettienne Goossens#JavaFX#
-Room#ld120#15#
+Lesson#7:00#90#Cloud#Omnislash#
+Room#MarioKartCircuit#35#
+Group#A6#30#
+endLesson
+
+Lesson#8:45#120#Wii Fit Trainer#Yoga#
+Room#Gym#60#
+Group#A1#30#
+endLesson
+
+Lesson#11:00#120#Kirby#UltraSword#
+Room#Melee#35#
+Group#A6#30#
+endLesson
+
+Lesson#13:15#120#Kirby#UltraSword#
+Room#Melee#35#
+Group#B2#30#
+endLesson
+
+Lesson#10:00#90#Waluigi#Omnislash#
+Room#MarioKartCircuit#35#
+Group#A3#30#
+endLesson
+
+Lesson#11:00#120#Wii Fit Trainer#Yoga#
+Room#Gym#60#
+Group#B2#30#
+endLesson
+
+Lesson#09:45#60#Borfy#Smash#
+Room#LA029#60#
 Group#A6#6#
 endLesson
-Lesson#10:30#60#Johan Talboom#JavaFX#
-Room#ld121#15#
-Group#A5#6#
+
+Lesson#14:0s0#60#Borfy#Smash#
+Room#MarioKartCircuit#60#
+Group#A6#6#
 endLesson
-Lesson#11:30#60#Maurice Snoeren#JavaFX#
-Room#ld122#15#
-Group#A4#6#
+
+Lesson#06:45#120#Link#Split Personality#
+Room#LA029#60#
+Group#B7#6#
 endLesson
-Lesson#12:30#60#Maurice Snoeren#JavaFX#
-Room#ld120#15#
-Group#A4#6#
+
+Lesson#16:00#90#Peach#Peach Blossom#
+Room#MarioKartCircuit#35#
+Group#A6#30#
 endLesson
+
