@@ -34,7 +34,7 @@ Room#LA029#60#
 Group#A6#6#
 endLesson
 
-Lesson#14:0s0#60#Borfy#Smash#
+Lesson#14:00#60#Borfy#Smash#
 Room#MarioKartCircuit#60#
 Group#A6#6#
 endLesson
