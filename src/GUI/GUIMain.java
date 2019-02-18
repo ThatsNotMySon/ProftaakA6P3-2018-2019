@@ -512,7 +512,7 @@ public class GUIMain extends Application {
                 graphics.setColor(Color.WHITE);
 
                 Lesson lesson = lessonBlock.getLesson();
-                String lessonString = lesson.getGroup() + " " + lesson.getSubject();
+                String lessonString = lesson.getGroup() + " " + lesson.getSubject() + ", " + lesson.getTeacher();
                 Shape fontShape = font.createGlyphVector(graphics.getFontRenderContext(),lessonString).getOutline();
                 AffineTransform fontTransform = new AffineTransform();
                 fontTransform.translate(lessonBlock.getPosition().getX()+4,lessonBlock.getPosition().getY()+ 20);
