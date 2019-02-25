@@ -20,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
+import simulation.SimulationPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,13 +35,14 @@ import java.util.ArrayList;
 public class GUIMain extends Application {
 
 
-    private Canvas canvas;
+    private Canvas agendaCanvas;
     private DataController dataController;
     private Timetable timetable;
     private Point2D offset;
     private ArrayList<LessonBlock> lessonBlocks;
     private DraggedBlock dragged;
     private ArrayList<Lesson> lessons;
+    private ArrayList<Color> groupColors;
 
     private void onStart() {
         this.dataController = new DataController();
@@ -51,11 +53,16 @@ public class GUIMain extends Application {
 
         this.onStart();
         
-        this.canvas = new Canvas(1200  ,900);
+        this.agendaCanvas = new Canvas(1200  ,900);
         timetable = dataController.getTimeTable();
         lessonBlocks = new ArrayList<>();
         dragged = null;
         lessons = dataController.getAllLessons();
+
+        //Testcode om groepen in Agenda kleurtjes te geven
+        //this.groupColors = new ArrayList<>();
+        //Color[] data = {Color.RED, Color.YELLOW, Color.BLUE,Color.CYAN,Color.GREEN, Color.MAGENTA};
+        //groupColors.addAll(data{1,2,3,4,5});
 
         TableView tableViewTableTab = new TableView();
         ObservableList<Lesson> tableData = FXCollections.observableArrayList(lessons);
@@ -65,7 +72,7 @@ public class GUIMain extends Application {
 
         this.createLessonBlocks();
 //Auteur : Sebastiaan
-        canvas.setOnMousePressed(e ->
+        agendaCanvas.setOnMousePressed(e ->
         {
             for (LessonBlock lessonBlock : lessonBlocks) {
                 if (lessonBlock.getTransformedShape().contains(e.getX(), e.getY())) {
@@ -76,7 +83,7 @@ public class GUIMain extends Application {
 
         });
 
-        canvas.setOnMouseReleased(e -> {
+        agendaCanvas.setOnMouseReleased(e -> {
 
             if(dragged != null){
 
@@ -97,16 +104,16 @@ public class GUIMain extends Application {
                 tableViewTableTab.setItems(tableData);
             }}
             dragged = null;
-            draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+            draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         });
 
-        canvas.setOnMouseDragged(e ->
+        agendaCanvas.setOnMouseDragged(e ->
         {
             Point2D position = new Point2D(e.getX(), e.getY());
             if (dragged != null) {
                 dragged.setPosition(offset.add(position));
             }
-            draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+            draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         });
 
 
@@ -201,7 +208,7 @@ public class GUIMain extends Application {
                 lessonRoomsListView.getItems().clear();
                 lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
                 createLessonBlocks();
-                draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
             }
         });
 
@@ -219,7 +226,7 @@ public class GUIMain extends Application {
             tableData.clear();
             tableData.addAll(this.dataController.getAllLessons());
             createLessonBlocks();
-            draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+            draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         });
 
         HBox hBoxTableFiles = new HBox(openFile, saveFile);
@@ -253,7 +260,7 @@ public class GUIMain extends Application {
                         tableData.add(lessons.get(lessons.size() - 1));
                         tableViewTableTab.setItems(tableData);
                         createLessonBlocks();
-                        draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+                        draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
                         System.out.println("Lesson added");
                     } else {
                         errorLabel.setText("Room not available at selected time");
@@ -269,18 +276,21 @@ public class GUIMain extends Application {
             }
 
         });
+/*
+        Code voor aanmaken simulatie scherm
+                Geschreven door Sebastiaan*/
 
         /*
         Meer algemene code
         * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
         * */
 
-        BorderPane agendaPane = new BorderPane(canvas);
+        BorderPane agendaPane = new BorderPane(agendaCanvas);
         BorderPane tablePane = new BorderPane(vBoxTable);
         GridPane roomPane = new GridPane();
         GridPane groupPane = new GridPane();
         BorderPane lessonPane = new BorderPane(hBoxLessons);
-        BorderPane simulationPane = new BorderPane(new Label("Work in progress :)"));
+        BorderPane simulationPane = new SimulationPane();
 
         /*
         Deze code hoogt bij het tabje Class
@@ -394,7 +404,7 @@ public class GUIMain extends Application {
                     lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
                     errorLabelRooms.setText("Room added");
                     createLessonBlocks();
-                    draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+                    draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
                 } else {
                     errorLabelRooms.setText("Check input");
                 }
@@ -423,7 +433,7 @@ public class GUIMain extends Application {
                 lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
                 errorLabelRooms.setText("Room deleted");
                 createLessonBlocks();
-                draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
             } else {
                 errorLabelRooms.setText("Cannot delete room being used by lesson");
             }
@@ -439,7 +449,7 @@ public class GUIMain extends Application {
         lessonTab.setContent(lessonPane);
         simulationTab.setContent(simulationPane);
 
-        draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+        draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         primaryStage.setScene(scene);
 
 
@@ -456,26 +466,26 @@ public class GUIMain extends Application {
           * */
 
         int time = 300;
-        int pixelVertical = (int)this.canvas.getHeight()/27;
+        int pixelVertical = (int)this.agendaCanvas.getHeight()/27;
         int pixelHorizontal = 0;
         int hours = 0;
         int minutes = 0;
 
     Timetable timetable = dataController.getTimeTable();
         graphics.setBackground(Color.WHITE);
-        graphics.clearRect(0, 0, (int) canvas.getHeight() * 2, (int) canvas.getWidth() * 2);
+        graphics.clearRect(0, 0, (int) agendaCanvas.getHeight() * 2, (int) agendaCanvas.getWidth() * 2);
 
 
 //Auteur: Marleen
         //Hieronder wordt het rooster getekend
-        graphics.draw(new Line2D.Double(50, 0, 50, this.canvas.getHeight()));
+        graphics.draw(new Line2D.Double(50, 0, 50, this.agendaCanvas.getHeight()));
 
-        int widthRoom = (int) (this.canvas.getWidth() - 50) / timetable.getAllRooms().size();
+        int widthRoom = (int) (this.agendaCanvas.getWidth() - 50) / timetable.getAllRooms().size();
 
         for (int i = 0; i < timetable.getAllRooms().size() - 1; i++) {
             //         graphics.draw(new Line2D.Double(i,0,i,900));
             pixelHorizontal = 50 + widthRoom + widthRoom * i;
-            graphics.draw(new Line2D.Double(pixelHorizontal, 0, pixelHorizontal, this.canvas.getHeight()));
+            graphics.draw(new Line2D.Double(pixelHorizontal, 0, pixelHorizontal, this.agendaCanvas.getHeight()));
         }
 
 
@@ -486,7 +496,7 @@ public class GUIMain extends Application {
 
         for (int i = 0; i < 27 - 1; i++) {
             time += 30;
-            pixelVertical = ((int) this.canvas.getHeight() / 27) + i * ((int) this.canvas.getHeight() / 27); //gedeeld door de maximum i
+            pixelVertical = ((int) this.agendaCanvas.getHeight() / 27) + i * ((int) this.agendaCanvas.getHeight() / 27); //gedeeld door de maximum i
 
             if (time % 60 == 0) {
                 hours = time / 60;
@@ -497,7 +507,7 @@ public class GUIMain extends Application {
             }
 
 
-            graphics.draw(new Line2D.Double(0, pixelVertical, this.canvas.getWidth(), pixelVertical));
+            graphics.draw(new Line2D.Double(0, pixelVertical, this.agendaCanvas.getWidth(), pixelVertical));
             graphics.drawString(LocalTime.of(hours, minutes).toString(), 0, pixelVertical + 23);
 
             //auteur : Sebastiaan
@@ -506,6 +516,7 @@ public class GUIMain extends Application {
 
             for (LessonBlock lessonBlock : lessonBlocks) {
                 graphics.setColor(new Color(0,150,255));
+                //graphics.setColor(groupColors.get(lessonBlocks.indexOf(lessonBlock)));
                 graphics.fill(lessonBlock.getTransformedShape());
                 graphics.setColor(Color.BLACK);
                 graphics.draw(lessonBlock.getTransformedShape());
@@ -535,8 +546,8 @@ public class GUIMain extends Application {
     // Deze methode kreert de lesblokken voor in d e
     private void createLessonBlocks() {
 
-        int pixelVertical = (int) this.canvas.getHeight() / 27;
-        int widthRoom = (int) (this.canvas.getWidth() - 50) / timetable.getAllRooms().size();
+        int pixelVertical = (int) this.agendaCanvas.getHeight() / 27;
+        int widthRoom = (int) (this.agendaCanvas.getWidth() - 50) / timetable.getAllRooms().size();
         lessonBlocks.clear();
         lessons = timetable.getLessons();
 
@@ -554,7 +565,7 @@ public class GUIMain extends Application {
     //Auteur: Sebastiaan
     //Deze methode vertaalt de coordinaten naar een tijd. Hardcoded
     private LocalTime getTimeAtMouse(Point2D mousePosition){
-        double hours = (mousePosition.getY()/2/(canvas.getHeight()/27))+5;
+        double hours = (mousePosition.getY()/2/(agendaCanvas.getHeight()/27))+5;
         double minutes = 60*(hours%1);
         return LocalTime.of((int) hours, (int) minutes);
     }
@@ -562,7 +573,7 @@ public class GUIMain extends Application {
     //Auteur: Sebastiaan
     //Deze methode vertaalt de coordinaten naar een room. Hardcoded.
     private Room getRoomAtMouse(Point2D mousePosition){
-        double roomIndex = 0.5 + dataController.getAllRooms().size()*(mousePosition.getX()-50)/(canvas.getWidth()-50);
+        double roomIndex = 0.5 + dataController.getAllRooms().size()*(mousePosition.getX()-50)/(agendaCanvas.getWidth()-50);
         System.out.println(roomIndex);
         return timetable.getAllRooms().get((int)roomIndex);
     }
