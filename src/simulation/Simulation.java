@@ -41,11 +41,9 @@ public class Simulation {
         graphics.clearRect(0, 0, 1200, 900);
         graphics.setColor(Color.RED);
         for (Actor actor : actors) {
-            //graphics.fill(new Rectangle2D.Double(actor.getLocation().getX(),actor.getLocation().getY(),15,15));
+            graphics.drawImage(sprites[1],(int)actor.getLocation().getX(),(int)actor.getLocation().getY(),null);
         }
-        for (int i = 0; i < sprites.length; i++) {
-            graphics.drawImage(sprites[i], 0, 32 * i, null);
-        }
+
 
 
     }
