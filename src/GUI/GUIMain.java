@@ -41,7 +41,7 @@ public class GUIMain extends Application {
     private ArrayList<LessonBlock> lessonBlocks;
     private DraggedBlock dragged;
     private ArrayList<Lesson> lessons;
-
+    private ArrayList<Color> groupColors;
     private void onStart() {
         this.dataController = new DataController();
     }
@@ -56,6 +56,11 @@ public class GUIMain extends Application {
         lessonBlocks = new ArrayList<>();
         dragged = null;
         lessons = dataController.getAllLessons();
+
+        //Testcode om groepen in Agenda kleurtjes te geven
+        //this.groupColors = new ArrayList<>();
+        //Color[] data = {Color.RED, Color.YELLOW, Color.BLUE,Color.CYAN,Color.GREEN, Color.MAGENTA};
+        //groupColors.addAll(data{1,2,3,4,5});
 
         TableView tableViewTableTab = new TableView();
         ObservableList<Lesson> tableData = FXCollections.observableArrayList(lessons);
@@ -506,6 +511,7 @@ public class GUIMain extends Application {
 
             for (LessonBlock lessonBlock : lessonBlocks) {
                 graphics.setColor(new Color(0,150,255));
+                //graphics.setColor(groupColors.get(lessonBlocks.indexOf(lessonBlock)));
                 graphics.fill(lessonBlock.getTransformedShape());
                 graphics.setColor(Color.BLACK);
                 graphics.draw(lessonBlock.getTransformedShape());
