@@ -7,6 +7,8 @@ import java.util.Random;
 
 public class Student extends Actor {
 
+
+
     private Group group;
 
     public Student(Group group)
@@ -22,5 +24,13 @@ public class Student extends Actor {
     @Override
     public void chooseDestination() {
 
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }
