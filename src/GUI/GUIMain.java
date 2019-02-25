@@ -20,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
+import simulation.SimulationPane;
 
 import javax.swing.*;
 import java.awt.*;
