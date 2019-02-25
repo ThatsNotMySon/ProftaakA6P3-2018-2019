@@ -13,9 +13,6 @@ abstract class Actor {
 
     }
 
-    public void draw(){
-
-    }
 
     public abstract void chooseDestination();
 

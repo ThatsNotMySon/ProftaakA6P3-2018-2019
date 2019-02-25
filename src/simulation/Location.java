@@ -6,7 +6,4 @@ public abstract class Location {
 
     Shape shape;
 
-    public void draw(){
-        
-    }
 }

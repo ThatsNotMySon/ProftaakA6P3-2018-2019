@@ -10,10 +10,14 @@ public class TimeControl {
     }
 
     public void playPause(){
-
+        System.out.println("Play/Pause");
     }
 
     public void setTime(){
+
+    }
+
+    public void setSpeedFactor(){
 
     }
 
