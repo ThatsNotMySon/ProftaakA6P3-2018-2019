@@ -7,14 +7,15 @@ import java.util.Random;
 
 public class Student extends Actor {
 
+
+
     private Group group;
 
     public Student(Group group)
     {
         this.group = this.group;
-        this.location = new Point2D(new Random().nextInt(1200),new Random().nextInt(900));
-        System.out.println(location.getX());
-        System.out.println(location.getY());
+        this.position = new Point2D(new Random().nextInt(1200),new Random().nextInt(900));
+
 
     }
 
@@ -22,5 +23,13 @@ public class Student extends Actor {
     @Override
     public void chooseDestination() {
 
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }
