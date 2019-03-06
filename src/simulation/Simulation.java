@@ -9,6 +9,7 @@ import org.jfree.fx.FXGraphics2D;
 import javax.imageio.ImageIO;
 import javax.xml.crypto.Data;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -41,9 +42,12 @@ public class Simulation {
         graphics.clearRect(0, 0, 1200, 900);
         graphics.setColor(Color.RED);
         for (Actor actor : actors) {
-            graphics.drawImage(sprites[1],(int)actor.getLocation().getX(),(int)actor.getLocation().getY(),null);
-        }
+            AffineTransform tx = new AffineTransform();
+            tx.translate(actor.getLocation().getX()+16, actor.getLocation().getY()+16);
+            tx.translate(-16,-16);
+            graphics.drawImage(sprites[actor.getSpriteIndex()], tx, null);
 
+        }
 
 
     }
@@ -67,7 +71,7 @@ public class Simulation {
     }
 
 
-    public void createSprite()  {
+    public void createSprite() {
 
         BufferedImage sprite = null;
         try {
