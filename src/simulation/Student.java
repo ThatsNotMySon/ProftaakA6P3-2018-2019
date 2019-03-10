@@ -15,6 +15,7 @@ public class Student extends Actor {
     {
         this.group = this.group;
         this.position = new Point2D(new Random().nextInt(1200),new Random().nextInt(900));
+        this.destination = new Point2D(new Random().nextInt(1200), new Random().nextInt(900));
 
 
     }

@@ -3,11 +3,12 @@ package simulation;
 import javafx.geometry.Point2D;
 
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 abstract class Actor {
 
     Point2D position;
-    private Point2D destination;
+    Point2D destination;
     private final double speed = 20;
     private double angle;
     BufferedImage sprite;
@@ -28,16 +29,41 @@ abstract class Actor {
 
 
 
+    //Auteur: Tom
+    //Deze methode zorgt ervoor dat een Actor richting zijn bestemming draait en beweegt,
     public void update(double deltaTime){
+        if (this.position.distance(this.destination) < 5.0) {
+            this.destination = new Point2D(new Random().nextInt(1200), new Random().nextInt(900));
+        }
+
         turnTimer += deltaTime;
         this.setLocation(new Point2D(this.getLocation().getX() +  deltaTime* speed * Math.cos(this.angle), this.getLocation().getY() +  deltaTime *speed * Math.sin(this.angle)));
 
+        Point2D difference = new Point2D(this.destination.getX() - this.position.getY(), this.destination.getY() - this.position.getY());
+        double targetAngle = Math.atan2(difference.getY(), difference.getX());
 
-        if(turnTimer > 0.25){
+        double differenceAngle = targetAngle - this.angle;
 
+        while (differenceAngle > Math.PI) {
+            differenceAngle -= 2 * Math.PI;
+        }
+        while (differenceAngle < -Math.PI) {
+            differenceAngle += 2 * Math.PI;
+        }
+
+        if (differenceAngle < -0.1) {
+            this.angle -= 0.1;
+        } else if (differenceAngle > 0.1) {
             this.angle += 0.1;
-        turnTimer=0;}
-        this.angle = this.angle%(2*Math.PI);
+        } else {
+            this.angle = targetAngle;
+        }
+
+//        if(turnTimer > 0.25){
+//
+//            this.angle += 0.1;
+//        turnTimer=0;}
+//        this.angle = this.angle%(2*Math.PI);
     }
 
 
