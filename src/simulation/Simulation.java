@@ -1,27 +1,20 @@
 package simulation;
 
 import Data.Group;
-import Data.Timetable;
 import Data.DataController;
-import javafx.animation.AnimationTimer;
-import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Simulation {
     private BufferedImage[] sprites;
     private ArrayList<Actor> actors;
     private ArrayList<Location> locations;
     private TimeControl timeControl;
-
 
     public Simulation(DataController dataController) {
         this.timeControl = new TimeControl();
@@ -46,15 +39,12 @@ public class Simulation {
             tx.translate(actor.getLocation().getX()+16, actor.getLocation().getY()+16);
             tx.translate(-16,-16);
             graphics.drawImage(sprites[actor.getSpriteIndex()], tx, null);
-
         }
-
-
     }
 
-    void update(double deltaTime) {
+    public void update(double deltaTime) {
         for (Actor actor : actors) {
-            actor.update(deltaTime);
+            actor.update(deltaTime, actors);
         }
     }
 
