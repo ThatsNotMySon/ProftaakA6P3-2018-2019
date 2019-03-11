@@ -35,6 +35,7 @@ import java.util.ArrayList;
 public class GUIMain extends Application {
 
 
+    public LessonTab lessonTab1;
     private Canvas agendaCanvas;
     private DataController dataController;
     private Timetable timetable;
@@ -68,7 +69,7 @@ public class GUIMain extends Application {
         ObservableList<Lesson> tableData = FXCollections.observableArrayList(lessons);
 
         ListView listGroups = new ListView();
-        ListView listRooms = new ListView();
+      //  ListView listRooms = new ListView();
 
         this.createLessonBlocks();
 //Auteur : Sebastiaan
@@ -116,13 +117,14 @@ public class GUIMain extends Application {
             draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         });
 
-        LessonTab lessonTab1 = new LessonTab(dataController, lessons, tableData, tableViewTableTab, agendaCanvas, this);
+        lessonTab1 = new LessonTab(dataController, lessons, tableData, tableViewTableTab, agendaCanvas, this);
+        RoomTab roomTab1 = new RoomTab(dataController, this, agendaCanvas);
 
         TabPane tabPane = new TabPane();
 
         Tab agendaTab = new Tab("Agenda");
         Tab tableTab = new Tab("Table");
-        Tab roomTab = new Tab("Rooms");
+        Tab roomTab = new Tab("Rooms", roomTab1);
         Tab groupTab = new Tab("Groups");
         Tab lessonTab = new Tab("Lesson", lessonTab1);
         Tab simulationTab = new Tab("Simulation");
@@ -134,14 +136,6 @@ public class GUIMain extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(tabPane);
         Scene scene = new Scene(borderPane);
-
-        /*
-        De volgende code hoort bij het tabje Lesson
-        * Als het stuk is moet je bij Tom zijn
-        * */
-
-
-
 
 
             /*
@@ -180,8 +174,7 @@ public class GUIMain extends Application {
                 tableViewTableTab.setItems(tableData);
                 listGroups.getItems().clear();
                 listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-                listRooms.getItems().clear();
-                listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                //TODO: Room update
                 //TODO: lesson update
                 createLessonBlocks();
                 draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
@@ -210,26 +203,16 @@ public class GUIMain extends Application {
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
 
-        /*
-        * De volgende code laat de knoppen op de Lesson Tab
-        * Als deze code stuk is moet je bij Marleen zijn.
-        * Voor het tekengedeelde moet je bij Sebastiaan zijn.
-        * */
 
-
-/*
-        Code voor aanmaken simulatie scherm
-                Geschreven door Sebastiaan*/
 
         /*
         Meer algemene code
         * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
         * */
 
-        //TODO: lessonTab
+
         BorderPane agendaPane = new BorderPane(agendaCanvas);
         BorderPane tablePane = new BorderPane(vBoxTable);
-        GridPane roomPane = new GridPane();
         GridPane groupPane = new GridPane();
         BorderPane simulationPane = new SimulationPane();
 
@@ -307,88 +290,16 @@ public class GUIMain extends Application {
         * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
         * */
 
-        Label nameRoomLabel = new Label("Room name: ");
-        TextField nameRoom = new TextField("LA111");
-
-        Label capacityRoomLabel = new Label("Capacity Room");
-        TextField capacityRoom = new TextField("0");
-
-        Button addRoom = new Button("Add Room");
-        Button deleteRoom = new Button("Delete Room");
-
-        Label errorLabelRooms = new Label("");
-
-        roomPane.add(nameRoomLabel, 1, 1);
-        roomPane.add(nameRoom, 2, 1);
-        roomPane.add(capacityRoomLabel, 1, 2);
-        roomPane.add(capacityRoom, 2, 2);
-        roomPane.add(errorLabelRooms, 2, 3);
-        roomPane.add(addRoom, 2, 4);
-        roomPane.add(listRooms, 1, 4);
-        roomPane.add(deleteRoom, 1, 5);
-
-        listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
-
-        /*
-        Actie van de knoppen van rooms
-        * Tom
-        * */
-
-        addRoom.setOnAction(event -> {
-            try {
-                if (nameRoom.getText() != null && capacityRoom != null && !this.dataController.getAllRoomNames().contains(nameRoom.getText()) && Integer.parseInt(capacityRoom.getText()) > 0) {
-                    this.dataController.getTimeTable().addRoom(new Room(nameRoom.getText(), Integer.parseInt(capacityRoom.getText())));
-                    listRooms.getItems().clear();
-                    listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
-                    lessonTab1.LessonUpdate();
-                    errorLabelRooms.setText("Room added");
-                    createLessonBlocks();
-                    draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
-                } else {
-                    errorLabelRooms.setText("Check input");
-                }
-            }
-            catch (Exception e) {
-                errorLabelRooms.setText("Check input");
-                System.out.println("Check input");
-                e.printStackTrace();
-            }
-        });
-
-        deleteRoom.setOnAction(event -> {
-            listRooms.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-            ArrayList<String> rooms = new ArrayList<>();
-            for (int i = 0; i < this.dataController.getAllLessons().size(); i++) {
-                rooms.add(this.dataController.getAllLessons().get(i).getRoom().getName());
-            }
-            Room selectedRoom = (Room)listRooms.getSelectionModel().getSelectedItem();
-            if (!rooms.contains(selectedRoom.getName())) {
-
-                this.dataController.getTimeTable().removeRoom((Room) listRooms.getSelectionModel().getSelectedItem());
-                listRooms.getItems().clear();
-                listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
-                lessonTab1.LessonUpdate();
-                errorLabelRooms.setText("Room deleted");
-                createLessonBlocks();
-                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
-            } else {
-                errorLabelRooms.setText("Cannot delete room being used by lesson");
-            }
-        });
-
         /*Meer algeme code
         * Als deze code stuk is moet je bij Marleen en Rümeysa*/
 
         agendaTab.setContent(agendaPane);
         tableTab.setContent(tablePane);
-        roomTab.setContent(roomPane);
         groupTab.setContent(groupPane);
-         simulationTab.setContent(simulationPane);
+        simulationTab.setContent(simulationPane);
 
         draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         primaryStage.setScene(scene);
-
 
         primaryStage.setTitle("Agenda");
         primaryStage.show();
@@ -413,7 +324,7 @@ public class GUIMain extends Application {
         graphics.clearRect(0, 0, (int) agendaCanvas.getHeight() * 2, (int) agendaCanvas.getWidth() * 2);
 
 
-//Auteur: Marleen
+        //Auteur: Marleen
         //Hieronder wordt het rooster getekend
         graphics.draw(new Line2D.Double(50, 0, 50, this.agendaCanvas.getHeight()));
 
@@ -480,7 +391,7 @@ public class GUIMain extends Application {
     }
 
     //Auteur: Sebastiaan
-    // Deze methode kreert de lesblokken voor in d e
+    // Deze methode creert de lesblokken voor in de
     public void createLessonBlocks() {
 
         int pixelVertical = (int) this.agendaCanvas.getHeight() / 27;

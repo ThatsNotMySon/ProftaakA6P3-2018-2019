@@ -20,7 +20,10 @@ public class LessonTab extends BorderPane {
     private DataController dataController;
 
 
+
     public LessonTab(DataController dataController, ArrayList<Lesson> lessons, ObservableList<Lesson> tableData, TableView tableViewTableTab, Canvas agendaCanvas, GUIMain guiMain){
+
+        //Auteur: Tom (losgehaald door Marleen)
 
         this.dataController = dataController;
         lessonGroupsListView = new ListView();
@@ -53,6 +56,9 @@ public class LessonTab extends BorderPane {
 
         lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
         lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+
+        //Auteur: Marleen
+        //Code voor aanmaken simulatiescherm: Sebastiaan
 
         confirmLesson.setOnAction(event -> {
             try {
