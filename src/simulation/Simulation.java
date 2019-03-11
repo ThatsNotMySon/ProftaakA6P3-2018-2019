@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class Simulation {
             for (int i = 0; i < group.getAmountOfStudents(); i++)
                 actors.add(new Student(group));
         }
+
         System.out.println("Created " + actors.size() + " students in simulation");
         createSprite();
     }
@@ -53,7 +55,7 @@ public class Simulation {
             tx.translate(actor.getLocation().getX()+16, actor.getLocation().getY()+16);
             tx.translate(-16,-16);
             graphics.drawImage(sprites[actor.getSpriteIndex()], tx, null);
-
+            graphics.draw(new Ellipse2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), 10,10));
         }
 
 

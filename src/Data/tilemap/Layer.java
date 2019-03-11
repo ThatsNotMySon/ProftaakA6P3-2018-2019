@@ -4,6 +4,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Layer {
@@ -18,6 +19,8 @@ public class Layer {
     private int width;
     private int x;
     private int y;
+
+    BufferedImage image = null;
 
     private ArrayList<TileSet> tileSets;
 
@@ -37,23 +40,35 @@ public class Layer {
     }
 
     public void draw(Graphics2D g2d){
-        for(int i = 0; i < data.size(); i++) {
-            int tile = data.getInt(i);
+        if(image == null)
+        {
+            image = new BufferedImage(width * 16, height * 16, BufferedImage.TYPE_4BYTE_ABGR);
+            Graphics2D g = image.createGraphics();
 
-            if (tile != 0) {
-                boolean found = false;
-                for (TileSet tileSet : tileSets) {
-                    if (tileSet.getFirstgid() < tile && !found) {
-                        if (tileSet.containsTile(tile)) {
-                            AffineTransform tx = new AffineTransform();
-                            tx.translate((i % width) * tileSet.getTileWidth(), (Math.floor(i / height) * tileSet.getTileHeight()));
-                            g2d.drawImage(tileSet.getTileImage(tile), tx, null);
-                            found = true;
+            for(int i = 0; i < data.size(); i++) {
+                int tile = data.getInt(i);
+
+                if (tile != 0) {
+                    boolean found = false;
+                    for (TileSet tileSet : tileSets) {
+                        if (tileSet.getFirstgid() < tile && !found) {
+                            if (tileSet.containsTile(tile)) {
+                                AffineTransform tx = new AffineTransform();
+                                tx.translate((i % width) * tileSet.getTileWidth(), (Math.floor(i / height) * tileSet.getTileHeight()));
+                                g.drawImage(tileSet.getTileImage(tile), tx, null);
+                                found = true;
+                                break;
+                            }
                         }
                     }
                 }
-           }
+            }
         }
+
+
+
+        g2d.drawImage(image, new AffineTransform(), null);
+
     }
 
     public void setTileSets(ArrayList<TileSet> tileSets){

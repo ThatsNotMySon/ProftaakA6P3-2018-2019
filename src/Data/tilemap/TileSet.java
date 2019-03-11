@@ -84,8 +84,8 @@ public class TileSet {
         int stepSizeY = this.tileHeight;
 
         int tID = firstgid;
-        for(int i =0; i < columns; i++){
-            for(int j = 0; j < this.imageHeight/(tileHeight+spacing); j++){
+        for(int j = 0; j < this.imageHeight/(tileHeight+spacing); j++){
+            for(int i =0; i < columns; i++){
                 BufferedImage tileImage = tilesImage.getSubimage(stepSizeX*i,  stepSizeY*j,  stepSizeX, stepSizeY);
                 tiles.add(new Tile(tID, tileImage));
                 tID++;
