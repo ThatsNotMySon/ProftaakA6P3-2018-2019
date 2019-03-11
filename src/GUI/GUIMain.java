@@ -116,6 +116,7 @@ public class GUIMain extends Application {
             draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         });
 
+        LessonTab lessonTab1 = new LessonTab(dataController, lessons, tableData, tableViewTableTab, agendaCanvas, this);
 
         TabPane tabPane = new TabPane();
 
@@ -123,7 +124,7 @@ public class GUIMain extends Application {
         Tab tableTab = new Tab("Table");
         Tab roomTab = new Tab("Rooms");
         Tab groupTab = new Tab("Groups");
-        Tab lessonTab = new Tab("Lesson");
+        Tab lessonTab = new Tab("Lesson", lessonTab1);
         Tab simulationTab = new Tab("Simulation");
 
         tabPane.getTabs().addAll(agendaTab, tableTab, roomTab, groupTab, lessonTab, simulationTab);
@@ -139,34 +140,9 @@ public class GUIMain extends Application {
         * Als het stuk is moet je bij Tom zijn
         * */
 
-        ListView lessonGroupsListView = new ListView();
-        ListView lessonRoomsListView = new ListView();
 
-        TextField lessonTeacherInput = new TextField();
-        TextField lessonSubjectInput = new TextField();
-        TextField lessonStartTimeInput = new TextField();
-        TextField lessonStartTimeInput2 = new TextField();
-        TextField lessonLengthTimeInput = new TextField();
 
-        Label lessonTeacherLabel = new Label("Teacher");
-        Label lessonSubjectLabel = new Label("Subject");
-        Label lessonStartTimeLabel = new Label("Start time");
-        Label lessonLengthTimeLabel = new Label("Length");
-        Label errorLabel = new Label("");
 
-        Button confirmLesson = new Button("Create Lesson");
-
-        HBox hBoxLessonsTeacher = new HBox(lessonTeacherInput, lessonTeacherLabel);
-        HBox hBoxLessonsSubject = new HBox(lessonSubjectInput, lessonSubjectLabel);
-        HBox hBoxLessonsStartTime = new HBox(lessonStartTimeInput, lessonStartTimeInput2, lessonStartTimeLabel);
-        HBox hBoxLessonsLengthTime = new HBox(lessonLengthTimeInput, lessonLengthTimeLabel);
-
-        VBox vBoxLessonsInput = new VBox(hBoxLessonsTeacher, hBoxLessonsSubject, hBoxLessonsStartTime, hBoxLessonsLengthTime, errorLabel);
-
-        VBox vBoxLessons = new VBox(vBoxLessonsInput, confirmLesson);
-        HBox hBoxLessons = new HBox(lessonGroupsListView, lessonRoomsListView, vBoxLessons);
-        vBoxLessons.setSpacing(5);
-        hBoxLessons.setSpacing(25);
 
             /*
         De volgende code hoort bij het tabje table
@@ -206,10 +182,7 @@ public class GUIMain extends Application {
                 listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
                 listRooms.getItems().clear();
                 listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
-                lessonGroupsListView.getItems().clear();
-                lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-                lessonRoomsListView.getItems().clear();
-                lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                //TODO: lesson update
                 createLessonBlocks();
                 draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
             }
@@ -243,42 +216,7 @@ public class GUIMain extends Application {
         * Voor het tekengedeelde moet je bij Sebastiaan zijn.
         * */
 
-        lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-        lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
 
-        confirmLesson.setOnAction(event -> {
-            try {
-                if(lessonRoomsListView.getSelectionModel().getSelectedItem() != null && lessonGroupsListView.getSelectionModel().getSelectedItem() != null &&
-                        lessonStartTimeInput != null && lessonStartTimeInput2 != null & lessonLengthTimeInput != null && lessonTeacherInput != null && lessonSubjectInput != null && Integer.parseInt(lessonLengthTimeInput.getText()) > 0
-                && Integer.parseInt(lessonStartTimeInput.getText()) > 5 && Integer.parseInt(lessonStartTimeInput.getText()) + (Integer.parseInt(lessonLengthTimeInput.getText())/60) < 18) {
-                    errorLabel.setText("");
-                    Lesson lessonToAdd = new Lesson((LocalTime.of(Integer.parseInt(
-                            lessonStartTimeInput.getText()), Integer.parseInt(lessonStartTimeInput2.getText()))),
-                            Integer.parseInt(lessonLengthTimeInput.getText()), lessonTeacherInput.getText(),
-                            lessonSubjectInput.getText(), (Room) lessonRoomsListView.getSelectionModel().getSelectedItem(),
-                            (Group) lessonGroupsListView.getSelectionModel().getSelectedItem());
-
-                    if (dataController.checkAvailableTime(lessonToAdd.getRoom().getName(), lessonToAdd.getStartTime(), lessonToAdd.getDuration())) {
-                        this.dataController.getTimeTable().addLesson(lessonToAdd);
-                        tableData.add(lessons.get(lessons.size() - 1));
-                        tableViewTableTab.setItems(tableData);
-                        createLessonBlocks();
-                        draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
-                        System.out.println("Lesson added");
-                    } else {
-                        errorLabel.setText("Room not available at selected time");
-                    }
-                } else {
-                    errorLabel.setText("Check input");
-                }
-
-            } catch (Exception e) {
-                errorLabel.setText("Check input");
-                e.printStackTrace();
-
-            }
-
-        });
 /*
         Code voor aanmaken simulatie scherm
                 Geschreven door Sebastiaan*/
@@ -288,11 +226,11 @@ public class GUIMain extends Application {
         * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
         * */
 
+        //TODO: lessonTab
         BorderPane agendaPane = new BorderPane(agendaCanvas);
         BorderPane tablePane = new BorderPane(vBoxTable);
         GridPane roomPane = new GridPane();
         GridPane groupPane = new GridPane();
-        BorderPane lessonPane = new BorderPane(hBoxLessons);
         BorderPane simulationPane = new SimulationPane();
 
         /*
@@ -333,8 +271,7 @@ public class GUIMain extends Application {
                     this.dataController.getTimeTable().addGroup(new Group(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText())));
                     listGroups.getItems().clear();
                     listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-                    lessonGroupsListView.getItems().clear();
-                    lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                    lessonTab1.LessonUpdate();
                     errorInGroup.setText("Group added");
                 } else {
                     errorInGroup.setText("Check input");
@@ -357,8 +294,8 @@ public class GUIMain extends Application {
                 listGroups.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
                 this.dataController.getTimeTable().removeGroup((Group) listGroups.getSelectionModel().getSelectedItem());
                 listGroups.getItems().clear();
-                listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());    lessonGroupsListView.getItems().clear();
-                lessonGroupsListView.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
+                lessonTab1.LessonUpdate();
                 errorInGroup.setText("Group deleted");
         } else {
                 errorInGroup.setText("Cannot delete group being used by lesson");
@@ -403,8 +340,7 @@ public class GUIMain extends Application {
                     this.dataController.getTimeTable().addRoom(new Room(nameRoom.getText(), Integer.parseInt(capacityRoom.getText())));
                     listRooms.getItems().clear();
                     listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
-                    lessonRoomsListView.getItems().clear();
-                    lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                    lessonTab1.LessonUpdate();
                     errorLabelRooms.setText("Room added");
                     createLessonBlocks();
                     draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
@@ -432,8 +368,7 @@ public class GUIMain extends Application {
                 this.dataController.getTimeTable().removeRoom((Room) listRooms.getSelectionModel().getSelectedItem());
                 listRooms.getItems().clear();
                 listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
-                lessonRoomsListView.getItems().clear();
-                lessonRoomsListView.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
+                lessonTab1.LessonUpdate();
                 errorLabelRooms.setText("Room deleted");
                 createLessonBlocks();
                 draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
@@ -449,8 +384,7 @@ public class GUIMain extends Application {
         tableTab.setContent(tablePane);
         roomTab.setContent(roomPane);
         groupTab.setContent(groupPane);
-        lessonTab.setContent(lessonPane);
-        simulationTab.setContent(simulationPane);
+         simulationTab.setContent(simulationPane);
 
         draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         primaryStage.setScene(scene);
@@ -547,7 +481,7 @@ public class GUIMain extends Application {
 
     //Auteur: Sebastiaan
     // Deze methode kreert de lesblokken voor in d e
-    private void createLessonBlocks() {
+    public void createLessonBlocks() {
 
         int pixelVertical = (int) this.agendaCanvas.getHeight() / 27;
         int widthRoom = (int) (this.agendaCanvas.getWidth() - 50) / timetable.getAllRooms().size();
