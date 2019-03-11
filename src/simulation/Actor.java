@@ -31,8 +31,9 @@ abstract class Actor {
     }
 
     /**
-     * Auter: Marleen, Rümeysa & Sebastiaan
+     * Auteur: Marleen, Rümeysa, Tom & Sebastiaan
      * De som van this.setLocation is van Sebastiaan
+     * De code voor beweging en angles is van Tom
      * De overige code over collision zijn gemaakt door Marleen en Rümeysa
      */
     public void update(double deltaTime, ArrayList<Actor> actors) {
