@@ -47,7 +47,7 @@ abstract class Actor {
                 break;
             }
         }
-        Point2D difference = new Point2D(this.destination.getX() - nextLocation.getY(), this.destination.getY() - nextLocation.getY());
+        Point2D difference = new Point2D(this.destination.getX() - nextLocation.getX(), this.destination.getY() - nextLocation.getY());
         double targetAngle = Math.atan2(difference.getY(), difference.getX());
 
         double differenceAngle = targetAngle - this.angle;
