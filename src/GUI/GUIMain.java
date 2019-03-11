@@ -138,7 +138,7 @@ public class GUIMain extends Application {
         De volgende code hoort bij het tabje Lesson
         * Als het stuk is moet je bij Tom zijn
         * */
-        
+
         ListView lessonGroupsListView = new ListView();
         ListView lessonRoomsListView = new ListView();
 
@@ -168,19 +168,22 @@ public class GUIMain extends Application {
         vBoxLessons.setSpacing(5);
         hBoxLessons.setSpacing(25);
 
+            /*
+        De volgende code hoort bij het tabje table
+        Als het stuk is moet je bij Rümeysa en Tom zijn
+         */
+
         Button openFile = new Button("Open File");
         Button saveFile = new Button("Save File");
         Button deleteLesson = new Button("Remove Lesson");
+
 
         TableColumn columnGroups = new TableColumn("Group");
         TableColumn columnRooms = new TableColumn("Room");
         TableColumn columnStartTime = new TableColumn("Start time");
         TableColumn columnLengthTime = new TableColumn("Length");
 
-        /*
-        De volgende code hoort bij het tabje table
-        Als het stuk is moet je bij Rümeysa en Tom zijn
-         */
+
 
         columnGroups.setCellValueFactory(new PropertyValueFactory<Lesson, Group>("Group"));
         columnRooms.setCellValueFactory(new PropertyValueFactory<Lesson, Room>("Room"));

@@ -6,6 +6,7 @@ import Data.DataController;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +24,15 @@ public class Simulation {
         actors = new ArrayList<>();
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
-            for (int i = 0; i < group.getAmountOfStudents(); i++)
-                actors.add(new Student(group));
+            for (int i = 0; i < group.getAmountOfStudents(); i++) {
+                Student  newStudent = new Student(group);
+                boolean hasCollision = false;
+                for(Actor a : actors)
+                    if(a.hasCollision(newStudent))
+                        hasCollision = true;
+                if(!hasCollision)
+                    actors.add(newStudent);
+            }
         }
         System.out.println("Created " + actors.size() + " students in simulation");
         createSprite();
@@ -39,6 +47,8 @@ public class Simulation {
             tx.translate(actor.getLocation().getX()+16, actor.getLocation().getY()+16);
             tx.translate(-16,-16);
             graphics.drawImage(sprites[actor.getSpriteIndex()], tx, null);
+            graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.destination.getX(), actor.destination.getY()));
+            graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.getLocation().getX() + Math.cos(actor.getAngle()) * 10, actor.getLocation().getY() + Math.sin(actor.getAngle()) * 10));
         }
     }
 
