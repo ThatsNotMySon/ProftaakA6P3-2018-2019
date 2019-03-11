@@ -176,12 +176,17 @@ public class GUIMain extends Application {
         Button openFile = new Button("Open File");
         Button saveFile = new Button("Save File");
         Button deleteLesson = new Button("Remove Lesson");
+        Button editLesson = new Button("Edit lesson");
+        Button addGroupToLesson = new Button("Add group to lesson");
+        Button removeGroupFromLesson = new Button("Remove group to lesson");
 
 
         TableColumn columnGroups = new TableColumn("Group");
         TableColumn columnRooms = new TableColumn("Room");
         TableColumn columnStartTime = new TableColumn("Start time");
         TableColumn columnLengthTime = new TableColumn("Length");
+        TableColumn columnSubject = new TableColumn("Subject");
+        TableColumn columnTeacher = new TableColumn("Teacher");
 
 
 
@@ -189,9 +194,11 @@ public class GUIMain extends Application {
         columnRooms.setCellValueFactory(new PropertyValueFactory<Lesson, Room>("Room"));
         columnStartTime.setCellValueFactory(new PropertyValueFactory<Lesson, LocalTime>("startTime"));
         columnLengthTime.setCellValueFactory(new PropertyValueFactory<Lesson, Integer>("duration"));
+        columnSubject.setCellValueFactory(new PropertyValueFactory<Lesson, String>("subject"));
+        columnTeacher.setCellValueFactory(new PropertyValueFactory<Lesson, String>("teacher"));
 
         tableViewTableTab.setItems(tableData);
-        tableViewTableTab.getColumns().addAll(columnGroups, columnRooms, columnStartTime, columnLengthTime);
+        tableViewTableTab.getColumns().addAll(columnGroups, columnRooms, columnSubject, columnTeacher, columnStartTime, columnLengthTime);
 
         JFileChooser chooser = new JFileChooser();
         openFile.setOnAction(e -> {
@@ -232,8 +239,116 @@ public class GUIMain extends Application {
             draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         });
 
+        HBox editFieldHBox = new HBox();
+        Label feedbackEditsLabel = new Label();
+        editLesson.setOnAction(e -> {
+            editFieldHBox.getChildren().clear();
+            tableViewTableTab.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            Lesson selectedLesson = (Lesson)tableViewTableTab.getSelectionModel().getSelectedItem();
+            TextField groupEditField = new TextField(selectedLesson.getGroup().toString().substring(1, selectedLesson.getGroup().toString().length() - 1));
+
+            groupEditField.setOnAction(a -> {
+                String groupString = groupEditField.getText();
+                ArrayList<Group> groups = dataController.getAllGroups();
+                ArrayList<Group> selectedGroups = new ArrayList<>();
+                for (Group group : groups){
+                    if (group.getName().equals(groupString)){
+                        selectedGroups.add(group);
+                    }
+                }
+                if (selectedGroups.isEmpty()){
+                    feedbackEditsLabel.setText("Trying to add a group that doesn't exist, First make a group in the group tab with the same name");
+                } else {
+                    feedbackEditsLabel.setText("");
+                    selectedLesson.setGroup(selectedGroups);
+                }
+                tableData.clear();
+                tableData.addAll(this.dataController.getAllLessons());
+                createLessonBlocks();
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
+            });
+
+            TextField roomEditField = new TextField(selectedLesson.getRoom().toString());
+
+            roomEditField.setOnAction(a -> {
+                String roomString = roomEditField.getText();
+                ArrayList<Room> rooms = dataController.getAllRooms();
+                boolean worked = false;
+                for (Room room : rooms){
+                    if (room.getName().equals(roomString)){
+                        selectedLesson.setRoom(room);
+                        worked = true;
+                        feedbackEditsLabel.setText("");
+                    }
+                }
+                if (!worked){
+                    feedbackEditsLabel.setText("Trying to use a room that doesn't exist, First make a room in the room tab with the same name");
+                }
+                tableData.clear();
+                tableData.addAll(this.dataController.getAllLessons());
+                createLessonBlocks();
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
+            });
+
+            TextField subjectEditField = new TextField(selectedLesson.getSubject());
+
+            subjectEditField.setOnAction(a -> {
+                selectedLesson.setSubject(subjectEditField.getText());
+                tableData.clear();
+                tableData.addAll(this.dataController.getAllLessons());
+                createLessonBlocks();
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
+            });
+
+            TextField teacherEditField = new TextField(selectedLesson.getTeacher());
+
+            teacherEditField.setOnAction(a -> {
+                selectedLesson.setTeacher(teacherEditField.getText());
+                tableData.clear();
+                tableData.addAll(this.dataController.getAllLessons());
+                createLessonBlocks();
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
+            });
+
+            TextField startTimeEditField = new TextField(selectedLesson.getStartTime().toString());
+
+            startTimeEditField.setOnAction(a -> {
+                String startTimeString = startTimeEditField.getText();
+                String[] splitStrings = startTimeString.split(":");
+                LocalTime startTime = LocalTime.of(Integer.parseInt(splitStrings[0]), Integer.parseInt(splitStrings[1]));
+                if (dataController.checkAvailableTime(selectedLesson.getRoom().toString(), startTime, selectedLesson.getDuration(), selectedLesson)){
+                    selectedLesson.setStartTime(startTime);
+                } else {
+                    feedbackEditsLabel.setText("Time overlaps with other lesson, use an available time or another room");
+                }
+                tableData.clear();
+                tableData.addAll(this.dataController.getAllLessons());
+                createLessonBlocks();
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
+            });
+
+            TextField lengthTimeEditField = new TextField(String.valueOf(selectedLesson.getDuration()));
+
+            lengthTimeEditField.setOnAction(a -> {
+                int lengthTime = Integer.parseInt(lengthTimeEditField.getText());
+
+                if (dataController.checkAvailableTime(selectedLesson.getRoom().toString(), selectedLesson.getStartTime(), lengthTime, selectedLesson)){
+                    selectedLesson.setDuration(lengthTime);
+                } else {
+                    feedbackEditsLabel.setText("Time overlaps with other lesson, use an available time or another room");
+                }
+                tableData.clear();
+                tableData.addAll(this.dataController.getAllLessons());
+                createLessonBlocks();
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
+            });
+
+             editFieldHBox.getChildren().addAll(groupEditField,roomEditField,subjectEditField,teacherEditField,startTimeEditField,lengthTimeEditField);
+
+        });
+
         HBox hBoxTableFiles = new HBox(openFile, saveFile);
-        VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab, deleteLesson);
+        VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab, deleteLesson, editLesson, editFieldHBox, feedbackEditsLabel, addGroupToLesson, removeGroupFromLesson);
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
 
