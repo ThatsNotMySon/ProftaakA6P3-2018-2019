@@ -52,9 +52,9 @@ abstract class Actor {
         } else {
 
 //            this.speed = 0;
-            this.angle += 0.1;
-            turnTimer = 0;
-            this.angle = this.angle%(2*Math.PI);
+//            this.angle += 0.1;
+//            turnTimer = 0;
+//            this.angle = this.angle%(2*Math.PI);
         }
 
 //        if(turnTimer > 0.25){
