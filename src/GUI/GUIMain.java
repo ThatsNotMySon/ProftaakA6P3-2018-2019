@@ -68,8 +68,7 @@ public class GUIMain extends Application {
         TableView tableViewTableTab = new TableView();
         ObservableList<Lesson> tableData = FXCollections.observableArrayList(lessons);
 
-        ListView listGroups = new ListView();
-      //  ListView listRooms = new ListView();
+//        ListView listGroups = new ListView();
 
         this.createLessonBlocks();
 //Auteur : Sebastiaan
@@ -119,13 +118,14 @@ public class GUIMain extends Application {
 
         lessonTab1 = new LessonTab(dataController, lessons, tableData, tableViewTableTab, agendaCanvas, this);
         RoomTab roomTab1 = new RoomTab(dataController, this, agendaCanvas);
+        GroupTab groupTab1 = new GroupTab(dataController, this);
 
         TabPane tabPane = new TabPane();
 
         Tab agendaTab = new Tab("Agenda");
         Tab tableTab = new Tab("Table");
         Tab roomTab = new Tab("Rooms", roomTab1);
-        Tab groupTab = new Tab("Groups");
+        Tab groupTab = new Tab("Groups", groupTab1);
         Tab lessonTab = new Tab("Lesson", lessonTab1);
         Tab simulationTab = new Tab("Simulation");
 
@@ -172,10 +172,9 @@ public class GUIMain extends Application {
                 this.dataController.getTimeTable().loadTimetableFromFile(fileChosen.getAbsolutePath());
                 tableData.addAll(lessons);
                 tableViewTableTab.setItems(tableData);
-                listGroups.getItems().clear();
-                listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-                //TODO: Room update
-                //TODO: lesson update
+                groupTab1.groupTabUpdate();
+                roomTab1.roomTabUpdate();
+                lessonTab1.LessonUpdate();
                 createLessonBlocks();
                 draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
             }
@@ -213,89 +212,16 @@ public class GUIMain extends Application {
 
         BorderPane agendaPane = new BorderPane(agendaCanvas);
         BorderPane tablePane = new BorderPane(vBoxTable);
-        GridPane groupPane = new GridPane();
+//        GridPane groupPane = new GridPane();
         BorderPane simulationPane = new SimulationPane();
 
-        /*
-        Deze code hoogt bij het tabje Class
-        * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
-        * */
-
-        Label nameClassLabel = new Label("Name class: ");
-        Label amountOfStudentsLabel = new Label("Amount of students: ");
-
-        TextField nameClassField = new TextField("class");
-        TextField amountOfStudentsField = new TextField("amount");
-
-        Button buttonAddClass = new Button("Add class");
-        Button buttonDeleteClass = new Button("Delete Class");
-
-        Label errorInGroup = new Label("");
-
-        groupPane.add(nameClassLabel, 1, 1);
-        groupPane.add(nameClassField, 2, 1);
-        groupPane.add(amountOfStudentsLabel, 1, 2);
-        groupPane.add(amountOfStudentsField, 2, 2);
-        groupPane.add(buttonAddClass, 2, 4);
-        groupPane.add(listGroups, 1, 4);
-        groupPane.add(buttonDeleteClass, 1, 5);
-        groupPane.add(errorInGroup,2,3 );
-
-        /*
-         * De volgende code laat de knoppen op de Lesson Tab
-         * Als deze code stuk is moet je bij Marleen zijn
-         * */
-
-        listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-
-        buttonAddClass.setOnAction(event -> {
-            try {
-                if (nameClassField.getText() != null && amountOfStudentsField != null && !this.dataController.getAllGroupNames().contains(nameClassField.getText()) && Integer.parseInt(amountOfStudentsField.getText()) > 0) {
-                    this.dataController.getTimeTable().addGroup(new Group(nameClassField.getText(), Integer.parseInt(amountOfStudentsField.getText())));
-                    listGroups.getItems().clear();
-                    listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-                    lessonTab1.LessonUpdate();
-                    errorInGroup.setText("Group added");
-                } else {
-                    errorInGroup.setText("Check input");
-                }
-            } catch (Exception e){
-                System.out.println("Check input");
-                errorInGroup.setText("Check input");
-                e.printStackTrace();
-            }
-        });
-
-        buttonDeleteClass.setOnAction(event -> {
-            ArrayList<String> groupDelete = new ArrayList<>();
-            for (int i = 0; i < this.dataController.getAllLessons().size(); i++) {
-                groupDelete.add(this.dataController.getAllLessons().get(i).getGroup().get(0).getName());
-            }
-            listGroups.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-            Group selectedGroup = (Group)listGroups.getSelectionModel().getSelectedItem();
-            if (!groupDelete.contains(selectedGroup.getName())){
-                listGroups.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-                this.dataController.getTimeTable().removeGroup((Group) listGroups.getSelectionModel().getSelectedItem());
-                listGroups.getItems().clear();
-                listGroups.getItems().addAll(this.dataController.getTimeTable().getAllGroups());
-                lessonTab1.LessonUpdate();
-                errorInGroup.setText("Group deleted");
-        } else {
-                errorInGroup.setText("Cannot delete group being used by lesson");
-            }
-        });
-
-        /*
-        De volgende code hoort bij het tabje Room
-        * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
-        * */
 
         /*Meer algeme code
         * Als deze code stuk is moet je bij Marleen en Rümeysa*/
 
         agendaTab.setContent(agendaPane);
         tableTab.setContent(tablePane);
-        groupTab.setContent(groupPane);
+     //   groupTab.setContent(groupPane);
         simulationTab.setContent(simulationPane);
 
         draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));

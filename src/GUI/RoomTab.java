@@ -10,6 +10,7 @@ import org.jfree.fx.FXGraphics2D;
 import java.util.ArrayList;
 
 public class RoomTab extends GridPane {
+    // Auteur: Rümeysa en Marleen
     ListView listRooms = new ListView();
     private DataController dataController;
 
@@ -38,10 +39,7 @@ public class RoomTab extends GridPane {
 
         listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
 
-        /*
-        Actie van de knoppen van rooms
-        * Tom
-        * */
+        //Auteur: Tom
 
         addRoom.setOnAction(event -> {
             try {
@@ -87,8 +85,9 @@ public class RoomTab extends GridPane {
 
     }
 
-    public void roomTabUpdate() {
+    // Auteur: Rümeysa en Marleen
 
+    public void roomTabUpdate() {
         listRooms.getItems().clear();
         listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
     }
