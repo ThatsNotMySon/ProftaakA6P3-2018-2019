@@ -344,8 +344,64 @@ public class GUIMain extends Application {
 
         });
 
+        Button editGroupsInLesson = new Button("Edit groups in selected lesson");
+
+        HBox editGroupsHBox = new HBox();
+        editGroupsHBox.setSpacing(16.0);
+
+        editGroupsInLesson.setOnAction(a -> {
+            editGroupsHBox.getChildren().clear();
+            Lesson selectedLesson = (Lesson)tableViewTableTab.getSelectionModel().getSelectedItem();
+
+            VBox addGroupVbox = new VBox();
+            Label addGroupLabel = new Label("Add group to selected lesson");
+            TextField addGroupTextField = new TextField();
+            addGroupVbox.getChildren().addAll(addGroupLabel,addGroupTextField);
+            editGroupsHBox.getChildren().add(addGroupVbox);
+
+
+            addGroupTextField.setOnAction(e -> {
+                boolean worked = false;
+                for (Group group : dataController.getAllGroups()){
+                    if (group.getName().equals(addGroupTextField.getText())){
+                        selectedLesson.addGroup(group);
+                        worked = true;
+                    }
+                }
+                if (!worked){
+                    feedbackEditsLabel.setText("Trying to add a group that doesn't exist");
+                }
+                tableData.clear();
+                tableData.addAll(this.dataController.getAllLessons());
+                createLessonBlocks();
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
+            });
+
+            VBox removeGroupVbox = new VBox();
+            Label removeGroupLabel = new Label("Remove group from selected lesson");
+            TextField removeGroupTextField = new TextField();
+            removeGroupVbox.getChildren().addAll(removeGroupLabel,removeGroupTextField);
+            editGroupsHBox.getChildren().add(removeGroupVbox);
+            removeGroupTextField.setOnAction(e -> {
+                boolean worked = false;
+                for (Group group : selectedLesson.getGroup()){
+                    if (group.getName().equals(removeGroupTextField.getText())){
+                        selectedLesson.removeGroup(group);
+                        worked = true;
+                    }
+                }
+                if (!worked){
+                    feedbackEditsLabel.setText("Trying to remove group from a lesson wich the group is not in");
+                }
+                tableData.clear();
+                tableData.addAll(this.dataController.getAllLessons());
+                createLessonBlocks();
+                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
+            });
+        });
+
         HBox hBoxTableFiles = new HBox(openFile, saveFile);
-        VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab, deleteLesson, editLesson, editFieldHBox, feedbackEditsLabel, addGroupToLesson, removeGroupFromLesson);
+        VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab, deleteLesson, editLesson, editFieldHBox, editGroupsInLesson, editGroupsHBox, feedbackEditsLabel);
         hBoxTableFiles.setSpacing(50);
         vBoxTable.setSpacing(25);
 

@@ -97,5 +97,7 @@ public class Lesson implements Serializable {
         this.group.add(group);
     }
 
-
+    public void removeGroup(Group group) {
+        this.group.remove(group);
+    }
 }
