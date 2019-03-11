@@ -35,43 +35,48 @@ abstract class Actor {
      * De som van this.setLocation is van Sebastiaan
      * De overige code over collision zijn gemaakt door Marleen en Rümeysa
      */
-    public void update(double deltaTime, ArrayList<Actor> actors){
+    public void update(double deltaTime, ArrayList<Actor> actors) {
         turnTimer += deltaTime;
-        this.setLocation(new Point2D(this.getLocation().getX() +  deltaTime* speed * Math.cos(this.angle), this.getLocation().getY() +  deltaTime *speed * Math.sin(this.angle)));
+        Point2D nextLocation = new Point2D(this.getLocation().getX() + deltaTime * speed * Math.cos(this.angle), this.getLocation().getY() + deltaTime * speed * Math.sin(this.angle));
 
         Boolean hasCollision = false;
         for (Actor act : actors) {
-            if (act != this && act.hasCollision(this.getLocation())){
+            if (act != this && act.hasCollision(nextLocation)) {
                 hasCollision = true;
                 break;
             }
         }
-        Point2D difference = new Point2D(this.destination.getX() - this.position.getY(), this.destination.getY() - this.position.getY());
+        Point2D difference = new Point2D(this.destination.getX() - nextLocation.getY(), this.destination.getY() - nextLocation.getY());
         double targetAngle = Math.atan2(difference.getY(), difference.getX());
 
         double differenceAngle = targetAngle - this.angle;
         if (!hasCollision) {
 
-        while (differenceAngle > Math.PI) {
-            differenceAngle -= 2 * Math.PI;
-        }
-        while (differenceAngle < -Math.PI) {
-            differenceAngle += 2 * Math.PI;
-        }
+            this.setLocation(nextLocation);
 
-        if (differenceAngle < -0.1) {
-            this.angle -= 0.1;
-        } else if (differenceAngle > 0.1) {
-            this.angle += 0.1;
-        } else {
-            this.angle = targetAngle;
-        }
+            while (differenceAngle > Math.PI) {
+                differenceAngle -= 2 * Math.PI;
+            }
+            while (differenceAngle < -Math.PI) {
+                differenceAngle += 2 * Math.PI;
+            }
+
+            if (differenceAngle < -0.1) {
+                this.angle -= 0.1;
+            } else if (differenceAngle > 0.1) {
+                this.angle += 0.1;
+            } else {
+                this.angle = targetAngle;
+            }
 
 //        if(turnTimer > 0.25){
 //
 //            this.angle += 0.1;
 //        turnTimer=0;}
 //        this.angle = this.angle%(2*Math.PI);
+        } else {
+            this.angle += 0.1;
+        }
     }
 
 
