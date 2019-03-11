@@ -3,6 +3,7 @@ package simulation;
 import Data.Group;
 import Data.Timetable;
 import Data.DataController;
+import Data.tilemap.TileMap;
 import javafx.animation.AnimationTimer;
 import org.jfree.fx.FXGraphics2D;
 
@@ -21,6 +22,7 @@ public class Simulation {
     private ArrayList<Actor> actors;
     private ArrayList<Location> locations;
     private TimeControl timeControl;
+    private TileMap tileMap;
 
 
     public Simulation(DataController dataController) {
@@ -28,6 +30,8 @@ public class Simulation {
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
+        tileMap = new TileMap("resources/tilemaps/TI1.3Ontwerp5.json");
+
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++)
@@ -41,6 +45,9 @@ public class Simulation {
         graphics.setBackground(Color.WHITE);
         graphics.clearRect(0, 0, 1200, 900);
         graphics.setColor(Color.RED);
+
+        tileMap.draw(graphics);
+
         for (Actor actor : actors) {
             AffineTransform tx = new AffineTransform();
             tx.translate(actor.getLocation().getX()+16, actor.getLocation().getY()+16);
@@ -48,6 +55,8 @@ public class Simulation {
             graphics.drawImage(sprites[actor.getSpriteIndex()], tx, null);
 
         }
+
+
 
 
     }
