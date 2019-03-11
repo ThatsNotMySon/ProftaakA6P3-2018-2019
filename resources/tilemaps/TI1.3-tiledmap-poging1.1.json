@@ -35,7 +35,7 @@
         {
          "columns":8,
          "firstgid":1,
-         "image":"..\/..\/downloads\/Tiles\/castleFloor.png",
+         "image":"/img/castleFloor.png",
          "imageheight":112,
          "imagewidth":128,
          "margin":0,
@@ -48,7 +48,7 @@
         {
          "columns":8,
          "firstgid":57,
-         "image":"..\/..\/downloads\/Tiles\/TilesMeub.png",
+         "image":"/img/TilesMeub.png",
          "imageheight":288,
          "imagewidth":128,
          "margin":0,
@@ -61,7 +61,7 @@
         {
          "columns":8,
          "firstgid":201,
-         "image":"..\/..\/downloads\/Tiles\/TilesOutside.png",
+         "image":"/img/TilesOutside.png",
          "imageheight":96,
          "imagewidth":128,
          "margin":0,
@@ -74,7 +74,7 @@
         {
          "columns":8,
          "firstgid":249,
-         "image":"..\/..\/downloads\/Tiles\/TilesBomenetc.png",
+         "image":"/img/TilesBomenetc.png",
          "imageheight":208,
          "imagewidth":128,
          "margin":0,

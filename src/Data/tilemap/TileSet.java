@@ -52,6 +52,7 @@ public class TileSet {
         }
         else{
             this.columns = data.getInt("columns");
+            this.firstgid = data.getInt("firstgid");
             this.image = data.getString("image");
             this.imageHeight = data.getInt("imageheight");
             this.imageWidth = data.getInt("imagewidth");
@@ -59,11 +60,8 @@ public class TileSet {
             this.name = data.getString("name");
             this.spacing = data.getInt("spacing");
             this.tileCount = data.getInt("tilecount");
-            this.tiledVersion = data.getString("tiledversion");
             this.tileHeight = data.getInt("tileheight");
             this.tileWidth = data.getInt("tilewidth");
-            this.type = data.getString("type");
-            this.version = data.getJsonNumber("version").doubleValue();
         }
 
 
@@ -85,10 +83,12 @@ public class TileSet {
         int stepSizeX = this.tileWidth;
         int stepSizeY = this.tileHeight;
 
-        for(int i = 0; i < this.imageHeight/(tileHeight+spacing); i++){
-            for(int j = 0; j < imageWidth/(tileWidth + spacing); j++){
-                BufferedImage tileImage = tilesImage.getSubimage(stepSizeX*j, stepSizeY*i,  stepSizeX, stepSizeY);
-                tiles.add(new Tile(this.firstgid + i, tileImage));
+        int tID = firstgid;
+        for(int i =0; i < columns; i++){
+            for(int j = 0; j < this.imageHeight/(tileHeight+spacing); j++){
+                BufferedImage tileImage = tilesImage.getSubimage(stepSizeX*i,  stepSizeY*j,  stepSizeX, stepSizeY);
+                tiles.add(new Tile(tID, tileImage));
+                tID++;
             }
         }
     }

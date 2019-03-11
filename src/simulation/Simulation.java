@@ -30,7 +30,7 @@ public class Simulation {
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
-        tileMap = new TileMap("resources/tilemaps/TI1.3Ontwerp5.json");
+        tileMap = new TileMap("resources/tilemaps/TI1.3-tiledmap-poging1.1.json");
 
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());

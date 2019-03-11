@@ -45,6 +45,7 @@ public class TileMap {
         for (JsonValue jsonValue : tilesetsJsonArray){
             JsonObject jsonObject = (JsonObject) jsonValue;
             tileSetArrayList.add(new TileSet(jsonObject));
+
         }
         this.tileSets = tileSetArrayList;
 
@@ -86,6 +87,7 @@ public class TileMap {
         JsonArray tilesetsJsonArray = jsonIO.getJsonArrayFromTag("tilesets");
         ArrayList<TileSet> tileSetArrayList = new ArrayList<>();
         for (JsonValue jsonValue : tilesetsJsonArray){
+
             JsonObject jsonObject = (JsonObject) jsonValue;
             tileSetArrayList.add(new TileSet(jsonObject));
         }

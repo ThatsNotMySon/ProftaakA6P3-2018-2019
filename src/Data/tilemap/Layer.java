@@ -47,15 +47,12 @@ public class Layer {
                         if (tileSet.containsTile(tile)) {
                             AffineTransform tx = new AffineTransform();
                             tx.translate((i % width) * tileSet.getTileWidth(), (Math.floor(i / height) * tileSet.getTileHeight()));
-                            System.out.println(tx.toString());
                             g2d.drawImage(tileSet.getTileImage(tile), tx, null);
                             found = true;
                         }
                     }
                 }
-            }else{
-
-            }
+           }
         }
     }
 
