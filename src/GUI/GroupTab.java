@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class GroupTab extends GridPane {
 
-    //Auteur: Rümeysa en Marleen
+    //Auteur: Rümeysa en Marleen (loshalen uit GUIMain door Marleen)
 
     ListView listGroups = new ListView();
     DataController dataController;

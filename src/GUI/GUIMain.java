@@ -36,6 +36,9 @@ public class GUIMain extends Application {
 
 
     public LessonTab lessonTab1;
+    public GroupTab groupTab1;
+    public RoomTab roomTab1;
+    public TableTab tableTab1;
     private Canvas agendaCanvas;
     private DataController dataController;
     private Timetable timetable;
@@ -53,8 +56,8 @@ public class GUIMain extends Application {
     public void start(Stage primaryStage) {
 
         this.onStart();
-        
-        this.agendaCanvas = new Canvas(1200  ,900);
+
+        this.agendaCanvas = new Canvas(1200, 900);
         timetable = dataController.getTimeTable();
         lessonBlocks = new ArrayList<>();
         dragged = null;
@@ -67,8 +70,6 @@ public class GUIMain extends Application {
 
         TableView tableViewTableTab = new TableView();
         ObservableList<Lesson> tableData = FXCollections.observableArrayList(lessons);
-
-//        ListView listGroups = new ListView();
 
         this.createLessonBlocks();
 //Auteur : Sebastiaan
@@ -85,24 +86,25 @@ public class GUIMain extends Application {
 
         agendaCanvas.setOnMouseReleased(e -> {
 
-            if(dragged != null){
+            if (dragged != null) {
 
-            LocalTime newTime = getTimeAtMouse(offset.add(new Point2D(e.getX(),e.getY())));
-            Room newRoom = getRoomAtMouse(offset.add(new Point2D(e.getX(),e.getY())));
-                if(!dataController.checkAvailableTime(newRoom.getName(),newTime,dragged.getLesson().getDuration(), dragged.getLesson()))
+                LocalTime newTime = getTimeAtMouse(offset.add(new Point2D(e.getX(), e.getY())));
+                Room newRoom = getRoomAtMouse(offset.add(new Point2D(e.getX(), e.getY())));
+                if (!dataController.checkAvailableTime(newRoom.getName(), newTime, dragged.getLesson().getDuration(), dragged.getLesson()))
                     System.out.println("No free time found");
-            if(dataController.checkAvailableTime(newRoom.getName(),newTime,dragged.getLesson().getDuration(), dragged.getLesson()))
-                    //!dragged.getLesson().getStartTime().equals(newTime) && !dragged.getLesson().getRoom().equals(newRoom))
-            {
-                System.out.println("Free time found!");
-                dragged.getLesson().setStartTime(newTime);
-                dragged.getLesson().setRoom(newRoom);
-                System.out.println(dragged.getLesson());
-                createLessonBlocks();
-                tableData.removeAll(lessons);
-                tableData.addAll(lessons);
-                tableViewTableTab.setItems(tableData);
-            }}
+                if (dataController.checkAvailableTime(newRoom.getName(), newTime, dragged.getLesson().getDuration(), dragged.getLesson()))
+                //!dragged.getLesson().getStartTime().equals(newTime) && !dragged.getLesson().getRoom().equals(newRoom))
+                {
+                    System.out.println("Free time found!");
+                    dragged.getLesson().setStartTime(newTime);
+                    dragged.getLesson().setRoom(newRoom);
+                    System.out.println(dragged.getLesson());
+                    createLessonBlocks();
+                    tableData.removeAll(lessons);
+                    tableData.addAll(lessons);
+                    tableViewTableTab.setItems(tableData);
+                }
+            }
             dragged = null;
             draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         });
@@ -116,14 +118,16 @@ public class GUIMain extends Application {
             draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
         });
 
+        //Auteur: Marleen
         lessonTab1 = new LessonTab(dataController, lessons, tableData, tableViewTableTab, agendaCanvas, this);
-        RoomTab roomTab1 = new RoomTab(dataController, this, agendaCanvas);
-        GroupTab groupTab1 = new GroupTab(dataController, this);
+        roomTab1 = new RoomTab(dataController, this, agendaCanvas);
+        groupTab1 = new GroupTab(dataController, this);
+        tableTab1 = new TableTab(dataController, this, lessons, agendaCanvas);
 
         TabPane tabPane = new TabPane();
 
         Tab agendaTab = new Tab("Agenda");
-        Tab tableTab = new Tab("Table");
+        Tab tableTab = new Tab("Table", tableTab1);
         Tab roomTab = new Tab("Rooms", roomTab1);
         Tab groupTab = new Tab("Groups", groupTab1);
         Tab lessonTab = new Tab("Lesson", lessonTab1);
@@ -133,95 +137,15 @@ public class GUIMain extends Application {
 
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
+        //Auteur: Rümeysa en Marleen
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(tabPane);
         Scene scene = new Scene(borderPane);
 
-
-            /*
-        De volgende code hoort bij het tabje table
-        Als het stuk is moet je bij Rümeysa en Tom zijn
-         */
-
-        Button openFile = new Button("Open File");
-        Button saveFile = new Button("Save File");
-        Button deleteLesson = new Button("Remove Lesson");
-
-
-        TableColumn columnGroups = new TableColumn("Group");
-        TableColumn columnRooms = new TableColumn("Room");
-        TableColumn columnStartTime = new TableColumn("Start time");
-        TableColumn columnLengthTime = new TableColumn("Length");
-
-
-
-        columnGroups.setCellValueFactory(new PropertyValueFactory<Lesson, Group>("Group"));
-        columnRooms.setCellValueFactory(new PropertyValueFactory<Lesson, Room>("Room"));
-        columnStartTime.setCellValueFactory(new PropertyValueFactory<Lesson, LocalTime>("startTime"));
-        columnLengthTime.setCellValueFactory(new PropertyValueFactory<Lesson, Integer>("duration"));
-
-        tableViewTableTab.setItems(tableData);
-        tableViewTableTab.getColumns().addAll(columnGroups, columnRooms, columnStartTime, columnLengthTime);
-
-        JFileChooser chooser = new JFileChooser();
-        openFile.setOnAction(e -> {
-            int returnVal = chooser.showOpenDialog(null);
-            if (returnVal == chooser.APPROVE_OPTION) {
-                File fileChosen = chooser.getSelectedFile();
-                tableData.removeAll(lessons);
-                this.dataController.getTimeTable().loadTimetableFromFile(fileChosen.getAbsolutePath());
-                tableData.addAll(lessons);
-                tableViewTableTab.setItems(tableData);
-                groupTab1.groupTabUpdate();
-                roomTab1.roomTabUpdate();
-                lessonTab1.LessonUpdate();
-                createLessonBlocks();
-                draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
-            }
-        });
-
-        saveFile.setOnAction(e -> {
-            int returnVal = chooser.showSaveDialog(null);
-            if (returnVal == chooser.APPROVE_OPTION) {
-                File file = chooser.getSelectedFile();
-                this.dataController.getTimeTable().saveTimetableToFile(file.getAbsolutePath());
-            }
-        });
-
-        deleteLesson.setOnAction(e -> {
-            tableViewTableTab.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-            this.dataController.getTimeTable().removeLesson((Lesson)tableViewTableTab.getSelectionModel().getSelectedItem());
-            tableData.clear();
-            tableData.addAll(this.dataController.getAllLessons());
-            createLessonBlocks();
-            draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
-        });
-
-        HBox hBoxTableFiles = new HBox(openFile, saveFile);
-        VBox vBoxTable = new VBox(hBoxTableFiles, tableViewTableTab, deleteLesson);
-        hBoxTableFiles.setSpacing(50);
-        vBoxTable.setSpacing(25);
-
-
-
-        /*
-        Meer algemene code
-        * Als deze code stuk is moet je bij Marleen en Rümeysa zijn
-        * */
-
-
         BorderPane agendaPane = new BorderPane(agendaCanvas);
-        BorderPane tablePane = new BorderPane(vBoxTable);
-//        GridPane groupPane = new GridPane();
         BorderPane simulationPane = new SimulationPane();
 
-
-        /*Meer algeme code
-        * Als deze code stuk is moet je bij Marleen en Rümeysa*/
-
         agendaTab.setContent(agendaPane);
-        tableTab.setContent(tablePane);
-     //   groupTab.setContent(groupPane);
         simulationTab.setContent(simulationPane);
 
         draw(new FXGraphics2D(agendaCanvas.getGraphicsContext2D()));
@@ -234,87 +158,40 @@ public class GUIMain extends Application {
 
     public void draw(FXGraphics2D graphics) {
 
-        /*
-        De volgende code tekent het rooster template
-         * Als deze code stuk is moet je bij Marleen zijn of huilen.
-          * */
+        createAgenda(graphics);
 
-        int time = 300;
-        int pixelVertical = (int)this.agendaCanvas.getHeight()/27;
-        int pixelHorizontal = 0;
-        int hours = 0;
-        int minutes = 0;
+        //auteur : Sebastiaan
+        //Het volgende blok tekent lesblokken en lestekst in blokken
+        Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
 
-    Timetable timetable = dataController.getTimeTable();
-        graphics.setBackground(Color.WHITE);
-        graphics.clearRect(0, 0, (int) agendaCanvas.getHeight() * 2, (int) agendaCanvas.getWidth() * 2);
+        for (LessonBlock lessonBlock : lessonBlocks) {
+            graphics.setColor(new Color(0, 150, 255));
+            //graphics.setColor(groupColors.get(lessonBlocks.indexOf(lessonBlock)));
+            graphics.fill(lessonBlock.getTransformedShape());
+            graphics.setColor(Color.BLACK);
+            graphics.draw(lessonBlock.getTransformedShape());
+            graphics.setColor(Color.WHITE);
 
-
-        //Auteur: Marleen
-        //Hieronder wordt het rooster getekend
-        graphics.draw(new Line2D.Double(50, 0, 50, this.agendaCanvas.getHeight()));
-
-        int widthRoom = (int) (this.agendaCanvas.getWidth() - 50) / timetable.getAllRooms().size();
-
-        for (int i = 0; i < timetable.getAllRooms().size() - 1; i++) {
-            //         graphics.draw(new Line2D.Double(i,0,i,900));
-            pixelHorizontal = 50 + widthRoom + widthRoom * i;
-            graphics.draw(new Line2D.Double(pixelHorizontal, 0, pixelHorizontal, this.agendaCanvas.getHeight()));
+            Lesson lesson = lessonBlock.getLesson();
+            String lessonString = lesson.getGroup() + " " + lesson.getSubject() + ", " + lesson.getTeacher();
+            Shape fontShape = font.createGlyphVector(graphics.getFontRenderContext(), lessonString).getOutline();
+            AffineTransform fontTransform = new AffineTransform();
+            fontTransform.translate(lessonBlock.getPosition().getX() + 4, lessonBlock.getPosition().getY() + 20);
+            graphics.fill(fontTransform.createTransformedShape(fontShape));
+            graphics.setColor(Color.BLACK);
         }
 
-
-        for (int i = 0; i < timetable.getAllRooms().size(); i++) {
-            graphics.drawString(timetable.getAllRooms().get(i).getName(), 75 + widthRoom * i, pixelVertical - 10);
-        }
-
-
-        for (int i = 0; i < 27 - 1; i++) {
-            time += 30;
-            pixelVertical = ((int) this.agendaCanvas.getHeight() / 27) + i * ((int) this.agendaCanvas.getHeight() / 27); //gedeeld door de maximum i
-
-            if (time % 60 == 0) {
-                hours = time / 60;
-                minutes = 00;
-            } else {
-                hours = time / 60;
-                minutes = 30;
-            }
-
-
-            graphics.draw(new Line2D.Double(0, pixelVertical, this.agendaCanvas.getWidth(), pixelVertical));
-            graphics.drawString(LocalTime.of(hours, minutes).toString(), 0, pixelVertical + 23);
-
-            //auteur : Sebastiaan
-            //Het volgende blok tekent lesblokken en lestekst in blokken
-            Font font = new Font(Font.SANS_SERIF,Font.PLAIN, 20);
-
-            for (LessonBlock lessonBlock : lessonBlocks) {
-                graphics.setColor(new Color(0,150,255));
-                //graphics.setColor(groupColors.get(lessonBlocks.indexOf(lessonBlock)));
-                graphics.fill(lessonBlock.getTransformedShape());
-                graphics.setColor(Color.BLACK);
-                graphics.draw(lessonBlock.getTransformedShape());
-                graphics.setColor(Color.WHITE);
-
-                Lesson lesson = lessonBlock.getLesson();
-                String lessonString = lesson.getGroup() + " " + lesson.getSubject() + ", " + lesson.getTeacher();
-                Shape fontShape = font.createGlyphVector(graphics.getFontRenderContext(),lessonString).getOutline();
-                AffineTransform fontTransform = new AffineTransform();
-                fontTransform.translate(lessonBlock.getPosition().getX()+4,lessonBlock.getPosition().getY()+ 20);
-                graphics.fill(fontTransform.createTransformedShape(fontShape));
-                graphics.setColor(Color.BLACK);
-            }
-
-            if (dragged != null) {
-                graphics.setColor(Color.GRAY);
-                graphics.fill(dragged.getTransformedShape());
-                graphics.setColor(Color.BLACK);
-                graphics.draw(dragged.getTransformedShape());
-
-            }
+        if (dragged != null) {
+            graphics.setColor(Color.GRAY);
+            graphics.fill(dragged.getTransformedShape());
+            graphics.setColor(Color.BLACK);
+            graphics.draw(dragged.getTransformedShape());
 
         }
+
     }
+
+
 
     //Auteur: Sebastiaan
     // Deze methode creert de lesblokken voor in de
@@ -350,5 +227,52 @@ public class GUIMain extends Application {
         double roomIndex = 0.5 + dataController.getAllRooms().size()*(mousePosition.getX()-50)/(agendaCanvas.getWidth()-50);
         System.out.println(roomIndex);
         return timetable.getAllRooms().get((int)roomIndex);
+    }
+
+    public void createAgenda(FXGraphics2D graphics) {
+
+        //Auteur: Marleen
+        int time = 300;
+        int pixelVertical = (int) this.agendaCanvas.getHeight() / 27;
+        int pixelHorizontal = 0;
+        int hours = 0;
+        int minutes = 0;
+
+        Timetable timetable = dataController.getTimeTable();
+        graphics.setBackground(Color.WHITE);
+        graphics.clearRect(0, 0, (int) agendaCanvas.getHeight() * 2, (int) agendaCanvas.getWidth() * 2);
+        graphics.draw(new Line2D.Double(50, 0, 50, this.agendaCanvas.getHeight()));
+
+        int widthRoom = (int) (this.agendaCanvas.getWidth() - 50) / timetable.getAllRooms().size();
+
+        for (int i = 0; i < timetable.getAllRooms().size() - 1; i++) {
+            //         graphics.draw(new Line2D.Double(i,0,i,900));
+            pixelHorizontal = 50 + widthRoom + widthRoom * i;
+            graphics.draw(new Line2D.Double(pixelHorizontal, 0, pixelHorizontal, this.agendaCanvas.getHeight()));
+        }
+
+
+        for (int i = 0; i < timetable.getAllRooms().size(); i++) {
+            graphics.drawString(timetable.getAllRooms().get(i).getName(), 75 + widthRoom * i, pixelVertical - 10);
+        }
+
+
+        for (int i = 0; i < 27 - 1; i++) {
+            time += 30;
+            pixelVertical = ((int) this.agendaCanvas.getHeight() / 27) + i * ((int) this.agendaCanvas.getHeight() / 27); //gedeeld door de maximum i
+
+            if (time % 60 == 0) {
+                hours = time / 60;
+                minutes = 00;
+            } else {
+                hours = time / 60;
+                minutes = 30;
+            }
+
+
+            graphics.draw(new Line2D.Double(0, pixelVertical, this.agendaCanvas.getWidth(), pixelVertical));
+            graphics.drawString(LocalTime.of(hours, minutes).toString(), 0, pixelVertical + 23);
+
+        }
     }
 }

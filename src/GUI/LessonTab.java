@@ -23,7 +23,7 @@ public class LessonTab extends BorderPane {
 
     public LessonTab(DataController dataController, ArrayList<Lesson> lessons, ObservableList<Lesson> tableData, TableView tableViewTableTab, Canvas agendaCanvas, GUIMain guiMain){
 
-        //Auteur: Tom (losgehaald door Marleen)
+        //Auteur: Tom (loshalen uit GUIMain door Marleen)
 
         this.dataController = dataController;
         lessonGroupsListView = new ListView();

@@ -10,7 +10,7 @@ import org.jfree.fx.FXGraphics2D;
 import java.util.ArrayList;
 
 public class RoomTab extends GridPane {
-    // Auteur: Rümeysa en Marleen
+    // Auteur: Rümeysa en Marleen (loshalen uit GUIMain door Marleen)
     ListView listRooms = new ListView();
     private DataController dataController;
 
