@@ -5,13 +5,9 @@ import Data.DataController;
 import Data.tilemap.TileMap;
 import javafx.animation.AnimationTimer;
 import org.jfree.fx.FXGraphics2D;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +18,7 @@ public class Simulation {
     private ArrayList<Location> locations;
     private TimeControl timeControl;
     private TileMap tileMap;
+    public Point2D Position = new Point2D.Double(0, 0);
 
     public Simulation(DataController dataController) {
         this.timeControl = new TimeControl();
@@ -49,7 +46,7 @@ public class Simulation {
 
     public void draw(Graphics2D graphics) {
         graphics.setBackground(Color.WHITE);
-        graphics.clearRect(0, 0, 1200, 900);
+        graphics.clearRect((int)Position.getX(), (int)Position.getY(), 1920, 1800);
         graphics.setColor(Color.RED);
 
         tileMap.draw(graphics);
