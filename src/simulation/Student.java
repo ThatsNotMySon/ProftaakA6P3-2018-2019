@@ -14,13 +14,13 @@ public class Student extends Actor {
     private Group group;
     private DataController dataController;
     private ArrayList<Lesson> lessons;
-    Point2D destination;
 
     public Student(Group group, DataController dataController)
     {
+        this.lessons = new ArrayList<>();
         this.group = group;
         this.dataController = dataController;
-        ArrayList<Lesson> allLessons = dataController.getAllLessons();
+        ArrayList<Lesson> allLessons = this.dataController.getAllLessons();
 
         for (Lesson lesson : allLessons) {
             for (Group group1 : lesson.getGroup()) {

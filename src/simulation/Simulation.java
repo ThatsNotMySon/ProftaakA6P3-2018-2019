@@ -34,7 +34,7 @@ public class Simulation {
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student  newStudent = new Student(group, dataController);
+                Student newStudent = new Student(group, dataController);
                 boolean hasCollision = false;
                 for(Actor a : actors)
                     if(a.hasCollision(newStudent))
@@ -102,10 +102,10 @@ public class Simulation {
         }}
     }
 
-    public void refresh(){
+    //Auteur: Marleen
+
+    public void refresh(DataController dataController){
         System.out.println("refresh");
-        DataController dataController = new DataController();
-       // Simulation simulation = new Simulation(dataController);
         dataController.getTimeTable();
 
         this.actors.clear();

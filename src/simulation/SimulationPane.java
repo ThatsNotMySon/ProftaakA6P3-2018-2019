@@ -25,9 +25,11 @@ public class SimulationPane extends BorderPane {
     private Canvas simulationCanvas;
 
     private ArrayList<Actor> actors;
+    private DataController dataController;
 
-    public SimulationPane(){
+    public SimulationPane(DataController dataController){
 
+        this.dataController = dataController;
         this.simulation = new Simulation(new DataController());
         this.simulationCanvas = new Canvas(1200,900);
 
@@ -37,7 +39,7 @@ public class SimulationPane extends BorderPane {
 
         RefreshButton refreshButton = new RefreshButton();
         refreshButton.setText("Refresh");
-        refreshButton.setOnMousePressed(e -> simulation.refresh());
+        refreshButton.setOnMousePressed(e -> simulation.refresh(dataController));
 
         FlowPane GuiPane = new FlowPane();
         GuiPane.getChildren().add(playPauseButton);
