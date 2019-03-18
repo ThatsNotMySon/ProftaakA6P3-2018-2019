@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
@@ -38,6 +39,22 @@ public class SimulationPane extends BorderPane {
         GuiPane.getChildren().add(playPauseButton);
 
         FXGraphics2D g = new FXGraphics2D(simulationCanvas.getGraphicsContext2D());
+        this.setOnMouseClicked(e -> {
+            if (e.getButton().equals(MouseButton.PRIMARY)) {
+                g.translate(10,0);
+            }
+            if (e.getButton().equals(MouseButton.SECONDARY)) {
+                g.translate(-10,0);
+            }
+        });
+        this.setOnScroll(e -> {
+            if (e.getDeltaY() > 0) {
+                g.translate(0, -10);
+            }
+            if (e.getDeltaY() < 0) {
+                g.translate(0,10);
+            }
+        });
         new AnimationTimer() {
             long last = -1;
 
