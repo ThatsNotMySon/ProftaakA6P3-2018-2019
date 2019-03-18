@@ -41,34 +41,34 @@ public class SimulationPane extends BorderPane {
         GuiPane.getChildren().add(playPauseButton);
 
         FXGraphics2D g = new FXGraphics2D(simulationCanvas.getGraphicsContext2D());
-        this.setOnMousePressed(e -> {
-            this.startPoint = new Point2D.Double(this.simulation.Position.getX() - e.getX(), this.simulation.Position.getY() - e.getY());
-        });
-        this.setOnMouseDragged(e -> {
-            AffineTransform tx = new AffineTransform();
-            tx.translate(this.simulation.Position.getX(), this.simulation.Position.getY());
-            g.translate(tx.getTranslateX(), tx.getTranslateY());
-            this.simulation.Position = new Point2D.Double(this.startPoint.getX() + e.getX(),this.startPoint.getY() + e.getY());
+//        this.setOnMousePressed(e -> {
 //            this.startPoint = new Point2D.Double(this.simulation.Position.getX() - e.getX(), this.simulation.Position.getY() - e.getY());
-//            if (e.getButton().equals(MouseButton.PRIMARY)) {)
-//                g.translate(10,0);
-//                this.simulation.clearCord = new Point2D.Double(this.simulation.clearCord.getX() - 10, this.simulation.clearCord.getY());
-//            }
-//            if (e.getButton().equals(MouseButton.SECONDARY)) {
-//                g.translate(-10,0);
-//                this.simulation.clearCord = new Point2D.Double(this.simulation.clearCord.getX() + 10, this.simulation.clearCord.getY());
-//            }
-        });
-//        this.setOnScroll(e -> {
-//            if (e.getDeltaY() > 0) {
-//                g.translate(0, -10);
-//                this.simulation.clearCord = new Point2D.Double(this.simulation.clearCord.getX(), this.simulation.clearCord.getY() + 10);
-//            }
-//            if (e.getDeltaY() < 0) {
-//                g.translate(0,10);
-//                this.simulation.clearCord = new Point2D.Double(this.simulation.clearCord.getX(), this.simulation.clearCord.getY() - 10);
-//            }
 //        });
+        this.setOnMousePressed(e -> {
+//            AffineTransform tx = new AffineTransform();
+//            tx.translate(this.simulation.Position.getX(), this.simulation.Position.getY());
+//            g.translate(tx.getTranslateX(), tx.getTranslateY());
+//            this.simulation.Position = new Point2D.Double(this.startPoint.getX() + e.getX(),this.startPoint.getY() + e.getY());
+//            this.startPoint = new Point2D.Double(this.simulation.Position.getX() - e.getX(), this.simulation.Position.getY() - e.getY());
+            if (e.getButton().equals(MouseButton.PRIMARY)) {
+                g.translate(10,0);
+                this.simulation.Position = new Point2D.Double(this.simulation.Position.getX() - 10, this.simulation.Position.getY());
+            }
+            if (e.getButton().equals(MouseButton.SECONDARY)) {
+                g.translate(-10,0);
+                this.simulation.Position = new Point2D.Double(this.simulation.Position.getX() + 10, this.simulation.Position.getY());
+            }
+        });
+        this.setOnScroll(e -> {
+            if (e.getDeltaY() > 0) {
+                g.translate(0, -10);
+                this.simulation.Position = new Point2D.Double(this.simulation.Position.getX(), this.simulation.Position.getY() + 10);
+            }
+            if (e.getDeltaY() < 0) {
+                g.translate(0,10);
+                this.simulation.Position = new Point2D.Double(this.simulation.Position.getX(), this.simulation.Position.getY() - 10);
+            }
+        });
         new AnimationTimer() {
             long last = -1;
 
