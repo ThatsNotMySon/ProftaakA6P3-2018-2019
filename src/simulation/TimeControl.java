@@ -1,10 +1,5 @@
 package simulation;
 
-
-import org.jfree.fx.FXGraphics2D;
-
-import java.awt.*;
-import java.awt.geom.*;
 import java.time.LocalTime;
 
 //Auteur :Sebastiaan
