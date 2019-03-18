@@ -4,7 +4,6 @@ import Data.Group;
 import Data.DataController;
 import Data.tilemap.TileMap;
 import javafx.animation.AnimationTimer;
-import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -70,6 +69,7 @@ public class Simulation {
         for (Actor actor : actors) {
             actor.update(deltaTime, actors);
         }
+        timeControl.update(deltaTime);
     }
 
     public void playPause() {
@@ -80,8 +80,8 @@ public class Simulation {
         timeControl.setTime();
     }
 
-    public void setSpeedFactor() {
-        timeControl.setSpeedFactor();
+    public void setSpeedFactor(double factor) {
+        timeControl.setSpeedFactor(factor);
     }
 
 
