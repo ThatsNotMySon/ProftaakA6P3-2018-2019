@@ -7,6 +7,7 @@ import javafx.animation.AnimationTimer;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
@@ -103,5 +104,20 @@ public class Simulation {
 
     public void refresh(){
         System.out.println("refresh");
+        DataController dataController = new DataController();
+       // Simulation simulation = new Simulation(dataController);
+        this.actors.clear();
+        for (Group group : dataController.getAllGroups()) {
+            for (int i = 0; i < group.getAmountOfStudents(); i++) {
+                Student newStudent = new Student(group);
+                boolean hasCollision = false;
+                for (Actor a : actors)
+                    if (a.hasCollision(newStudent))
+                        hasCollision = true;
+                if (!hasCollision)
+                    actors.add(newStudent);
+            }
+
+        }
     }
 }
