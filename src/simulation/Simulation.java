@@ -106,6 +106,8 @@ public class Simulation {
         System.out.println("refresh");
         DataController dataController = new DataController();
        // Simulation simulation = new Simulation(dataController);
+        dataController.getTimeTable();
+
         this.actors.clear();
         for (Group group : dataController.getAllGroups()) {
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
