@@ -20,9 +20,29 @@ public class Layer {
     private int x;
     private int y;
 
-    BufferedImage image = null;
+    BufferedImage cacheImage = null;
 
     private ArrayList<TileSet> tileSets;
+
+    public int[] getData() {
+        int[] intData = new int[data.size()];
+
+        for(int i = 0; i < data.size(); i++){
+
+            int iData = data.getInt(i);
+            if(data.getInt(i) >= 9999){
+                iData = 353;
+            }
+
+            intData[i] = data.getInt(i);
+        }
+
+        return intData;
+    }
+
+    public int getWidth() {
+        return width;
+    }
 
     public Layer(JsonObject layer) {
 
@@ -40,23 +60,31 @@ public class Layer {
     }
 
     public void draw(Graphics2D g2d){
-        if(image == null)
+        if(cacheImage == null)
         {
-            image = new BufferedImage(width * 16, height * 16, BufferedImage.TYPE_4BYTE_ABGR);
-            Graphics2D g = image.createGraphics();
+            cacheImage = new BufferedImage(width * 16, height * 16, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = cacheImage.createGraphics();
+
+            System.out.println(this.getName());
 
             for(int i = 0; i < data.size(); i++) {
-                int tile = data.getInt(i);
+
+                int iData = data.getInt(i);
+                if(iData >= 9999 || iData<-9999){
+                    iData = 353;
+                }
+
+                int tile = iData;
+
+
 
                 if (tile != 0) {
-                    boolean found = false;
                     for (TileSet tileSet : tileSets) {
-                        if (tileSet.getFirstgid() < tile && !found) {
+                        if (tileSet.getFirstgid() <= tile) {
                             if (tileSet.containsTile(tile)) {
                                 AffineTransform tx = new AffineTransform();
                                 tx.translate((i % width) * tileSet.getTileWidth(), (Math.floor(i / height) * tileSet.getTileHeight()));
                                 g.drawImage(tileSet.getTileImage(tile), tx, null);
-                                found = true;
                                 break;
                             }
                         }
@@ -67,7 +95,8 @@ public class Layer {
 
 
 
-        g2d.drawImage(image, new AffineTransform(), null);
+        g2d.drawImage(cacheImage, new AffineTransform(), null);
+
 
     }
 
@@ -78,6 +107,10 @@ public class Layer {
     public boolean isVisible(){
         return visible;
     }
+
+    public String getName() {return name;}
+
+
 }
 
 

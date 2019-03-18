@@ -26,25 +26,27 @@ public class Simulation {
     private TileMap tileMap;
 
 
+
     public Simulation(DataController dataController) {
         this.timeControl = new TimeControl();
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
-        tileMap = new TileMap("resources/tilemaps/TI1.3-tiledmap-poging1.1.json");
+        tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Collision.json");
+
 
         for (Group group : dataController.getAllGroups()) {
-            System.out.println(group.getAmountOfStudents());
+
             for (int i = 0; i < group.getAmountOfStudents(); i++)
                 actors.add(new Student(group));
         }
 
-        System.out.println("Created " + actors.size() + " students in simulation");
+
         createSprite();
     }
 
     public void draw(Graphics2D graphics) {
-        graphics.setBackground(Color.WHITE);
+        graphics.setBackground(Color.BLACK);
         graphics.clearRect(0, 0, 1200, 900);
         graphics.setColor(Color.RED);
 
