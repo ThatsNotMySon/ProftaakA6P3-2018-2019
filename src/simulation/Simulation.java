@@ -2,11 +2,16 @@ package simulation;
 
 import Data.Group;
 import Data.DataController;
+import Data.tilemap.TileMap;
+import javafx.animation.AnimationTimer;
+import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,12 +21,15 @@ public class Simulation {
     private ArrayList<Actor> actors;
     private ArrayList<Location> locations;
     private TimeControl timeControl;
+    private TileMap tileMap;
 
     public Simulation(DataController dataController) {
         this.timeControl = new TimeControl();
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
+        tileMap = new TileMap("resources/tilemaps/TI1.3-tiledmap-poging1.1.json");
+
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
@@ -34,6 +42,7 @@ public class Simulation {
                     actors.add(newStudent);
             }
         }
+
         System.out.println("Created " + actors.size() + " students in simulation");
         createSprite();
     }
@@ -42,6 +51,9 @@ public class Simulation {
         graphics.setBackground(Color.WHITE);
         graphics.clearRect(0, 0, 1200, 900);
         graphics.setColor(Color.RED);
+
+        tileMap.draw(graphics);
+
         for (Actor actor : actors) {
             AffineTransform tx = new AffineTransform();
             tx.translate(actor.getLocation().getX()+16, actor.getLocation().getY()+16);
@@ -50,6 +62,8 @@ public class Simulation {
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.destination.getX(), actor.destination.getY()));
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.getLocation().getX() + Math.cos(actor.getAngle()) * 10, actor.getLocation().getY() + Math.sin(actor.getAngle()) * 10));
         }
+
+
     }
 
     public void update(double deltaTime) {

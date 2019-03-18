@@ -4,10 +4,13 @@ import Data.DataController;
 import GUI.GUIMain;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
+import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 import simulation.simulationgui.ForwardButton;
 import simulation.simulationgui.PlayPauseButton;
@@ -34,6 +37,7 @@ public class SimulationPane extends BorderPane {
         FlowPane GuiPane = new FlowPane();
         GuiPane.getChildren().add(playPauseButton);
 
+        FXGraphics2D g = new FXGraphics2D(simulationCanvas.getGraphicsContext2D());
         new AnimationTimer() {
             long last = -1;
 
@@ -43,7 +47,7 @@ public class SimulationPane extends BorderPane {
                     last = now;
                 update((now - last) / 1000000000.0);
                 last = now;
-                draw(new FXGraphics2D(simulationCanvas.getGraphicsContext2D()));
+                draw(g);
             }
         }.start();
 
@@ -55,16 +59,11 @@ public class SimulationPane extends BorderPane {
         this.setBottom(GuiPane);
         this.setTop(simulationCanvas);
 
-        //this.simulation.draw(new FXGraphics2D(simulationCanvas.getGraphicsContext2D()));
-
     }
 
     public void update(double deltaTime){
         this.simulation.update(deltaTime);
     }
-
-    public void draw(FXGraphics2D graphics)
-    {
-        this.simulation.draw(graphics);
-    }
+    public void draw(FXGraphics2D graphics){this.simulation.draw(graphics); }
 }
+

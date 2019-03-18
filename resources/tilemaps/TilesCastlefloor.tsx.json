@@ -1,0 +1,14 @@
+{ "columns":16,
+ "image":"/img/TilesCastleFloor.png",
+ "imageheight":96,
+ "imagewidth":128,
+ "margin":0,
+ "name":"TilesCastlefloor",
+ "spacing":0,
+ "tilecount":192,
+ "tiledversion":"1.2.2",
+ "tileheight":8,
+ "tilewidth":8,
+ "type":"tileset",
+ "version":1.2
+}
