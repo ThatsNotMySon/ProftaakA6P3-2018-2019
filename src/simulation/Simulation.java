@@ -20,10 +20,12 @@ public class Simulation {
     private ArrayList<Actor> actors;
     private ArrayList<Location> locations;
     private TimeControl timeControl;
+    private Clock clock;
     private TileMap tileMap;
 
     public Simulation(DataController dataController) {
         this.timeControl = new TimeControl();
+        this.clock = new Clock(timeControl);
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
@@ -61,7 +63,7 @@ public class Simulation {
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.destination.getX(), actor.destination.getY()));
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.getLocation().getX() + Math.cos(actor.getAngle()) * 10, actor.getLocation().getY() + Math.sin(actor.getAngle()) * 10));
         }
-
+        this.clock.draw(graphics);
 
     }
 
@@ -84,7 +86,7 @@ public class Simulation {
         timeControl.setSpeedFactor(factor);
     }
 
-
+    //Auteur: Sebastiaan
     public void createSprite() {
 
         BufferedImage sprite = null;
@@ -100,4 +102,6 @@ public class Simulation {
             this.sprites[8*v+i] = sprite.getSubimage(32 * i, 32*v, 32, 32);
         }}
     }
+
+
 }

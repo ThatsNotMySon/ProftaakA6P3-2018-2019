@@ -1,5 +1,10 @@
 package simulation;
 
+
+import org.jfree.fx.FXGraphics2D;
+
+import java.awt.*;
+import java.awt.geom.*;
 import java.time.LocalTime;
 
 //Auteur :Sebastiaan
@@ -9,6 +14,10 @@ public class TimeControl {
     private double minutesPerSecond = 5;
     private double timer = 0;
     private boolean timeIsPaused;
+
+    public void TimeControl(){
+
+    }
 
 
     public void update(double deltaTime){
@@ -23,7 +32,6 @@ public class TimeControl {
 
     public void playPause(){
         this.timeIsPaused = !this.timeIsPaused;
-        System.out.println("Play/Pause");
     }
 
     public void setTime(){
@@ -40,5 +48,14 @@ public class TimeControl {
 
     public void reverse(){
 
+    }
+
+
+    public double getHour(){
+        return this.time.getHour();
+    }
+
+    public double getMinute(){
+        return this.time.getMinute();
     }
 }
