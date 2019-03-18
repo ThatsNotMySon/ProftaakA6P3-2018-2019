@@ -100,4 +100,8 @@ public class Simulation {
             this.sprites[8*v+i] = sprite.getSubimage(32 * i, 32*v, 32, 32);
         }}
     }
+
+    public void refresh(){
+        System.out.println("refresh");
+    }
 }

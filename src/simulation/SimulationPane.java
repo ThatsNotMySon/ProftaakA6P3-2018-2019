@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 import simulation.simulationgui.ForwardButton;
 import simulation.simulationgui.PlayPauseButton;
+import simulation.simulationgui.RefreshButton;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -34,8 +35,13 @@ public class SimulationPane extends BorderPane {
         playPauseButton.setText("Play/Pause");
         playPauseButton.setOnMousePressed(e -> simulation.playPause());
 
+        RefreshButton refreshButton = new RefreshButton();
+        refreshButton.setText("Refresh");
+        refreshButton.setOnMousePressed(e -> simulation.refresh());
+
         FlowPane GuiPane = new FlowPane();
         GuiPane.getChildren().add(playPauseButton);
+        GuiPane.getChildren().add(refreshButton);
 
         FXGraphics2D g = new FXGraphics2D(simulationCanvas.getGraphicsContext2D());
         new AnimationTimer() {
