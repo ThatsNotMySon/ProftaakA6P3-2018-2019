@@ -75,14 +75,15 @@ public class Simulation {
 
         BufferedImage sprite = null;
         try {
-            sprite = ImageIO.read(getClass().getResource("/img/WhiteWizard.png"));
+            sprite = ImageIO.read(getClass().getResource("/img/Wizards.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.sprites = new BufferedImage[10];
-        for (int i = 0; i < this.sprites.length; i++) {
-            this.sprites[i] = sprite.getSubimage(32 * i, 0, 32, 32);
-        }
+        this.sprites = new BufferedImage[40];
+        for(int v = 0; v < 5; v++){
+        for (int i = 0; i < 8; i++) {
+            this.sprites[8*v+i] = sprite.getSubimage(32 * i, 32*v, 32, 32);
+        }}
     }
 }
