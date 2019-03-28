@@ -26,12 +26,18 @@ public class SimulationPane extends BorderPane {
 
     private ArrayList<Actor> actors;
     private DataController dataController;
+    private Camera camera;
+    public static final int WIDTH = 1200;
+    public static final int HEIGHT = 900;
 
     public SimulationPane(DataController dataController){
 
         this.dataController = dataController;
-        this.simulation = new Simulation(new DataController());
-        this.simulationCanvas = new Canvas(1200,900);
+        this.simulationCanvas = new Canvas(WIDTH,HEIGHT);
+        FXGraphics2D g = new FXGraphics2D(simulationCanvas.getGraphicsContext2D());
+        camera = new Camera(simulationCanvas, simulation, g);
+        this.simulation = new Simulation(new DataController(), this.camera);
+
 
         PlayPauseButton playPauseButton = new PlayPauseButton();
         playPauseButton.setText("Play/Pause");
@@ -45,7 +51,8 @@ public class SimulationPane extends BorderPane {
         GuiPane.getChildren().add(playPauseButton);
         GuiPane.getChildren().add(refreshButton);
 
-        FXGraphics2D g = new FXGraphics2D(simulationCanvas.getGraphicsContext2D());
+
+
         new AnimationTimer() {
             long last = -1;
 
@@ -63,6 +70,9 @@ public class SimulationPane extends BorderPane {
 //            for(Actor actor : actors)
 //                actor.setTarget(new Point2D(e.getX(), e.getY()));
 //        });
+
+
+
 
         this.setBottom(GuiPane);
         this.setTop(simulationCanvas);
