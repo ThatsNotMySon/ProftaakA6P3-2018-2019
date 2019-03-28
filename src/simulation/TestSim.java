@@ -11,7 +11,7 @@ public class TestSim extends Application
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setScene(new Scene(new SimulationPane()));
+    //    primaryStage.setScene(new Scene(new SimulationPane()));
         primaryStage.show();
     }
 }

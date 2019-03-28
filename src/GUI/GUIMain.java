@@ -143,7 +143,7 @@ public class GUIMain extends Application {
         Scene scene = new Scene(borderPane);
 
         BorderPane agendaPane = new BorderPane(agendaCanvas);
-        BorderPane simulationPane = new SimulationPane();
+        BorderPane simulationPane = new SimulationPane(dataController);
 
         agendaTab.setContent(agendaPane);
         simulationTab.setContent(simulationPane);

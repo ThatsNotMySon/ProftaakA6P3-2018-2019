@@ -7,6 +7,7 @@ import javafx.animation.AnimationTimer;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
@@ -33,7 +34,7 @@ public class Simulation {
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student  newStudent = new Student(group);
+                Student newStudent = new Student(group, dataController);
                 boolean hasCollision = false;
                 for(Actor a : actors)
                     if(a.hasCollision(newStudent))
@@ -107,5 +108,26 @@ public class Simulation {
         for (int i = 0; i < 8; i++) {
             this.sprites[8*v+i] = sprite.getSubimage(32 * i, 32*v, 32, 32);
         }}
+    }
+
+    //Auteur: Marleen
+
+    public void refresh(DataController dataController){
+        System.out.println("refresh");
+        dataController.getTimeTable();
+
+        this.actors.clear();
+        for (Group group : dataController.getAllGroups()) {
+            for (int i = 0; i < group.getAmountOfStudents(); i++) {
+                Student newStudent = new Student(group, dataController);
+                boolean hasCollision = false;
+                for (Actor a : actors)
+                    if (a.hasCollision(newStudent))
+                        hasCollision = true;
+                if (!hasCollision)
+                    actors.add(newStudent);
+            }
+
+        }
     }
 }
