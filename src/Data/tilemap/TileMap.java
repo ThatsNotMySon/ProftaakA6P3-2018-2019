@@ -25,6 +25,7 @@ public class TileMap {
     private double version;
     private int width;
     private Layer collision;
+    private Layer target;
 
     public TileMap(String fileName) {
         JsonIO jsonIO = new JsonIO(fileName);
@@ -60,6 +61,8 @@ public class TileMap {
             }
             if (newLayer.getName().equalsIgnoreCase("collision")){
                 this.collision = newLayer;
+            } else if (newLayer.getName().equalsIgnoreCase("Lokaal")){
+                this.target = newLayer;
             }
             layerArrayList.add(newLayer);
 
@@ -143,5 +146,9 @@ public class TileMap {
         ArrayList<Integer> dataInCollision = getCollisionLayer().getData();
         int dataInTile = dataInCollision.get(y * this.width + x);
         return !(dataInTile == 0);
+    }
+
+    public Layer getTargetLayer(){
+        return this.target;
     }
 }

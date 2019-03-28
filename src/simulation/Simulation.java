@@ -33,7 +33,7 @@ public class Simulation {
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
-        tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Collision.json");
+        tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Versie4.5.json");
         pathFindingTiles = new ArrayList<>();
 
 //        for (Group group : dataController.getAllGroups()) {
