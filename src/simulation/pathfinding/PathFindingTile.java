@@ -80,7 +80,7 @@ public class PathFindingTile {
 
     public void draw(Graphics2D g2d){
         if (isWall){
-            g2d.fill(shape);
+//            g2d.fill(shape);
         } else {
             g2d.setFont(new Font("", 1, 10));
             g2d.drawString(String.valueOf(this.value), this.xPos + 1, this.yPos + size / 2 + 4);
