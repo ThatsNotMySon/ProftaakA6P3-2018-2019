@@ -2,6 +2,7 @@ package simulation;
 
 import Data.Group;
 import Data.DataController;
+import Data.tilemap.Layer;
 import Data.tilemap.TileMap;
 import javafx.animation.AnimationTimer;
 import org.jfree.fx.FXGraphics2D;
@@ -32,7 +33,7 @@ public class Simulation {
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
-        tileMap = new TileMap("resources/tilemaps/TI1.3-tiledmap-poging1.1.json");
+        tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Collision.json");
         pathFindingTiles = new ArrayList<>();
 
 //        for (Group group : dataController.getAllGroups()) {
@@ -48,14 +49,19 @@ public class Simulation {
 //            }
 //        }
 
+        int tileSize = tileMap.getTileSize();
+
         for (int y = 0; y < 100; y++){
             for(int x = 0; x < 100; x++){
-                pathFindingTiles.add(new PathFindingTile(16, x * 16, y*16, false));
+                if (tileMap.tileIsWallInCollisionLayer(x,y)){
+                    pathFindingTiles.add(new PathFindingTile(tileSize, x * tileSize, y*tileSize, true));
+                } else {
+                    pathFindingTiles.add(new PathFindingTile(tileSize, x * tileSize, y*tileSize, false));
+                }
             }
         }
 
-        DijkstraMap dijkstraMap = new DijkstraMap(pathFindingTiles, 100, 100, 16);
-
+        DijkstraMap dijkstraMap = new DijkstraMap(pathFindingTiles, tileMap.getWidth(), tileMap.getHeight(), tileSize, 24, 26);
         System.out.println("Created " + actors.size() + " students in simulation");
         createSprite();
     }
@@ -76,7 +82,7 @@ public class Simulation {
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.getLocation().getX() + Math.cos(actor.getAngle()) * 10, actor.getLocation().getY() + Math.sin(actor.getAngle()) * 10));
         }
 
-        graphics.setColor(Color.BLUE);
+        graphics.setColor(Color.BLACK);
         for (PathFindingTile tile : pathFindingTiles){
             tile.draw(graphics);
         }

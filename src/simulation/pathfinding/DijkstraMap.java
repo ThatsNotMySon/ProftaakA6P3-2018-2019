@@ -32,6 +32,20 @@ public class DijkstraMap {
         execute(startingTile.getxPos()/tileSize, startingTile.getyPos()/tileSize);
     }
 
+    public DijkstraMap(ArrayList<PathFindingTile> tiles, int width, int height, int tileSize, int xPosFromStartingTile, int yPosFromStartingTile){
+        this.width = width;
+        this.height = height;
+        this.tileSize = tileSize;
+        tiles2D = new PathFindingTile[height][width];
+        for (int y = 0; y < height; y++){
+            for (int x = 0 ; x < width; x++){
+                tiles2D[y][x] = tiles.get(y * height + x);
+            }
+        }
+        startingTile = tiles2D[0][0];
+        execute(xPosFromStartingTile, yPosFromStartingTile);
+    }
+
     public void execute(int xPosFromStartingTileInArray, int yPosFromStartingTileInArray){
         queue.clear();
         visited.clear();
