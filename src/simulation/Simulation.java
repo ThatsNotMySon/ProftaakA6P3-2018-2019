@@ -4,7 +4,9 @@ import Data.Group;
 import Data.DataController;
 import Data.tilemap.TileMap;
 import javafx.animation.AnimationTimer;
+import javafx.scene.transform.Transform;
 import org.jfree.fx.FXGraphics2D;
+import org.jfree.fx.Resizable;
 import simulation.pathfinding.DijkstraMap;
 import simulation.pathfinding.PathFindingTile;
 
@@ -19,22 +21,23 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Simulation {
+public class Simulation implements Resizable {
     private BufferedImage[] sprites;
     private ArrayList<Actor> actors;
     private ArrayList<PathFindingTile> pathFindingTiles;
     private ArrayList<Location> locations;
     private TimeControl timeControl;
     private TileMap tileMap;
+    private Camera camera;
 
-    public Simulation(DataController dataController) {
+    public Simulation(DataController dataController, Camera camera) {
         this.timeControl = new TimeControl();
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
         tileMap = new TileMap("resources/tilemaps/TI1.3-tiledmap-poging1.1.json");
         pathFindingTiles = new ArrayList<>();
-
+        this.camera = camera;
 //        for (Group group : dataController.getAllGroups()) {
 //            System.out.println(group.getAmountOfStudents());
 //            for (int i = 0; i < group.getAmountOfStudents(); i++) {
@@ -60,10 +63,12 @@ public class Simulation {
         createSprite();
     }
 
-    public void draw(Graphics2D graphics) {
+    public void draw(FXGraphics2D graphics) {
         graphics.setBackground(Color.WHITE);
-        graphics.clearRect(0, 0, 1200, 900);
+        graphics.clearRect(-20, -20, SimulationPane.WIDTH*2, SimulationPane.HEIGHT*2);
         graphics.setColor(Color.RED);
+
+        graphics.setTransform(camera.getTransform( SimulationPane.WIDTH, SimulationPane.HEIGHT));
 
         tileMap.draw(graphics);
 
