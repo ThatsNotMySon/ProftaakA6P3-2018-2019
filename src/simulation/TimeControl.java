@@ -1,14 +1,26 @@
 package simulation;
 
+import java.time.LocalTime;
+
 public class TimeControl {
 
     private int hours;
     private int minutes;
 
+    private LocalTime time = LocalTime.of(6, 30);
+    private double minutesPerSecond = 5;
+    private double timer = 0;
     private boolean timeIsPaused;
 
-    public void step(){
+    public void update(double deltaTime){
 
+        if(!timeIsPaused) {
+            timer += deltaTime;
+            if (timer > 1 / minutesPerSecond) {
+                timer -= 1 / minutesPerSecond;
+                time = time.plusMinutes(1);
+            }
+        }
     }
 
     /**
@@ -27,19 +39,17 @@ public class TimeControl {
         }
     }
 
+    public void setSpeedFactor(double factor){
+
+        this.minutesPerSecond *= factor;
+    }
+
+    public void setNormalSpeed(){
+
+        this.minutesPerSecond = 5;
+    }
+
     public void setTime(){
-
-    }
-
-    public void setSpeedFactor(){
-
-    }
-
-    public void forward(){
-
-    }
-
-    public void reverse(){
 
     }
 }

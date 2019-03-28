@@ -63,16 +63,19 @@ public class Simulation {
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.destination.getX(), actor.destination.getY()));
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.getLocation().getX() + Math.cos(actor.getAngle()) * 10, actor.getLocation().getY() + Math.sin(actor.getAngle()) * 10));
         }
-
-
     }
 
     public void update(double deltaTime) {
         for (Actor actor : actors) {
             actor.update(deltaTime, actors);
         }
+
+        timeControl.update(deltaTime);
     }
 
+    /**
+     * Auteur: Rümeysa
+     */
     public void playPause() {
 
         timeControl.playPause();
@@ -88,11 +91,28 @@ public class Simulation {
         timeControl.setTime();
     }
 
-    public void setSpeedFactor() {
+    /**
+     * Auteur: Rümeysa
+     */
+    public void setSpeedFactor(double factor) {
 
-        timeControl.setSpeedFactor();
+        timeControl.setSpeedFactor(factor);
+
+        for (Actor actor : actors) {
+
+            actor.forward(factor);
+        }
     }
 
+    public void setNormalSpeed() {
+
+        timeControl.setNormalSpeed();
+
+        for (Actor actor : actors) {
+
+            actor.setNormalSpeed();
+        }
+    }
 
     public void createSprite() {
 
@@ -127,7 +147,6 @@ public class Simulation {
                 if (!hasCollision)
                     actors.add(newStudent);
             }
-
         }
     }
 }
