@@ -62,6 +62,7 @@ public class SimulationPane extends BorderPane {
     }
 
     public void update(double deltaTime){
+
         this.simulation.update(deltaTime);
     }
     public void draw(FXGraphics2D graphics){this.simulation.draw(graphics); }
