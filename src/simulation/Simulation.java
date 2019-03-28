@@ -5,6 +5,8 @@ import Data.DataController;
 import Data.tilemap.TileMap;
 import javafx.animation.AnimationTimer;
 import org.jfree.fx.FXGraphics2D;
+import simulation.pathfinding.DijkstraMap;
+import simulation.pathfinding.PathFindingTile;
 
 import javax.imageio.ImageIO;
 import javax.xml.crypto.Data;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 public class Simulation {
     private BufferedImage[] sprites;
     private ArrayList<Actor> actors;
+    private ArrayList<PathFindingTile> pathFindingTiles;
     private ArrayList<Location> locations;
     private TimeControl timeControl;
     private TileMap tileMap;
@@ -30,19 +33,28 @@ public class Simulation {
         locations = new ArrayList<>();
         actors = new ArrayList<>();
         tileMap = new TileMap("resources/tilemaps/TI1.3-tiledmap-poging1.1.json");
+        pathFindingTiles = new ArrayList<>();
 
-        for (Group group : dataController.getAllGroups()) {
-            System.out.println(group.getAmountOfStudents());
-            for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController);
-                boolean hasCollision = false;
-                for(Actor a : actors)
-                    if(a.hasCollision(newStudent))
-                        hasCollision = true;
-                if(!hasCollision)
-                    actors.add(newStudent);
+//        for (Group group : dataController.getAllGroups()) {
+//            System.out.println(group.getAmountOfStudents());
+//            for (int i = 0; i < group.getAmountOfStudents(); i++) {
+//                Student newStudent = new Student(group, dataController);
+//                boolean hasCollision = false;
+//                for(Actor a : actors)
+//                    if(a.hasCollision(newStudent))
+//                        hasCollision = true;
+//                if(!hasCollision)
+//                    actors.add(newStudent);
+//            }
+//        }
+
+        for (int y = 0; y < 100; y++){
+            for(int x = 0; x < 100; x++){
+                pathFindingTiles.add(new PathFindingTile(16, x * 16, y*16, false));
             }
         }
+
+        DijkstraMap dijkstraMap = new DijkstraMap(pathFindingTiles, 100, 100, 16);
 
         System.out.println("Created " + actors.size() + " students in simulation");
         createSprite();
@@ -62,6 +74,11 @@ public class Simulation {
             graphics.drawImage(sprites[actor.getSpriteIndex()], tx, null);
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.destination.getX(), actor.destination.getY()));
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.getLocation().getX() + Math.cos(actor.getAngle()) * 10, actor.getLocation().getY() + Math.sin(actor.getAngle()) * 10));
+        }
+
+        graphics.setColor(Color.BLUE);
+        for (PathFindingTile tile : pathFindingTiles){
+            tile.draw(graphics);
         }
 
 
