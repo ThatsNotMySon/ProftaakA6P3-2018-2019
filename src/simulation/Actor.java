@@ -2,7 +2,6 @@ package simulation;
 
 import javafx.geometry.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 import java.util.ArrayList;
 
 abstract class Actor {
@@ -113,5 +112,19 @@ abstract class Actor {
 
     public boolean hasCollision(Actor otherPerson){
         return otherPerson.position.distance(position) < 32;
+    }
+
+    /**
+     * Auteur: Rümeysa
+     */
+    public void playPauseActor() {
+
+        if (this.speed != 0) {
+
+            this.speed = 0;
+        } else {
+
+            this.speed = 20;
+        }
     }
 }

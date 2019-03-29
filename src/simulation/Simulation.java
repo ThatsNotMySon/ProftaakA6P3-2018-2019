@@ -74,14 +74,22 @@ public class Simulation {
     }
 
     public void playPause() {
+
         timeControl.playPause();
+
+        for (Actor actor : actors) {
+
+            actor.playPauseActor();
+        }
     }
 
     public void setTime() {
+
         timeControl.setTime();
     }
 
     public void setSpeedFactor() {
+
         timeControl.setSpeedFactor();
     }
 

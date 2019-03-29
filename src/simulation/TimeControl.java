@@ -5,12 +5,26 @@ public class TimeControl {
     private int hours;
     private int minutes;
 
+    private boolean timeIsPaused;
+
     public void step(){
 
     }
 
+    /**
+     * Auteur: Rümeysa
+     */
     public void playPause(){
-        System.out.println("Play/Pause");
+
+        if (this.timeIsPaused) {
+
+            this.timeIsPaused = false;
+            System.out.println("Play");
+        } else {
+
+            this.timeIsPaused = true;
+            System.out.println("Pause");
+        }
     }
 
     public void setTime(){
