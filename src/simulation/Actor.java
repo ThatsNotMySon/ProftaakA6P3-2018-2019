@@ -1,6 +1,10 @@
 package simulation;
 
 import javafx.geometry.Point2D;
+
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -13,6 +17,7 @@ abstract class Actor {
     BufferedImage sprite;
     double turnTimer;
     private final int animationStep = 0;
+    private BufferedImage[] sprites;
 
     /**
      * Auteur: Sebastiaan
@@ -20,6 +25,7 @@ abstract class Actor {
     public void setSprite(BufferedImage sprite) {
         this.sprite = sprite;
     }
+    public void setSprites(BufferedImage[] sprites){this.sprites = sprites;}
 
     public Point2D getLocation() {
         return position;
@@ -126,5 +132,20 @@ abstract class Actor {
 
             this.speed = 20;
         }
+    }
+
+
+    public void draw(Graphics2D graphics, boolean showDirection) {
+        if(showDirection){
+            graphics.draw(new Line2D.Double(getLocation().getX(), getLocation().getY(), destination.getX(), destination.getY()));
+            graphics.draw(new Line2D.Double(getLocation().getX(), getLocation().getY(), getLocation().getX() + Math.cos(getAngle()) * 10, getLocation().getY() + Math.sin(getAngle()) * 10));
+        }
+        this.draw(graphics);
+    }
+    public void draw(Graphics2D graphics) {
+        AffineTransform tx = new AffineTransform();
+        tx.translate(getLocation().getX() + 16, getLocation().getY() + 16);
+        tx.translate(-16, -16);
+        graphics.drawImage(sprites[getSpriteIndex()], tx, null);
     }
 }

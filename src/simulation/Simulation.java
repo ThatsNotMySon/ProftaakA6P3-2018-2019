@@ -14,6 +14,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Simulation {
@@ -23,6 +24,7 @@ public class Simulation {
     private TimeControl timeControl;
     private Clock clock;
     private TileMap tileMap;
+    private boolean showDirection = false;
 
     public Simulation(DataController dataController) {
         this.timeControl = new TimeControl();
@@ -31,11 +33,12 @@ public class Simulation {
         locations = new ArrayList<>();
         actors = new ArrayList<>();
         tileMap = new TileMap("resources/tilemaps/TI1.3-tiledmap-poging1.1.json");
+        createSprite();
 
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController);
+                Student newStudent = new Student(group, dataController, sprites);
                 boolean hasCollision = false;
                 for(Actor a : actors)
                     if(a.hasCollision(newStudent))
@@ -46,7 +49,7 @@ public class Simulation {
         }
 
         System.out.println("Created " + actors.size() + " students in simulation");
-        createSprite();
+
     }
 
     public void draw(Graphics2D graphics) {
@@ -57,13 +60,8 @@ public class Simulation {
         tileMap.draw(graphics);
 
         for (Actor actor : actors) {
-            AffineTransform tx = new AffineTransform();
-            tx.translate(actor.getLocation().getX()+16, actor.getLocation().getY()+16);
-            tx.translate(-16,-16);
-            graphics.drawImage(sprites[actor.getSpriteIndex()], tx, null);
-            graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.destination.getX(), actor.destination.getY()));
-            graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.getLocation().getX() + Math.cos(actor.getAngle()) * 10, actor.getLocation().getY() + Math.sin(actor.getAngle()) * 10));
-        }
+            actor.draw(graphics, showDirection);
+             }
         this.clock.draw(graphics);
 
     }
@@ -83,6 +81,10 @@ public class Simulation {
 
             actor.playPauseActor();
         }
+    }
+
+    public void showDirections(){
+        this.showDirection = !this.showDirection;
     }
 
     public void setTime() {
@@ -118,9 +120,15 @@ public class Simulation {
         dataController.getTimeTable();
 
         this.actors.clear();
+
+        //Auteur: Mark | bug fix: time resets when refreshed
+        this.timeControl = new TimeControl();
+        this.clock = new Clock(timeControl);
+        //
+
         for (Group group : dataController.getAllGroups()) {
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController);
+                Student newStudent = new Student(group, dataController, sprites);
                 boolean hasCollision = false;
                 for (Actor a : actors)
                     if (a.hasCollision(newStudent))

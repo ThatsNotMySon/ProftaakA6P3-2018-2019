@@ -15,6 +15,7 @@ import org.jfree.fx.FXGraphics2D;
 import simulation.simulationgui.ForwardButton;
 import simulation.simulationgui.PlayPauseButton;
 import simulation.simulationgui.RefreshButton;
+import simulation.simulationgui.ShowDirectionButton;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -41,9 +42,16 @@ public class SimulationPane extends BorderPane {
         refreshButton.setText("Refresh");
         refreshButton.setOnMousePressed(e -> simulation.refresh(dataController));
 
+        ShowDirectionButton directionButton = new ShowDirectionButton();
+        directionButton.setText("Show Direction");
+        directionButton.setOnMousePressed(e-> simulation.showDirections());
+
         FlowPane GuiPane = new FlowPane();
         GuiPane.getChildren().add(playPauseButton);
         GuiPane.getChildren().add(refreshButton);
+        GuiPane.getChildren().add(directionButton);
+
+
 
         FXGraphics2D g = new FXGraphics2D(simulationCanvas.getGraphicsContext2D());
         new AnimationTimer() {
