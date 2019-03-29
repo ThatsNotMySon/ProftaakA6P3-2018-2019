@@ -4,7 +4,6 @@ import Data.Group;
 import Data.DataController;
 import Data.tilemap.TileMap;
 import javafx.animation.AnimationTimer;
-import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
 import javax.xml.crypto.Data;
@@ -22,10 +21,12 @@ public class Simulation {
     private ArrayList<Actor> actors;
     private ArrayList<Location> locations;
     private TimeControl timeControl;
+    private Clock clock;
     private TileMap tileMap;
 
     public Simulation(DataController dataController) {
         this.timeControl = new TimeControl();
+        this.clock = new Clock(timeControl);
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
@@ -63,7 +64,7 @@ public class Simulation {
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.destination.getX(), actor.destination.getY()));
             graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.getLocation().getX() + Math.cos(actor.getAngle()) * 10, actor.getLocation().getY() + Math.sin(actor.getAngle()) * 10));
         }
-
+        this.clock.draw(graphics);
 
     }
 
@@ -71,6 +72,7 @@ public class Simulation {
         for (Actor actor : actors) {
             actor.update(deltaTime, actors);
         }
+        timeControl.update(deltaTime);
     }
 
     public void playPause() {
@@ -88,12 +90,11 @@ public class Simulation {
         timeControl.setTime();
     }
 
-    public void setSpeedFactor() {
-
-        timeControl.setSpeedFactor();
+    public void setSpeedFactor(double factor) {
+        timeControl.setSpeedFactor(factor);
     }
 
-
+    //Auteur: Sebastiaan
     public void createSprite() {
 
         BufferedImage sprite = null;
