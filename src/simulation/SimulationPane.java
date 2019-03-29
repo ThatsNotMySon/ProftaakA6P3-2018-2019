@@ -48,19 +48,19 @@ public class SimulationPane extends BorderPane {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 if (e.isShiftDown()) {
                     g.translate(0,50);
-                    this.simulation.Position = new Point2D.Double(this.simulation.Position.getX(), this.simulation.Position.getY() - 50);
+                    this.simulation.Position = new Point2D.Double(this.simulation.Position.getX(), this.simulation.Position.getY() - 50 * this.simulation.simulationScaling);
                 } else {
                     g.translate(50, 0);
-                    this.simulation.Position = new Point2D.Double(this.simulation.Position.getX() - 50, this.simulation.Position.getY());
+                    this.simulation.Position = new Point2D.Double(this.simulation.Position.getX() - 50 * this.simulation.simulationScaling, this.simulation.Position.getY());
                 }
             }
             if (e.getButton().equals(MouseButton.SECONDARY)) {
                 if (e.isShiftDown()) {
                     g.translate(0,-50);
-                    this.simulation.Position = new Point2D.Double(this.simulation.Position.getX(), this.simulation.Position.getY() + 50);
+                    this.simulation.Position = new Point2D.Double(this.simulation.Position.getX(), this.simulation.Position.getY() + 50 * this.simulation.simulationScaling);
                 } else {
                     g.translate(-50, 0);
-                    this.simulation.Position = new Point2D.Double(this.simulation.Position.getX() + 50, this.simulation.Position.getY());
+                    this.simulation.Position = new Point2D.Double(this.simulation.Position.getX() + 50 * this.simulation.simulationScaling, this.simulation.Position.getY());
                 }
             }
         });
@@ -69,11 +69,10 @@ public class SimulationPane extends BorderPane {
                 g.scale(0.9, 0.9);
                 this.simulation.ScaleX = this.simulation.ScaleX * 1.1;
                 this.simulation.ScaleY = this.simulation.ScaleY * 1.1;
+                this.simulation.simulationScaling = 1.1 * this.simulation.simulationScaling;
             }
             if (e.getDeltaY() < 0) {
                 g.scale(1.1,1.1);
-                this.simulation.ScaleX = this.simulation.ScaleX * 0.9;
-                this.simulation.ScaleY = this.simulation.ScaleY * 0.9;
             }
         });
         new AnimationTimer() {

@@ -21,6 +21,7 @@ public class Simulation {
     public Point2D Position = new Point2D.Double(0, 0);
     public double ScaleX = 1920;
     public double ScaleY = 1800;
+    public double simulationScaling = 1.0;
 
     public Simulation(DataController dataController) {
         this.timeControl = new TimeControl();
@@ -48,7 +49,7 @@ public class Simulation {
 
     public void draw(Graphics2D graphics) {
         graphics.setBackground(Color.WHITE);
-        graphics.clearRect((int)Position.getX(), (int)Position.getY(), (int)this.ScaleX, (int)this.ScaleY);
+        graphics.clearRect((int)Position.getX(), (int)Position.getY(), (int)(this.ScaleX * this.simulationScaling), (int)(this.ScaleY * this.simulationScaling));
         graphics.setColor(Color.RED);
 
         tileMap.draw(graphics);
