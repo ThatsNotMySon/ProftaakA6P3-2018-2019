@@ -10,13 +10,15 @@ public class TimeControl {
     private double timer = 0;
     private boolean timeIsPaused;
 
-    private boolean timeIsPaused;
 
     public void step(){
 
     }
 
 
+    /**
+     * Auteur: Sebastiaan
+     */
     public void update(double deltaTime){
         if(!timeIsPaused) {
             timer += deltaTime;
