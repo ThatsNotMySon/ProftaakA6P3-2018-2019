@@ -20,6 +20,7 @@ public class Student extends Actor {
     private DataController dataController;
     private ArrayList<Lesson> lessons;
 
+    //for testing purposes only
     public Student(Group group, DataController dataController, BufferedImage[] sprites, DijkstraMap dijkstra){
         this(group, dataController);
         this.sprites = sprites;
@@ -66,9 +67,20 @@ public class Student extends Actor {
 
         }
         this.dijkstra = dijkstraMaps.get(nextLesson.getRoom().getName());
+        if(dijkstra == null) System.out.println("Error: no map found for " + nextLesson.getRoom().getName());
+        System.out.println("Student going to lesson " + nextLesson.getSubject() + " in " + nextLesson.getRoom() + " at " + nextLesson.getStartTime());
     }
 
 
+    //Gives students colors per group (max of 5 different)
+    //TODO set proper formula
+    @Override
+    public int getSpriteIndex()
+    {
+        //int color = dataController.getAllGroups().indexOf(group.getName())%5;
+        int color = 0;
+        return super.getSpriteIndex() + color*8;
+    }
     public Group getGroup() {
         return group;
     }

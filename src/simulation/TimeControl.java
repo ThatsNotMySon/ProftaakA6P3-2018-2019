@@ -1,16 +1,22 @@
 package simulation;
 
+import simulation.simulationgui.ChooseLocationUpdate;
+
 import java.time.LocalTime;
 
 //Auteur :Sebastiaan
 public class TimeControl {
 
-    private LocalTime time =  LocalTime.of(6,30);
+    private LocalTime time =  LocalTime.of(8,30);
     private double minutesPerSecond = 5;
     private double timer = 0;
     private boolean timeIsPaused;
+    private ChooseLocationUpdate locationUpdate;
 
-
+    public TimeControl(ChooseLocationUpdate locationUpdate)
+    {
+        this.locationUpdate = locationUpdate;
+    }
     public void step(){
 
     }
@@ -26,6 +32,11 @@ public class TimeControl {
                 timer -= 1 / minutesPerSecond;
                 time = time.plusMinutes(1);
             }
+        }
+        //Every 5 minutes on the clock, update targets for actors
+        if (time.getMinute()%5 == 0)
+        {
+            locationUpdate.chooseLocations();
         }
     }
 

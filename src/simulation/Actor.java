@@ -46,7 +46,6 @@ abstract class Actor {
      * De overige code over collision zijn gemaakt door Marleen en Rümeysa
      */
     public void update(double deltaTime, ArrayList<Actor> actors) {
-
         this.destination = this.dijkstra.getDirection(this.position.getX(), this.position.getY());
 
         turnTimer += deltaTime;
@@ -156,6 +155,7 @@ abstract class Actor {
         }
         this.draw(graphics);
     }
+
     public void draw(Graphics2D graphics) {
         AffineTransform tx = new AffineTransform();
         tx.translate(getLocation().getX() + 8, getLocation().getY() + 8);

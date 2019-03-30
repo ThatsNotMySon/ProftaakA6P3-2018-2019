@@ -7,16 +7,18 @@ import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.Resizable;
 import simulation.pathfinding.DijkstraMap;
 import simulation.pathfinding.PathFindingTile;
+import simulation.simulationgui.ChooseLocationUpdate;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Simulation implements Resizable {
+public class Simulation implements Resizable, ChooseLocationUpdate {
     private BufferedImage[] sprites;
     private ArrayList<Actor> actors;
     private ArrayList<Location> locations;
@@ -31,7 +33,7 @@ public class Simulation implements Resizable {
     private ArrayList<Actor> spawnwaitlist;
 
     public Simulation(DataController dataController, Camera camera) {
-        this.timeControl = new TimeControl();
+        this.timeControl = new TimeControl(this);
         this.pathFindingLists = new ArrayList<>();
         this.dijkstraMapArrayList = new ArrayList<>();
         this.clock = new Clock(timeControl);
@@ -79,11 +81,12 @@ public class Simulation implements Resizable {
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController, sprites, dijkstraMaps.get("Lokaal " + String.valueOf((int) (Math.random() * 8))));
+                Student newStudent = new Student(group, dataController, sprites, null);
+                newStudent.chooseDestination(timeControl.getTime(),dijkstraMaps);
                 boolean hasCollision = false;
-                for (Actor a : actors)
+                for (Actor a : actors){
                     if (a.hasCollision(newStudent))
-                        hasCollision = true;
+                        hasCollision = true;}
                 if (!hasCollision) {
                     actors.add(newStudent);
 
@@ -95,10 +98,8 @@ public class Simulation implements Resizable {
 
         }
 
-        System.out.println("Creating " + actors.size() + spawnwaitlist.size() + " students in simulation");
-        for (Actor actor : actors) {
-            actor.chooseDestination(timeControl.getTime(), dijkstraMaps);
-        }
+        System.out.println("Creating " + (actors.size() + spawnwaitlist.size()) + " students in simulation");
+
     }
 
 
@@ -201,7 +202,7 @@ public class Simulation implements Resizable {
         this.actors.clear();
 
         //Auteur: Mark | bug fix: time resets when refreshed
-        this.timeControl = new TimeControl();
+        this.timeControl = new TimeControl(this);
         this.clock = new Clock(timeControl);
         //
 
@@ -217,5 +218,16 @@ public class Simulation implements Resizable {
 //            }
 //
 //        }
+    }
+
+    @Override
+    public void chooseLocations() {
+        LocalTime now = timeControl.getTime();
+        for(Actor actor: actors){
+            actor.chooseDestination(now, dijkstraMaps);
+        }
+        for(Actor actor: spawnwaitlist){
+            actor.chooseDestination(now,dijkstraMaps);
+        }
     }
 }
