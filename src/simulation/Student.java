@@ -10,6 +10,8 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.Random;
 
 public class Student extends Actor {
@@ -47,9 +49,25 @@ public class Student extends Actor {
 
 
     @Override
-    public void chooseDestination() {
+    public void chooseDestination(LocalTime time, Map<String,DijkstraMap> dijkstraMaps) {
+        //get first lesson
+        lessons.sort(new Comparator<Lesson>() {
+            @Override
+            public int compare(Lesson o1, Lesson o2) {
+                return o1.getStartTime().compareTo(o2.getStartTime());
+            }
+        });
+        Lesson nextLesson = lessons.get(0);
 
+        //check if lesson already has passed - if so, take next lesson as target
+        while(nextLesson.getEndTime().isBefore(time) && lessons.indexOf(nextLesson)+1 < lessons.size())
+        {
+            nextLesson = lessons.get(lessons.indexOf(nextLesson)+1);
+
+        }
+        this.dijkstra = dijkstraMaps.get(nextLesson.getRoom().getName());
     }
+
 
     public Group getGroup() {
         return group;
@@ -59,12 +77,5 @@ public class Student extends Actor {
         this.group = group;
     }
 
-    public Data.Room nextRoom(LocalTime time){
-        for (Lesson lesson : lessons) {
-            if (lesson.getStartTime().minusMinutes(5) == time){
-                return lesson.getRoom();
-            }
-        }
-      return null;
-    }
+
 }

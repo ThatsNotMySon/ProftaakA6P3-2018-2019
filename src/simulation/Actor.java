@@ -8,7 +8,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Map;
 
 abstract class Actor {
 
@@ -94,7 +96,7 @@ abstract class Actor {
     /**
      * Auteur: Sebastiaan
      */
-    public abstract void chooseDestination();
+    public abstract void chooseDestination(LocalTime time, Map<String, DijkstraMap> dijkstraMaps);
 
     public double getAngle() {
         return angle;

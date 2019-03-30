@@ -72,7 +72,6 @@ public class Simulation implements Resizable {
 //        //}
 
 
-        System.out.println("Created " + actors.size() + " students in simulation");
         spawnwaitlist = new ArrayList<>();
 
         // TODO: fix students goeie dijkstraMap krijgen
@@ -80,22 +79,27 @@ public class Simulation implements Resizable {
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController, sprites, dijkstraMaps.get("Lokaal " + String.valueOf((int)(Math.random()*8))));
+                Student newStudent = new Student(group, dataController, sprites, dijkstraMaps.get("Lokaal " + String.valueOf((int) (Math.random() * 8))));
                 boolean hasCollision = false;
                 for (Actor a : actors)
                     if (a.hasCollision(newStudent))
                         hasCollision = true;
-                        if (!hasCollision) {
-                            actors.add(newStudent);
+                if (!hasCollision) {
+                    actors.add(newStudent);
 
-                        }else {
-                            spawnwaitlist.add(newStudent);
-                        }
+                } else {
+                    spawnwaitlist.add(newStudent);
+                }
             }
 
 
-            }
         }
+
+        System.out.println("Creating " + actors.size() + spawnwaitlist.size() + " students in simulation");
+        for (Actor actor : actors) {
+            actor.chooseDestination(timeControl.getTime(), dijkstraMaps);
+        }
+    }
 
 
     public void draw(FXGraphics2D graphics) {
@@ -119,6 +123,7 @@ public class Simulation implements Resizable {
     }
 
     public void update(double deltaTime) {
+        ArrayList<Actor> spawnedList = new ArrayList<>();
         if(!spawnwaitlist.isEmpty()){
 
             for (Actor spawn : spawnwaitlist) {
@@ -130,9 +135,15 @@ public class Simulation implements Resizable {
                 }
                 if (!hasCollision) {
                     actors.add(spawn);
-                    spawnwaitlist.remove(spawn);
+                    spawnedList.add(spawn);
                 }
             }
+        }
+
+        for(Actor spawn: spawnedList)
+        {
+            spawnwaitlist.remove(spawn);
+
         }
 
         for (Actor actor : actors) {

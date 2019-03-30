@@ -98,4 +98,9 @@ public class Lesson implements Serializable {
     }
 
 
+    public LocalTime getEndTime()
+    {
+        return this.startTime.plusMinutes(duration);
+    }
+
 }

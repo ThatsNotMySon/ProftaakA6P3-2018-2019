@@ -60,4 +60,7 @@ public class TimeControl {
     public double getMinute(){
         return this.time.getMinute();
     }
+
+    public LocalTime getTime() {return this.time;}
 }
+
