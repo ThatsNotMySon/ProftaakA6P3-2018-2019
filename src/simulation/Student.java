@@ -3,8 +3,11 @@ package simulation;
 import Data.DataController;
 import Data.Group;
 import Data.Lesson;
-import javafx.geometry.Point2D;
 
+import simulation.pathfinding.DijkstraMap;
+
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,6 +17,12 @@ public class Student extends Actor {
     private Group group;
     private DataController dataController;
     private ArrayList<Lesson> lessons;
+
+    public Student(Group group, DataController dataController, BufferedImage[] sprites, DijkstraMap dijkstra){
+        this(group, dataController);
+        this.sprites = sprites;
+        this.dijkstra = dijkstra;
+    }
 
     public Student(Group group, DataController dataController)
     {
@@ -30,10 +39,11 @@ public class Student extends Actor {
             }
         }
 
-        this.position = new Point2D(new Random().nextInt(1200),new Random().nextInt(900));
-        this.destination = new Point2D(new Random().nextInt(1200), new Random().nextInt(900));
+        this.position = new Point2D.Double(30*16, 97*16);
 
     }
+
+
 
 
     @Override
