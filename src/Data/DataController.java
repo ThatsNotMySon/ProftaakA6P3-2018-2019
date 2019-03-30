@@ -9,7 +9,7 @@ public class DataController {
 
     public DataController(){
 
-        this.timeTable = new Timetable("src/Data/standaardLessen.txt");
+        this.timeTable = new Timetable("src/Data/standaardLessen3.txt");
     }
 
     public DataController(Timetable timeTable) {
@@ -143,5 +143,9 @@ public class DataController {
 
     private int getMinutesOfLocalTime(LocalTime localTime){
         return (localTime.getHour()*60) + localTime.getMinute();
+    }
+
+    private Lesson getNextLessonForGroup(Group group, LocalTime time){
+        return this.timeTable.getNextLessonForGroup(group, time);
     }
 }

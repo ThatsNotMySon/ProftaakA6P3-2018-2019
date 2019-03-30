@@ -153,6 +153,7 @@ public class TileMap {
     }
 
     public ArrayList<ArrayList<Integer>> getTargetsFromTargetLayer(){
+        int counter = 0;
         ArrayList<Integer> dataList = this.target.getData();
         ArrayList<ArrayList<Integer>> xyList = new ArrayList<>();
         for (int i = 0 ; i < dataList.size(); i++){
@@ -161,6 +162,8 @@ public class TileMap {
                 ArrayList<Integer> coords = new ArrayList<>();
                 coords.add(i%width);
                 coords.add(i/width);
+                coords.add(counter);
+                counter++;
                 xyList.add(coords);
             }
         }

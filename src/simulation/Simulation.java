@@ -10,11 +10,8 @@ import simulation.pathfinding.PathFindingTile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,15 +25,15 @@ public class Simulation implements Resizable {
     private TileMap tileMap;
     private Camera camera;
     private ArrayList<ArrayList<PathFindingTile>> pathFindingLists;
-    private ArrayList<DijkstraMap> dijkstraMaps;
+    private ArrayList<DijkstraMap> dijkstraMapArrayList;
     private boolean showDirection = false;
-    private Map dijkstraMaps = new HashMap();
+    private Map<String, DijkstraMap> dijkstraMaps = new HashMap<String, DijkstraMap>();
     private ArrayList<Actor> spawnwaitlist;
 
     public Simulation(DataController dataController, Camera camera) {
         this.timeControl = new TimeControl();
         this.pathFindingLists = new ArrayList<>();
-        this.dijkstraMaps = new ArrayList<>();
+        this.dijkstraMapArrayList = new ArrayList<>();
         this.clock = new Clock(timeControl);
 
         locations = new ArrayList<>();
@@ -47,7 +44,7 @@ public class Simulation implements Resizable {
 
 
         int tileSize = tileMap.getTileSize();
-
+        int roomCounter = 0;
         for (ArrayList<Integer> coords : tileMap.getTargetsFromTargetLayer()){
             ArrayList<PathFindingTile> setPathFindingTiles = new ArrayList<>();
             for (int y = 0; y < 100; y++){
@@ -61,24 +58,29 @@ public class Simulation implements Resizable {
             }
 
             DijkstraMap dijkstraMap = new DijkstraMap(setPathFindingTiles, tileMap.getWidth(), tileMap.getHeight(), tileSize, coords.get(0), coords.get(1));
-            this.pathFindingLists.add(setPathFindingTiles);
-            dijkstraMaps.add(dijkstraMap);
+            dijkstraMaps.put(dataController.getAllRooms().get(roomCounter).getName(), dijkstraMap);
+            System.out.println(dijkstraMaps);
+            roomCounter++;
+//            this.pathFindingLists.add(setPathFindingTiles);
+//            dijkstraMapArrayList.add(dijkstraMap);
         }
 
-        // TODO: 3/30/2019  loop through destinations
-        //for(each destination received from tilemap {
-        DijkstraMap dijkstraMap = new DijkstraMap(pathFindingTiles, tileMap.getWidth(), tileMap.getHeight(), tileSize, 24, 26);
-        dijkstraMaps.put("LA666", dijkstraMap);
-        //}
+//        // TODO: 3/30/2019  loop through destinations
+//        //for(each destination received from tilemap {
+//        DijkstraMap dijkstraMap = new DijkstraMap(pathFindingTiles, tileMap.getWidth(), tileMap.getHeight(), tileSize, 24, 26);
+//        dijkstraMapArrayList.put("LA666", dijkstraMap);
+//        //}
 
 
         System.out.println("Created " + actors.size() + " students in simulation");
         spawnwaitlist = new ArrayList<>();
 
+        // TODO: fix students goeie dijkstraMap krijgen
+
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController, sprites, dijkstraMap);
+                Student newStudent = new Student(group, dataController, sprites, dijkstraMaps.get("Lokaal " + String.valueOf((int)(Math.random()*8))));
                 boolean hasCollision = false;
                 for (Actor a : actors)
                     if (a.hasCollision(newStudent))
@@ -111,6 +113,7 @@ public class Simulation implements Resizable {
         this.clock.draw(graphics);
 
         graphics.setColor(Color.BLACK);
+
 
 
     }
@@ -191,17 +194,17 @@ public class Simulation implements Resizable {
         this.clock = new Clock(timeControl);
         //
 
-        for (Group group : dataController.getAllGroups()) {
-            for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController, sprites, (DijkstraMap)dijkstraMaps.get("LA666"));
-                boolean hasCollision = false;
-                for (Actor a : actors)
-                    if (a.hasCollision(newStudent))
-                        hasCollision = true;
-                if (!hasCollision)
-                    actors.add(newStudent);
-            }
-
-        }
+//        for (Group group : dataController.getAllGroups()) {
+//            for (int i = 0; i < group.getAmountOfStudents(); i++) {
+//                Student newStudent = new Student(group, dataController, sprites, (DijkstraMap) dijkstraMapArrayList.get("LA666"));
+//                boolean hasCollision = false;
+//                for (Actor a : actors)
+//                    if (a.hasCollision(newStudent))
+//                        hasCollision = true;
+//                if (!hasCollision)
+//                    actors.add(newStudent);
+//            }
+//
+//        }
     }
 }
