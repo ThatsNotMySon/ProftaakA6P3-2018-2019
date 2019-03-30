@@ -1,23 +1,17 @@
 package simulation;
 
-import Data.Group;
 import Data.DataController;
-import Data.tilemap.Layer;
+import Data.Group;
 import Data.tilemap.TileMap;
-import javafx.animation.AnimationTimer;
-import javafx.scene.transform.Transform;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.Resizable;
 import simulation.pathfinding.DijkstraMap;
 import simulation.pathfinding.PathFindingTile;
 
 import javax.imageio.ImageIO;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,19 +19,20 @@ import java.util.ArrayList;
 public class Simulation implements Resizable {
     private BufferedImage[] sprites;
     private ArrayList<Actor> actors;
-    private ArrayList<PathFindingTile> pathFindingTiles;
     private ArrayList<Location> locations;
     private TimeControl timeControl;
     private TileMap tileMap;
     private Camera camera;
+    private ArrayList<ArrayList<PathFindingTile>> pathFindingLists;
+    private ArrayList<DijkstraMap> dijkstraMaps;
 
     public Simulation(DataController dataController, Camera camera) {
         this.timeControl = new TimeControl();
-
+        this.pathFindingLists = new ArrayList<>();
+        this.dijkstraMaps = new ArrayList<>();
         locations = new ArrayList<>();
         actors = new ArrayList<>();
         tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Versie4.5.json");
-        pathFindingTiles = new ArrayList<>();
         this.camera = camera;
 //        for (Group group : dataController.getAllGroups()) {
 //            System.out.println(group.getAmountOfStudents());
@@ -54,17 +49,24 @@ public class Simulation implements Resizable {
 
         int tileSize = tileMap.getTileSize();
 
-        for (int y = 0; y < 100; y++){
-            for(int x = 0; x < 100; x++){
-                if (tileMap.tileIsWallInCollisionLayer(x,y)){
-                    pathFindingTiles.add(new PathFindingTile(tileSize, x * tileSize, y*tileSize, true));
-                } else {
-                    pathFindingTiles.add(new PathFindingTile(tileSize, x * tileSize, y*tileSize, false));
+        for (ArrayList<Integer> coords : tileMap.getTargetsFromTargetLayer()){
+            ArrayList<PathFindingTile> setPathFindingTiles = new ArrayList<>();
+            for (int y = 0; y < 100; y++){
+                for(int x = 0; x < 100; x++){
+                    if (tileMap.tileIsWallInCollisionLayer(x,y)){
+                        setPathFindingTiles.add(new PathFindingTile(tileSize, x * tileSize, y*tileSize, true));
+                    } else {
+                        setPathFindingTiles.add(new PathFindingTile(tileSize, x * tileSize, y*tileSize, false));
+                    }
                 }
             }
+
+            DijkstraMap dijkstraMap = new DijkstraMap(setPathFindingTiles, tileMap.getWidth(), tileMap.getHeight(), tileSize, coords.get(0), coords.get(1));
+            this.pathFindingLists.add(setPathFindingTiles);
+            dijkstraMaps.add(dijkstraMap);
         }
 
-        DijkstraMap dijkstraMap = new DijkstraMap(pathFindingTiles, tileMap.getWidth(), tileMap.getHeight(), tileSize, 24, 26);
+
         System.out.println("Created " + actors.size() + " students in simulation");
         createSprite();
     }
@@ -88,9 +90,6 @@ public class Simulation implements Resizable {
         }
 
         graphics.setColor(Color.BLACK);
-        for (PathFindingTile tile : pathFindingTiles){
-            tile.draw(graphics);
-        }
 
 
     }

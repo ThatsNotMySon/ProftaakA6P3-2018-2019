@@ -1,12 +1,14 @@
 package simulation;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-
 import javafx.scene.canvas.Canvas;
-import javafx.scene.input.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.Resizable;
+
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 
 public class Camera {
     private Point2D centerPoint = new Point2D.Double(0,0);

@@ -151,4 +151,19 @@ public class TileMap {
     public Layer getTargetLayer(){
         return this.target;
     }
+
+    public ArrayList<ArrayList<Integer>> getTargetsFromTargetLayer(){
+        ArrayList<Integer> dataList = this.target.getData();
+        ArrayList<ArrayList<Integer>> xyList = new ArrayList<>();
+        for (int i = 0 ; i < dataList.size(); i++){
+            int data = dataList.get(i);
+            if (!(data == 0)){
+                ArrayList<Integer> coords = new ArrayList<>();
+                coords.add(i%width);
+                coords.add(i/width);
+                xyList.add(coords);
+            }
+        }
+        return xyList;
+    }
 }
