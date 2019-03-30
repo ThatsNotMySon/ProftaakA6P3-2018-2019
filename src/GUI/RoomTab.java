@@ -14,17 +14,23 @@ public class RoomTab extends GridPane {
     ListView listRooms = new ListView();
     private DataController dataController;
 
+    private Label editNameRoomLabel;
+    private TextField editNameRoomField;
+    private Label editCapacityRoomLabel;
+    private TextField editCapacityRoomField;
+
     public RoomTab(DataController dataController, GUIMain guiMain, Canvas agendaCanvas) {
         this.dataController = dataController;
 
         Label nameRoomLabel = new Label("Room name: ");
         TextField nameRoom = new TextField("LA111");
 
-        Label capacityRoomLabel = new Label("Capacity Room");
+        Label capacityRoomLabel = new Label("Capacity Room: ");
         TextField capacityRoom = new TextField("0");
 
         Button addRoom = new Button("Add Room");
         Button deleteRoom = new Button("Delete Room");
+        Button editRoom = new Button("Edit Room");
 
         Label errorLabelRooms = new Label("");
 
@@ -36,6 +42,7 @@ public class RoomTab extends GridPane {
         add(addRoom, 2, 4);
         add(listRooms, 1, 4);
         add(deleteRoom, 1, 5);
+        add(editRoom, 1, 6);
 
         listRooms.getItems().addAll(this.dataController.getTimeTable().getAllRooms());
 
@@ -83,6 +90,36 @@ public class RoomTab extends GridPane {
             }
         });
 
+        //Auteur: Rümeysa
+        editRoom.setOnAction(event -> {
+
+            Room selectedItem = (Room) listRooms.getSelectionModel().getSelectedItem();
+
+            editNameRoomLabel = new Label("Edit room name: ");
+            editNameRoomField = new TextField(selectedItem.getName());
+
+            editNameRoomField.setOnAction(a -> {
+                selectedItem.setName(editNameRoomField.getText());
+                listRooms.refresh();
+            });
+
+            editCapacityRoomLabel = new Label("Edit capacity room: ");
+            editCapacityRoomField = new TextField(Integer.toString(selectedItem.getCapacity()));
+
+            editCapacityRoomField.setOnAction(b -> {
+
+                selectedItem.setCapacity(Integer.parseInt(editCapacityRoomField.getText()));
+                listRooms.refresh();
+            });
+
+            if (selectedItem != null) {
+
+                add(editNameRoomLabel, 1, 7);
+                add(editNameRoomField, 2, 7);
+                add(editCapacityRoomLabel, 1, 8);
+                add(editCapacityRoomField, 2, 8);
+            }
+        });
     }
 
     // Auteur: Rümeysa en Marleen
