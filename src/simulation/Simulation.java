@@ -14,38 +14,37 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Simulation implements Resizable {
     private BufferedImage[] sprites;
     private ArrayList<Actor> actors;
     private ArrayList<Location> locations;
     private TimeControl timeControl;
+    private Clock clock;
     private TileMap tileMap;
     private Camera camera;
     private ArrayList<ArrayList<PathFindingTile>> pathFindingLists;
     private ArrayList<DijkstraMap> dijkstraMaps;
+    private boolean showDirection = false;
+    private Map dijkstraMaps = new HashMap();
+    private ArrayList<Actor> spawnwaitlist;
 
     public Simulation(DataController dataController, Camera camera) {
         this.timeControl = new TimeControl();
         this.pathFindingLists = new ArrayList<>();
         this.dijkstraMaps = new ArrayList<>();
+        this.clock = new Clock(timeControl);
+
         locations = new ArrayList<>();
         actors = new ArrayList<>();
         tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Versie4.5.json");
         this.camera = camera;
-//        for (Group group : dataController.getAllGroups()) {
-//            System.out.println(group.getAmountOfStudents());
-//            for (int i = 0; i < group.getAmountOfStudents(); i++) {
-//                Student newStudent = new Student(group, dataController);
-//                boolean hasCollision = false;
-//                for(Actor a : actors)
-//                    if(a.hasCollision(newStudent))
-//                        hasCollision = true;
-//                if(!hasCollision)
-//                    actors.add(newStudent);
-//            }
-//        }
+        createSprite();
+
 
         int tileSize = tileMap.getTileSize();
 
@@ -66,10 +65,36 @@ public class Simulation implements Resizable {
             dijkstraMaps.add(dijkstraMap);
         }
 
+        // TODO: 3/30/2019  loop through destinations
+        //for(each destination received from tilemap {
+        DijkstraMap dijkstraMap = new DijkstraMap(pathFindingTiles, tileMap.getWidth(), tileMap.getHeight(), tileSize, 24, 26);
+        dijkstraMaps.put("LA666", dijkstraMap);
+        //}
+
 
         System.out.println("Created " + actors.size() + " students in simulation");
-        createSprite();
-    }
+        spawnwaitlist = new ArrayList<>();
+
+        for (Group group : dataController.getAllGroups()) {
+            System.out.println(group.getAmountOfStudents());
+            for (int i = 0; i < group.getAmountOfStudents(); i++) {
+                Student newStudent = new Student(group, dataController, sprites, dijkstraMap);
+                boolean hasCollision = false;
+                for (Actor a : actors)
+                    if (a.hasCollision(newStudent))
+                        hasCollision = true;
+                        if (!hasCollision) {
+                            actors.add(newStudent);
+
+                        }else {
+                            spawnwaitlist.add(newStudent);
+                        }
+            }
+
+
+            }
+        }
+
 
     public void draw(FXGraphics2D graphics) {
         graphics.setBackground(Color.WHITE);
@@ -81,13 +106,9 @@ public class Simulation implements Resizable {
         tileMap.draw(graphics);
 
         for (Actor actor : actors) {
-            AffineTransform tx = new AffineTransform();
-            tx.translate(actor.getLocation().getX()+16, actor.getLocation().getY()+16);
-            tx.translate(-16,-16);
-            graphics.drawImage(sprites[actor.getSpriteIndex()], tx, null);
-            graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.destination.getX(), actor.destination.getY()));
-            graphics.draw(new Line2D.Double(actor.getLocation().getX(), actor.getLocation().getY(), actor.getLocation().getX() + Math.cos(actor.getAngle()) * 10, actor.getLocation().getY() + Math.sin(actor.getAngle()) * 10));
-        }
+            actor.draw(graphics, showDirection);
+             }
+        this.clock.draw(graphics);
 
         graphics.setColor(Color.BLACK);
 
@@ -95,24 +116,52 @@ public class Simulation implements Resizable {
     }
 
     public void update(double deltaTime) {
+        if(!spawnwaitlist.isEmpty()){
+
+            for (Actor spawn : spawnwaitlist) {
+                boolean hasCollision = false;
+                for (Actor a : actors) {
+                    if(a.hasCollision(spawn)){
+                    hasCollision = true;
+                    }
+                }
+                if (!hasCollision) {
+                    actors.add(spawn);
+                    spawnwaitlist.remove(spawn);
+                }
+            }
+        }
+
         for (Actor actor : actors) {
             actor.update(deltaTime, actors);
         }
+        timeControl.update(deltaTime);
     }
 
     public void playPause() {
+
         timeControl.playPause();
+
+        for (Actor actor : actors) {
+
+            actor.playPauseActor();
+        }
+    }
+
+    public void showDirections(){
+        this.showDirection = !this.showDirection;
     }
 
     public void setTime() {
+
         timeControl.setTime();
     }
 
-    public void setSpeedFactor() {
-        timeControl.setSpeedFactor();
+    public void setSpeedFactor(double factor) {
+        timeControl.setSpeedFactor(factor);
     }
 
-
+    //Auteur: Sebastiaan
     public void createSprite() {
 
         BufferedImage sprite = null;
@@ -136,9 +185,15 @@ public class Simulation implements Resizable {
         dataController.getTimeTable();
 
         this.actors.clear();
+
+        //Auteur: Mark | bug fix: time resets when refreshed
+        this.timeControl = new TimeControl();
+        this.clock = new Clock(timeControl);
+        //
+
         for (Group group : dataController.getAllGroups()) {
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController);
+                Student newStudent = new Student(group, dataController, sprites, (DijkstraMap)dijkstraMaps.get("LA666"));
                 boolean hasCollision = false;
                 for (Actor a : actors)
                     if (a.hasCollision(newStudent))

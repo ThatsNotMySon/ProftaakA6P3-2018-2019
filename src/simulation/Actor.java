@@ -1,8 +1,13 @@
 package simulation;
 
-import javafx.geometry.Point2D;
+
+import simulation.pathfinding.DijkstraMap;
+
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 import java.util.ArrayList;
 
 abstract class Actor {
@@ -14,6 +19,8 @@ abstract class Actor {
     BufferedImage sprite;
     double turnTimer;
     private final int animationStep = 0;
+    protected BufferedImage[] sprites;
+    protected DijkstraMap dijkstra = null;
 
     /**
      * Auteur: Sebastiaan
@@ -37,8 +44,11 @@ abstract class Actor {
      * De overige code over collision zijn gemaakt door Marleen en Rümeysa
      */
     public void update(double deltaTime, ArrayList<Actor> actors) {
+
+        this.destination = this.dijkstra.getDirection(this.position.getX(), this.position.getY());
+
         turnTimer += deltaTime;
-        Point2D nextLocation = new Point2D(this.getLocation().getX() + deltaTime * speed * Math.cos(this.angle), this.getLocation().getY() + deltaTime * speed * Math.sin(this.angle));
+        Point2D nextLocation = new Point2D.Double(this.getLocation().getX() + deltaTime * speed * Math.cos(this.angle), this.getLocation().getY() + deltaTime * speed * Math.sin(this.angle));
 
         Boolean hasCollision = false;
         for (Actor act : actors) {
@@ -47,7 +57,7 @@ abstract class Actor {
                 break;
             }
         }
-        Point2D difference = new Point2D(this.destination.getX() - nextLocation.getX(), this.destination.getY() - nextLocation.getY());
+        Point2D difference = new Point2D.Double(this.destination.getX() - nextLocation.getX(), this.destination.getY() - nextLocation.getY());
         double targetAngle = Math.atan2(difference.getY(), difference.getX());
 
         double differenceAngle = targetAngle - this.angle;
@@ -90,6 +100,13 @@ abstract class Actor {
         return angle;
     }
 
+
+
+    /**
+     * Auteur: Mark
+     */
+
+
     //Auteur: Sebastiaan
     //Deze methode geeft de index van de sprite aan, afhankelijk van de huidige hoek
     //Dit heeft de indruk van een karakter dat de kant op kijkt waar het heen loopt.
@@ -113,5 +130,34 @@ abstract class Actor {
 
     public boolean hasCollision(Actor otherPerson){
         return otherPerson.position.distance(position) < 32;
+    }
+
+    /**
+     * Auteur: Rümeysa
+     */
+    public void playPauseActor() {
+
+        if (this.speed != 0) {
+
+            this.speed = 0;
+        } else {
+
+            this.speed = 20;
+        }
+    }
+
+
+    public void draw(Graphics2D graphics, boolean showDirection) {
+        if(showDirection){
+            graphics.draw(new Line2D.Double(getLocation().getX(), getLocation().getY(), destination.getX(), destination.getY()));
+            graphics.draw(new Line2D.Double(getLocation().getX(), getLocation().getY(), getLocation().getX() + Math.cos(getAngle()) * 10, getLocation().getY() + Math.sin(getAngle()) * 10));
+        }
+        this.draw(graphics);
+    }
+    public void draw(Graphics2D graphics) {
+        AffineTransform tx = new AffineTransform();
+        tx.translate(getLocation().getX() + 8, getLocation().getY() + 8);
+        tx.translate(-16, -16);
+        graphics.drawImage(sprites[getSpriteIndex()], tx, null);
     }
 }
