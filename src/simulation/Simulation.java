@@ -44,7 +44,7 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
-        tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Versie4.5.json");
+        tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Versie5.json");
         this.camera = camera;
         createSprite();
 
@@ -65,7 +65,7 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
 
             DijkstraMap dijkstraMap = new DijkstraMap(setPathFindingTiles, tileMap.getWidth(), tileMap.getHeight(), tileSize, coords.get(0), coords.get(1));
             dijkstraMaps.put(dataController.getAllRooms().get(roomCounter).getName(), dijkstraMap);
-            System.out.println(dijkstraMaps);
+            System.out.println(dijkstraMaps.get(dataController.getAllRooms().get(roomCounter).getName()).getStartingTile().getxPos() + " , " + dijkstraMaps.get(dataController.getAllRooms().get(roomCounter).getName()).getStartingTile().getyPos() + " , " + dataController.getAllRooms().get(roomCounter).getName());
             roomCounter++;
 //            this.pathFindingLists.add(setPathFindingTiles);
 //            dijkstraMapArrayList.add(dijkstraMap);
@@ -87,7 +87,7 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
                 Student newStudent;
                 newStudent = new Student(group, dataController, sprites, null, 30, tileMap);
-                newStudent.chooseDestination(timeControl.getTime(),dijkstraMaps);
+                newStudent.chooseDestination(timeControl.getTime(), dijkstraMaps);
                 boolean hasCollision = false;
                 for (Actor a : actors){
                     if (a.hasCollision(newStudent))

@@ -25,8 +25,6 @@ public class Layer {
     private ArrayList<TileSet> tileSets;
 
     public Layer(JsonObject layer) {
-
-
         this.data = layer.getJsonArray("data");
         this.height = layer.getInt("height");
         this.id = layer.getInt("id");

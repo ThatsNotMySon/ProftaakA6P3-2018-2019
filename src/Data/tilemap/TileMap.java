@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TileMap {
 
@@ -29,6 +31,7 @@ public class TileMap {
     private Layer collision;
     private Layer target;
     private ArrayList<Point2D> chairPositions = new ArrayList<>();
+    private Map<String, RoomObject> rooms = null;
 
     public TileMap(String fileName) {
         JsonIO jsonIO = new JsonIO(fileName);
@@ -58,6 +61,7 @@ public class TileMap {
         ArrayList<Layer> layerArrayList = new ArrayList<>();
         for (JsonValue jsonValue : layers){
             JsonObject jsonObject = (JsonObject) jsonValue;
+            if(jsonObject.getString("type").equals("tilelayer")){
             Layer newLayer = new Layer(jsonObject);
             if (newLayer.isVisible()){
                 newLayer.setTileSets(this.tileSets);
@@ -68,7 +72,7 @@ public class TileMap {
                 this.target = newLayer;
             }
             layerArrayList.add(newLayer);
-
+            }
         }
         this.layers = layerArrayList;
         this.tileWidth = jsonIO.getIntFromTag("tilewidth");
@@ -103,21 +107,38 @@ public class TileMap {
         }
         this.tileSets = tileSetArrayList;
 
-        for (JsonValue jsonValue : layers){
+        for (JsonValue jsonValue : layers) {
             JsonObject jsonObject = (JsonObject) jsonValue;
-            Layer newLayer = new Layer(jsonObject);
-            if (newLayer.isVisible()){
-                newLayer.setTileSets(this.tileSets);
+            if (jsonObject.getString("type").equals("objectgroup")) {
+                JsonArray roomsArray = jsonObject.getJsonArray("objects");
+
+                for (JsonValue room : roomsArray) {
+                    if (this.rooms == null) {
+                        this.rooms = new HashMap<>();
+                    }
+                    JsonObject jo = (JsonObject) room;
+                    RoomObject roomObject = new RoomObject(jo);
+
+                    rooms.put(((JsonObject) room).getString("name"), roomObject);
+                }
             }
-            layerArrayList.add(newLayer);
+            else{
+                Layer newLayer = new Layer(jsonObject);
+                if (newLayer.isVisible()) {
+                    newLayer.setTileSets(this.tileSets);
+                }
+
+                layerArrayList.add(newLayer);
+                this.layers = layerArrayList;
+
+            }
+
 
         }
-        this.layers = layerArrayList;
-
-        this.tileWidth = jsonIO.getIntFromTag("tilewidth");
-        this.type = jsonIO.getStringFromTag("type");
-        this.version = jsonIO.getDoubleFromTag("version");
-        this.width = jsonIO.getIntFromTag("width");
+            this.tileWidth = jsonIO.getIntFromTag("tilewidth");
+            this.type = jsonIO.getStringFromTag("type");
+            this.version = jsonIO.getDoubleFromTag("version");
+            this.width = jsonIO.getIntFromTag("width");
 
     }
 
