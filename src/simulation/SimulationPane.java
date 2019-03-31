@@ -95,7 +95,7 @@ public class SimulationPane extends BorderPane {
         //only run while simulation tab is visible
         if (this.simulationTab.isSelected())
         this.simulation.update(deltaTime);
-        
+
 
     }
     public void draw(FXGraphics2D graphics){this.simulation.draw(graphics); }

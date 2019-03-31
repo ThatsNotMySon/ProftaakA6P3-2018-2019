@@ -1,4 +1,32 @@
 Timetable
+Lesson#9:00#30#None#PlaceHolder#
+Room#Library#35#
+endLesson
+
+
+
+Lesson#9:00#30#None#PlaceHolder#
+Room#Garden#35#
+endLesson
+
+
+Lesson#15:00#60#Jessica#P&OC#
+Room#Lokaal 7#30#
+Group#A1#6#
+endLesson
+
+Lesson#16:00#60#Peter#AGV#
+Room#Lokaal 8#30#
+Group#A1#6#
+endLesson
+
+Lesson#17:00#30#Paul#AGV#
+Room#Lokaal 9#30#
+Group#A1#6#
+endLesson
+
+
+Timetable
 Lesson#7:00#90#Cloud#Omnislash#
 Room#MarioKartCircuit#35#
 Group#A6#5#

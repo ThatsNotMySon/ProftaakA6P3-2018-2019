@@ -9,7 +9,7 @@ public class DataController {
 
     public DataController(){
 
-        this.timeTable = new Timetable("src/Data/standaardLessen3.txt");
+        this.timeTable = new Timetable("src/Data/standaardLessen4.txt");
     }
 
     public DataController(Timetable timeTable) {

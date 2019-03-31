@@ -54,7 +54,7 @@ abstract class Actor {
         Boolean hasCollision = false;
         for (Actor act : actors) {
             if (act != this && act.hasCollision(nextLocation)) {
-                hasCollision = true;
+                //hasCollision = true;
                 break;
             }
         }

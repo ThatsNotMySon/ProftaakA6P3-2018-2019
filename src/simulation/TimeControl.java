@@ -8,7 +8,7 @@ import java.time.LocalTime;
 public class TimeControl {
 
     private LocalTime time =  LocalTime.of(5,30);
-    private double minutesPerSecond = 2;
+    private double minutesPerSecond = 2.5; //needs to be multiple of 5
     private double timer = 0;
     private boolean timeIsPaused;
     private ChooseLocationUpdate locationUpdate;
