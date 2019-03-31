@@ -138,6 +138,10 @@ abstract class Actor {
         return otherPerson.position.distance(position) < collisionPerimeter;
     }
 
+    public boolean hasCollisionWithWall(Point2D position){
+        return dijkstra.isTileAWall(position.getX()/16, position.getY()/16);
+    }
+
     /**
      * Auteur: Rümeysa
      */

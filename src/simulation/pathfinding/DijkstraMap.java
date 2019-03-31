@@ -248,4 +248,8 @@ public class DijkstraMap {
         this.startingTile = startingTile;
     }
 
+    public boolean isTileAWall(double xPosTile, double yPosTile){
+        return tiles2D[(int)yPosTile][(int)xPosTile].isWall();
+    }
+
 }
