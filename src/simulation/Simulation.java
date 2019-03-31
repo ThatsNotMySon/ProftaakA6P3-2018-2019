@@ -31,6 +31,8 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
     private boolean showDirection = false;
     private Map<String, DijkstraMap> dijkstraMaps = new HashMap<String, DijkstraMap>();
     private ArrayList<Actor> spawnwaitlist;
+    private boolean spedUp = false;
+    private int speedfactor = 3;
 
     public Simulation(DataController dataController, Camera camera) {
         this.timeControl = new TimeControl(this);
@@ -81,7 +83,8 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController, sprites, null);
+                Student newStudent;
+                newStudent = new Student(group, dataController, sprites, null, 30);
                 newStudent.chooseDestination(timeControl.getTime(),dijkstraMaps);
                 boolean hasCollision = false;
                 for (Actor a : actors){
@@ -228,6 +231,23 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
         }
         for(Actor actor: spawnwaitlist){
             actor.chooseDestination(now,dijkstraMaps);
+        }
+    }
+
+    public void speedUp() {
+        if (spawnwaitlist.isEmpty()) {
+            this.spedUp = !this.spedUp;
+            if (this.spedUp) {
+                this.timeControl.setSpeedFactor(speedfactor);
+                for (Actor actor : actors) {
+                    actor.setSpeed(actor.getSpeed() * speedfactor);
+                }
+            } else {
+                this.timeControl.setSpeedFactor(1);
+                for (Actor actor : actors) {
+                    actor.setSpeed(actor.getSpeed() / speedfactor);
+                }
+            }
         }
     }
 }

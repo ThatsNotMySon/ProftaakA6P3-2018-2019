@@ -16,7 +16,7 @@ abstract class Actor {
 
     Point2D position;
     Point2D destination;
-    private double speed = 30;
+    double speed = 30;
     private double angle = 1.5*Math.PI;
     BufferedImage sprite;
     double turnTimer;
@@ -27,6 +27,8 @@ abstract class Actor {
     /**
      * Auteur: Sebastiaan
      */
+
+
     public void setSprite(BufferedImage sprite) {
         this.sprite = sprite;
     }
@@ -54,7 +56,7 @@ abstract class Actor {
         Boolean hasCollision = false;
         for (Actor act : actors) {
             if (act != this && act.hasCollision(nextLocation)) {
-                //hasCollision = true;
+                hasCollision = true;
                 break;
             }
         }
@@ -128,7 +130,7 @@ abstract class Actor {
      * Auteur: Marleen
      */
     public boolean hasCollision(Point2D otherPosition){
-        return otherPosition.distance(position) < 32;
+        return otherPosition.distance(position) < 16;
     }
 
     public boolean hasCollision(Actor otherPerson){
@@ -163,5 +165,13 @@ abstract class Actor {
         tx.translate(getLocation().getX() + 8, getLocation().getY() + 8);
         tx.translate(-16, -16);
         graphics.drawImage(sprites[getSpriteIndex()], tx, null);
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 }

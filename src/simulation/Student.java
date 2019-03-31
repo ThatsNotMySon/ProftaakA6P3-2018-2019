@@ -22,10 +22,11 @@ public class Student extends Actor {
     private int color = 0;
 
     //for testing purposes only
-    public Student(Group group, DataController dataController, BufferedImage[] sprites, DijkstraMap dijkstra){
+    public Student(Group group, DataController dataController, BufferedImage[] sprites, DijkstraMap dijkstra, double speed){
         this(group, dataController);
         this.sprites = sprites;
         this.dijkstra = dijkstra;
+        this.speed = speed;
     }
 
     public Student(Group group, DataController dataController)
