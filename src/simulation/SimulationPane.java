@@ -2,12 +2,14 @@ package simulation;
 
 import Data.DataController;
 import GUI.GUIMain;
+import GUI.TableTab;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
@@ -30,9 +32,11 @@ public class SimulationPane extends BorderPane {
     private Camera camera;
     public static final int WIDTH = 1200;
     public static final int HEIGHT = 900;
+    private Tab simulationTab;
 
-    public SimulationPane(DataController dataController){
+    public SimulationPane(DataController dataController, Tab simulationTab){
 
+        this.simulationTab = simulationTab;
         this.dataController = dataController;
         this.simulationCanvas = new Canvas(WIDTH,HEIGHT);
         FXGraphics2D g = new FXGraphics2D(simulationCanvas.getGraphicsContext2D());
@@ -88,8 +92,11 @@ public class SimulationPane extends BorderPane {
     }
 
     public void update(double deltaTime){
-
+        //only run while simulation tab is visible
+        if (this.simulationTab.isSelected())
         this.simulation.update(deltaTime);
+        
+
     }
     public void draw(FXGraphics2D graphics){this.simulation.draw(graphics); }
 }

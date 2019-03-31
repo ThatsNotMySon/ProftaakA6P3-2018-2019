@@ -19,6 +19,7 @@ public class Student extends Actor {
     private Group group;
     private DataController dataController;
     private ArrayList<Lesson> lessons;
+    private int color = 0;
 
     //for testing purposes only
     public Student(Group group, DataController dataController, BufferedImage[] sprites, DijkstraMap dijkstra){
@@ -43,6 +44,9 @@ public class Student extends Actor {
         }
 
         this.position = new Point2D.Double(30*16, 97*16);
+        color = (dataController.getAllGroups().indexOf(group)%5);
+        System.out.println(color);
+
 
     }
 
@@ -66,9 +70,10 @@ public class Student extends Actor {
             nextLesson = lessons.get(lessons.indexOf(nextLesson)+1);
 
         }
+        if(this.dijkstra != dijkstraMaps.get(nextLesson.getRoom().getName()))
+            System.out.println("Student going to lesson " + nextLesson.getSubject() + " in " + nextLesson.getRoom() + " at " + nextLesson.getStartTime());
         this.dijkstra = dijkstraMaps.get(nextLesson.getRoom().getName());
         if(dijkstra == null) System.out.println("Error: no map found for " + nextLesson.getRoom().getName());
-        System.out.println("Student going to lesson " + nextLesson.getSubject() + " in " + nextLesson.getRoom() + " at " + nextLesson.getStartTime());
     }
 
 
@@ -77,8 +82,6 @@ public class Student extends Actor {
     @Override
     public int getSpriteIndex()
     {
-        //int color = dataController.getAllGroups().indexOf(group.getName())%5;
-        int color = 0;
         return super.getSpriteIndex() + color*8;
     }
     public Group getGroup() {

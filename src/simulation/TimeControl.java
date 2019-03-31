@@ -7,8 +7,8 @@ import java.time.LocalTime;
 //Auteur :Sebastiaan
 public class TimeControl {
 
-    private LocalTime time =  LocalTime.of(8,30);
-    private double minutesPerSecond = 5;
+    private LocalTime time =  LocalTime.of(5,30);
+    private double minutesPerSecond = 2;
     private double timer = 0;
     private boolean timeIsPaused;
     private ChooseLocationUpdate locationUpdate;

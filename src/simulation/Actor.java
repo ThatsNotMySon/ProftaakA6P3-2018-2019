@@ -16,8 +16,8 @@ abstract class Actor {
 
     Point2D position;
     Point2D destination;
-    private double speed = 20;
-    private double angle;
+    private double speed = 30;
+    private double angle = 1.5*Math.PI;
     BufferedImage sprite;
     double turnTimer;
     private final int animationStep = 0;
@@ -73,14 +73,16 @@ abstract class Actor {
                 differenceAngle += 2 * Math.PI;
             }
 
-            if (differenceAngle < -0.1) {
-                this.angle -= 0.1;
-            } else if (differenceAngle > 0.1) {
-                this.angle += 0.1;
+            if (differenceAngle < -0.3) {
+                this.angle -= 0.3;
+            } else if (differenceAngle > 0.3) {
+                this.angle += 0.3;
             } else {
                 this.angle = targetAngle;
             }
-
+            // keep angle in range 0 to 2pi
+            angle += 2*Math.PI;
+            angle %= 2*Math.PI;
 //        if(turnTimer > 0.25){
 //
 //            this.angle += 0.1;
