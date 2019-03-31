@@ -156,7 +156,27 @@ public class Timetable implements Serializable {
     }
 
 
+    public Lesson getNextLessonForGroup(Group group, LocalTime time){
+        ArrayList<Lesson> lessonsForGroup = new ArrayList<>();
+        for (Lesson lesson : lessons){
+            if(lesson.getGroup().contains(group)){
+                lessonsForGroup.add(lesson);
+            }
+        }
 
+
+        Lesson nextLesson = lessonsForGroup.get(0);
+        int difference = time.compareTo(nextLesson.getStartTime());
+
+        for (Lesson lesson : lessonsForGroup){
+            if (difference > time.compareTo(lesson.getStartTime())){
+                nextLesson = lesson;
+                difference = time.compareTo(lesson.getStartTime());
+            }
+        }
+
+        return nextLesson;
+    }
 
 
 

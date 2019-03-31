@@ -15,6 +15,11 @@ public class GroupTab extends GridPane {
     ListView listGroups = new ListView();
     DataController dataController;
 
+    private Label editNameClassLabel;
+    private TextField editNameClassField;
+    private Label editAmountOfStudentsLabel;
+    private TextField editAmountOfStudentsField;
+
     public GroupTab(DataController dataController, GUIMain guiMain){
         this.dataController = dataController;
 
@@ -25,7 +30,8 @@ public class GroupTab extends GridPane {
         TextField amountOfStudentsField = new TextField("amount");
 
         Button buttonAddClass = new Button("Add class");
-        Button buttonDeleteClass = new Button("Delete Class");
+        Button buttonDeleteClass = new Button("Delete class");
+        Button buttonEditClass = new Button("Edit class");
 
         Label errorInGroup = new Label("");
 
@@ -37,6 +43,7 @@ public class GroupTab extends GridPane {
         add(listGroups, 1, 4);
         add(buttonDeleteClass, 1, 5);
         add(errorInGroup,2,3 );
+        add(buttonEditClass, 1, 6);
 
         //Auteur: Marleen
 
@@ -76,6 +83,38 @@ public class GroupTab extends GridPane {
                 errorInGroup.setText("Group deleted");
             } else {
                 errorInGroup.setText("Cannot delete group being used by lesson");
+            }
+        });
+
+        //Auteur: Rümeysa
+
+        buttonEditClass.setOnAction(event -> {
+
+            Group selectedItem = (Group) listGroups.getSelectionModel().getSelectedItem();
+
+            editNameClassLabel = new Label("Edit name class: ");
+            editNameClassField = new TextField(selectedItem.getName());
+
+            editNameClassField.setOnAction(a -> {
+                selectedItem.setName(editNameClassField.getText());
+                listGroups.refresh();
+            });
+
+            editAmountOfStudentsLabel = new Label("Edit amount of students: ");
+            editAmountOfStudentsField = new TextField(Integer.toString(selectedItem.getAmountOfStudents()));
+
+            editAmountOfStudentsField.setOnAction(b -> {
+
+                selectedItem.setAmountOfStudents(Integer.parseInt(editAmountOfStudentsField.getText()));
+                listGroups.refresh();
+            });
+
+            if (selectedItem != null) {
+
+                add(editNameClassLabel, 1, 7);
+                add(editNameClassField, 2, 7);
+                add(editAmountOfStudentsLabel, 1, 8);
+                add(editAmountOfStudentsField, 2, 8);
             }
         });
 

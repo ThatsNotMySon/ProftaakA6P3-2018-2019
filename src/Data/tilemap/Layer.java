@@ -78,6 +78,18 @@ public class Layer {
     public boolean isVisible(){
         return visible;
     }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public ArrayList<Integer> getData(){
+        ArrayList<Integer> newList = new ArrayList<>();
+        for (int i = 0 ; i < data.size(); i++){
+            newList.add(this.data.getInt(i));
+        }
+        return newList;
+    }
 }
 
 

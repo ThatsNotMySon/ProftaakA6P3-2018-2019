@@ -24,6 +24,8 @@ public class TileMap {
     private String type;
     private double version;
     private int width;
+    private Layer collision;
+    private Layer target;
 
     public TileMap(String fileName) {
         JsonIO jsonIO = new JsonIO(fileName);
@@ -56,6 +58,11 @@ public class TileMap {
             Layer newLayer = new Layer(jsonObject);
             if (newLayer.isVisible()){
                 newLayer.setTileSets(this.tileSets);
+            }
+            if (newLayer.getName().equalsIgnoreCase("collision")){
+                this.collision = newLayer;
+            } else if (newLayer.getName().equalsIgnoreCase("Lokaal")){
+                this.target = newLayer;
             }
             layerArrayList.add(newLayer);
 
@@ -119,4 +126,47 @@ public class TileMap {
         }
     }
 
+    public int getTileSize(){
+        return tileWidth;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public Layer getCollisionLayer(){
+        return this.collision;
+    }
+
+    public boolean tileIsWallInCollisionLayer(int x, int y){
+        ArrayList<Integer> dataInCollision = getCollisionLayer().getData();
+        int dataInTile = dataInCollision.get(y * this.width + x);
+        return !(dataInTile == 0);
+    }
+
+    public Layer getTargetLayer(){
+        return this.target;
+    }
+
+    public ArrayList<ArrayList<Integer>> getTargetsFromTargetLayer(){
+        int counter = 0;
+        ArrayList<Integer> dataList = this.target.getData();
+        ArrayList<ArrayList<Integer>> xyList = new ArrayList<>();
+        for (int i = 0 ; i < dataList.size(); i++){
+            int data = dataList.get(i);
+            if (!(data == 0)){
+                ArrayList<Integer> coords = new ArrayList<>();
+                coords.add(i%width);
+                coords.add(i/width);
+                coords.add(counter);
+                counter++;
+                xyList.add(coords);
+            }
+        }
+        return xyList;
+    }
 }
