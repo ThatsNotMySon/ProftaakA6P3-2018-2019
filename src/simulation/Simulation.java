@@ -125,12 +125,14 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
         for (Actor actor : actors) {
             actor.draw(graphics, showDirection);
         }
+        this.clock.setScaleX(inverseTransform.getScaleX());
+        this.clock.setScaleY(inverseTransform.getScaleY());
 
         inverseTransform.translate(50, 50);
         this.clock.setLocation(new Point2D.Double(inverseTransform.getTranslateX(), inverseTransform.getTranslateY()));
-        inverseTransform.translate(-15, -15);
+        inverseTransform.translate(-50, -50);
         this.clock.setClock(this.clock.getClock().createTransformedArea(inverseTransform));
-        inverseTransform.translate(-35, -35);
+//        inverseTransform.translate(-50, -50);
         this.clock.setClockBackground(new Ellipse2D.Double(inverseTransform.getTranslateX(), inverseTransform.getTranslateY(), 100 * inverseTransform.getScaleX(), 100 * inverseTransform.getScaleY()));
         this.clock.draw(graphics);
 
