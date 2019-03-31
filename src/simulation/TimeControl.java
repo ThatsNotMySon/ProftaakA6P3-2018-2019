@@ -5,10 +5,15 @@ import simulation.simulationgui.ChooseLocationUpdate;
 import java.time.LocalTime;
 
 //Auteur :Sebastiaan
+import java.time.LocalTime;
+
 public class TimeControl {
 
-    private LocalTime time =  LocalTime.of(5,30);
-    private double minutesPerSecond = 2.5; //needs to be multiple of 5
+    private int hours;
+    private int minutes;
+
+    private LocalTime time = LocalTime.of(6, 30);
+    private double minutesPerSecond = 5;
     private double timer = 0;
     private boolean timeIsPaused;
     private ChooseLocationUpdate locationUpdate;
@@ -17,8 +22,14 @@ public class TimeControl {
     {
         this.locationUpdate = locationUpdate;
     }
-    public void step(){
 
+        if(!timeIsPaused) {
+            timer += deltaTime;
+            if (timer > 1 / minutesPerSecond) {
+                timer -= 1 / minutesPerSecond;
+                time = time.plusMinutes(1);
+            }
+        }
     }
 
 
@@ -55,14 +66,17 @@ public class TimeControl {
         this.minutesPerSecond = factor;
     }
 
-    public void forward(){
+    public void setSpeedFactor(double factor){
 
+        this.minutesPerSecond *= factor;
     }
 
-    public void reverse(){
+    public void setNormalSpeed(){
 
+        this.minutesPerSecond = 5;
     }
 
+    public void setTime(){
 
     public double getHour(){
         return this.time.getHour();

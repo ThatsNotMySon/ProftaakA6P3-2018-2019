@@ -19,6 +19,7 @@ import simulation.simulationgui.ForwardButton;
 import simulation.simulationgui.PlayPauseButton;
 import simulation.simulationgui.RefreshButton;
 import simulation.simulationgui.ShowDirectionButton;
+import simulation.simulationgui.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -49,6 +50,14 @@ public class SimulationPane extends BorderPane {
         playPauseButton.setText("Play/Pause");
         playPauseButton.setOnMousePressed(e -> simulation.playPause());
 
+        ForwardButton forwardButton = new ForwardButton();
+        forwardButton.setText("Forward");
+        forwardButton.setOnMousePressed(e -> simulation.setSpeedFactor(2));
+
+        NormalSpeedButton normalSpeedButton = new NormalSpeedButton();
+        normalSpeedButton.setText("Normal speed");
+        normalSpeedButton.setOnMousePressed(e -> simulation.setNormalSpeed());
+
         RefreshButton refreshButton = new RefreshButton();
         refreshButton.setText("Refresh");
         refreshButton.setOnMousePressed(e -> simulation.refresh(dataController));
@@ -62,8 +71,7 @@ public class SimulationPane extends BorderPane {
         speedUpButton.setOnMousePressed(e -> simulation.speedUp());
 
         FlowPane GuiPane = new FlowPane();
-        GuiPane.getChildren().add(playPauseButton);
-        GuiPane.getChildren().add(refreshButton);
+        GuiPane.getChildren().addAll(playPauseButton, forwardButton, normalSpeedButton, refreshButton);
         GuiPane.getChildren().add(directionButton);
         GuiPane.getChildren().add(speedUpButton);
 

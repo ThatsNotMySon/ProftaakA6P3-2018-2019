@@ -185,4 +185,14 @@ abstract class Actor {
     public void setSpeed(double speed) {
         this.speed = speed;
     }
+
+    public void forward(double factor) {
+
+        this.speed *= factor;
+    }
+
+    public void setNormalSpeed() {
+
+        this.speed = 20;
+    }
 }

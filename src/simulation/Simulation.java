@@ -156,6 +156,9 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
         timeControl.update(deltaTime);
     }
 
+    /**
+     * Auteur: Rümeysa
+     */
     public void playPause() {
 
         timeControl.playPause();
@@ -175,8 +178,27 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
         timeControl.setTime();
     }
 
+    /**
+     * Auteur: Rümeysa
+     */
     public void setSpeedFactor(double factor) {
+
         timeControl.setSpeedFactor(factor);
+
+        for (Actor actor : actors) {
+
+            actor.forward(factor);
+        }
+    }
+
+    public void setNormalSpeed() {
+
+        timeControl.setNormalSpeed();
+
+        for (Actor actor : actors) {
+
+            actor.setNormalSpeed();
+        }
     }
 
     //Auteur: Sebastiaan
@@ -208,26 +230,16 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
         this.timeControl = new TimeControl(this);
         this.clock = new Clock(timeControl);
         //
-
-//        for (Group group : dataController.getAllGroups()) {
-//            for (int i = 0; i < group.getAmountOfStudents(); i++) {
-//                Student newStudent = new Student(group, dataController, sprites, (DijkstraMap) dijkstraMapArrayList.get("LA666"));
-//                boolean hasCollision = false;
-//                for (Actor a : actors)
-//                    if (a.hasCollision(newStudent))
-//                        hasCollision = true;
-//                if (!hasCollision)
-//                    actors.add(newStudent);
-//            }
-//
-//        }
-    }
-
-    @Override
-    public void chooseLocations() {
-        LocalTime now = timeControl.getTime();
-        for(Actor actor: actors){
-            actor.chooseDestination(now, dijkstraMaps);
+        for (Group group : dataController.getAllGroups()) {
+            for (int i = 0; i < group.getAmountOfStudents(); i++) {
+                Student newStudent = new Student(group, dataController);
+                boolean hasCollision = false;
+                for (Actor a : actors)
+                    if (a.hasCollision(newStudent))
+                        hasCollision = true;
+                if (!hasCollision)
+                    actors.add(newStudent);
+            }
         }
         for(Actor actor: spawnwaitlist){
             actor.chooseDestination(now,dijkstraMaps);
