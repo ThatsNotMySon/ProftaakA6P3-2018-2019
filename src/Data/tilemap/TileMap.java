@@ -62,23 +62,43 @@ public class TileMap {
         for (JsonValue jsonValue : layers){
             JsonObject jsonObject = (JsonObject) jsonValue;
             if(jsonObject.getString("type").equals("tilelayer")){
-            Layer newLayer = new Layer(jsonObject);
-            if (newLayer.isVisible()){
-                newLayer.setTileSets(this.tileSets);
-            }
-            if (newLayer.getName().equalsIgnoreCase("collision")){
-                this.collision = newLayer;
-            } else if (newLayer.getName().equalsIgnoreCase("Lokaal")){
-                this.target = newLayer;
-            }
-            layerArrayList.add(newLayer);
+                Layer newLayer = new Layer(jsonObject);
+                if (newLayer.isVisible()){
+                    newLayer.setTileSets(this.tileSets);
+                }
+                if (newLayer.getName().equalsIgnoreCase("collision")){
+                    this.collision = newLayer;
+                } else if (newLayer.getName().equalsIgnoreCase("Lokaal")){
+                    this.target = newLayer;
+                }
+                layerArrayList.add(newLayer);
             }
         }
         this.layers = layerArrayList;
+
+
         this.tileWidth = jsonIO.getIntFromTag("tilewidth");
         this.type = jsonIO.getStringFromTag("type");
         this.version = jsonIO.getDoubleFromTag("version");
         this.width = jsonIO.getIntFromTag("width");
+
+        for (JsonValue layer : layers) {
+            JsonObject jsonObject = (JsonObject) layer;
+            if (jsonObject.getString("type").equals("objectgroup")) {
+                JsonArray roomsArray = jsonObject.getJsonArray("objects");
+
+                for (JsonValue room : roomsArray) {
+                    if (this.rooms == null) {
+                        this.rooms = new HashMap<>();
+                    }
+                    JsonObject jo = (JsonObject) room;
+                    RoomObject roomObject = new RoomObject(jo, this);
+
+                    rooms.put(((JsonObject) room).getString("name"), roomObject);
+                }
+            }
+        }
+
 
     }
     public TileMap(JsonIO jsonIO) {
@@ -109,6 +129,7 @@ public class TileMap {
 
         for (JsonValue jsonValue : layers) {
             JsonObject jsonObject = (JsonObject) jsonValue;
+            System.out.println(jsonObject.getString("type"));
             if (jsonObject.getString("type").equals("objectgroup")) {
                 JsonArray roomsArray = jsonObject.getJsonArray("objects");
 
@@ -117,12 +138,13 @@ public class TileMap {
                         this.rooms = new HashMap<>();
                     }
                     JsonObject jo = (JsonObject) room;
-                    RoomObject roomObject = new RoomObject(jo);
+                    RoomObject roomObject = new RoomObject(jo, this);
 
                     rooms.put(((JsonObject) room).getString("name"), roomObject);
                 }
             }
             else{
+
                 Layer newLayer = new Layer(jsonObject);
                 if (newLayer.isVisible()) {
                     newLayer.setTileSets(this.tileSets);
@@ -200,7 +222,9 @@ public class TileMap {
             for (int i = 0; i < data.size(); i++){
                 int id = data.get(i);
                 if (id == 150 || id == 151){
-                    this.chairPositions.add(new Point2D.Double(i%this.width, i/this.width));
+
+                    this.chairPositions.add(new Point2D.Double(i%this.width, Math.ceil((double)i/this.width)));
+
                 }
             }
             return this.chairPositions;
@@ -213,10 +237,16 @@ public class TileMap {
         Rectangle2D rect = new Rectangle2D.Double(upperLeftCorner.getX(), upperLeftCorner.getY(), lowerRightCorner.getX() - upperLeftCorner.getX(),lowerRightCorner.getY() - upperLeftCorner.getY());
         ArrayList<Point2D> points = new ArrayList<>();
         for (Point2D point : getChairPositions()){
+         //   System.out.println(point.getX() + " - "  + point.getY() + " | " +  ((Rectangle2D.Double) rect).x + " - " + ((Rectangle2D.Double) rect).width + " | " + ((Rectangle2D.Double) rect).y + " | " + ((Rectangle2D.Double) rect).width);
             if (rect.contains(point)){
                 points.add(point);
             }
         }
+        System.out.println(points.size());
         return points;
+    }
+
+    public RoomObject getRoomObject(String name){
+        return rooms.get(name);
     }
 }

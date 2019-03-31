@@ -9,12 +9,12 @@ public class Teacher extends Actor {
 
 
     @Override
-    protected void arrivedAtDestination() {
+    protected void arrivedAtDestination(double deltaTime) {
 
     }
 
     @Override
-    public void chooseDestination(LocalTime time, Map<String, DijkstraMap> dijkstraMaps) {
+    public void chooseDestination(LocalTime time, Map<String, DijkstraMap> dijkstraMaps, Map<String, Room> roomMap) {
 
     }
 }

@@ -18,15 +18,16 @@ abstract class Actor {
     Point2D position;
     Point2D destination;
     double speed = 30;
-    private double angle = 1.5*Math.PI;
+    protected double angle = 1.5*Math.PI;
     BufferedImage sprite;
     double turnTimer;
     private final int animationStep = 0;
     protected BufferedImage[] sprites;
     protected DijkstraMap dijkstra = null;
     private int collisionPerimeter = 16;
-    private boolean arrived = false;
+    protected boolean arrived = false;
     public Point2D finalDestination;
+    public Room room;
     /**
      * Auteur: Sebastiaan
      */
@@ -54,12 +55,10 @@ abstract class Actor {
 
         if (this.dijkstra.getValueFromTile((int)this.position.getX()/16,(int)this.position.getY()/16) <=2){
             this.arrived = true;
-        } else {
-            this.arrived = false;
         }
 
         if (arrived){
-            arrivedAtDestination();
+            arrivedAtDestination(deltaTime);
         } else {
             this.destination = this.dijkstra.getDirection(this.position.getX(), this.position.getY());
 
@@ -115,13 +114,13 @@ abstract class Actor {
         }
     }
 
-    protected abstract void arrivedAtDestination();
+    protected abstract void arrivedAtDestination(double deltaTime);
 
 
     /**
      * Auteur: Sebastiaan
      */
-    public abstract void chooseDestination(LocalTime time, Map<String, DijkstraMap> dijkstraMaps);
+    public abstract void chooseDestination(LocalTime time, Map<String, DijkstraMap> dijkstraMaps, Map<String, Room> roomMap);
 
     public double getAngle() {
         return angle;
@@ -184,6 +183,7 @@ abstract class Actor {
             graphics.draw(new Line2D.Double(getLocation().getX(), getLocation().getY(), getLocation().getX() + Math.cos(getAngle()) * 10, getLocation().getY() + Math.sin(getAngle()) * 10));
         }
         this.draw(graphics);
+
     }
 
     public void draw(Graphics2D graphics) {
