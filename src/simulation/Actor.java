@@ -23,6 +23,7 @@ abstract class Actor {
     private final int animationStep = 0;
     protected BufferedImage[] sprites;
     protected DijkstraMap dijkstra = null;
+    private int collisionPerimeter = 16;
 
     /**
      * Auteur: Sebastiaan
@@ -130,11 +131,11 @@ abstract class Actor {
      * Auteur: Marleen
      */
     public boolean hasCollision(Point2D otherPosition){
-        return otherPosition.distance(position) < 16;
+        return otherPosition.distance(position) < collisionPerimeter;
     }
 
     public boolean hasCollision(Actor otherPerson){
-        return otherPerson.position.distance(position) < 32;
+        return otherPerson.position.distance(position) < collisionPerimeter;
     }
 
     /**
