@@ -252,4 +252,8 @@ public class DijkstraMap {
         return tiles2D[(int)yPosTile][(int)xPosTile].isWall();
     }
 
+    public boolean isLocationAWall(double xPos, double yPos){
+        return isTileAWall((xPos/16), (yPos/16));
+    }
+
 }

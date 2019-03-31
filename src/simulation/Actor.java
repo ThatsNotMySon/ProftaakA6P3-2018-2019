@@ -61,6 +61,12 @@ abstract class Actor {
                 break;
             }
         }
+
+        if(dijkstra.isLocationAWall(nextLocation.getX(), nextLocation.getY())){
+            hasCollision = true;
+        }
+
+
         Point2D difference = new Point2D.Double(this.destination.getX() - nextLocation.getX(), this.destination.getY() - nextLocation.getY());
         double targetAngle = Math.atan2(difference.getY(), difference.getX());
 
