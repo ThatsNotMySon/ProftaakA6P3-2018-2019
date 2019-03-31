@@ -4,6 +4,7 @@ import Data.DataController;
 import Data.Group;
 import Data.Lesson;
 
+import Data.tilemap.TileMap;
 import simulation.pathfinding.DijkstraMap;
 
 import java.awt.geom.Point2D;
@@ -20,13 +21,15 @@ public class Student extends Actor {
     private DataController dataController;
     private ArrayList<Lesson> lessons;
     private int color = 0;
+    private TileMap tileMap;
 
     //for testing purposes only
-    public Student(Group group, DataController dataController, BufferedImage[] sprites, DijkstraMap dijkstra, double speed){
+    public Student(Group group, DataController dataController, BufferedImage[] sprites, DijkstraMap dijkstra, double speed, TileMap tilemap){
         this(group, dataController);
         this.sprites = sprites;
         this.dijkstra = dijkstra;
         this.speed = speed;
+        this.tileMap = tilemap;
     }
 
     public Student(Group group, DataController dataController)
@@ -35,7 +38,6 @@ public class Student extends Actor {
         this.group = group;
         this.dataController = dataController;
         ArrayList<Lesson> allLessons = this.dataController.getAllLessons();
-
         for (Lesson lesson : allLessons) {
             for (Group group1 : lesson.getGroup()) {
                 if (group1 == this.group) {
@@ -51,7 +53,10 @@ public class Student extends Actor {
     }
 
 
+    @Override
+    protected void arrivedAtDestination() {
 
+    }
 
     @Override
     public void chooseDestination(LocalTime time, Map<String,DijkstraMap> dijkstraMaps) {
@@ -80,6 +85,7 @@ public class Student extends Actor {
             System.out.println("Student going to lesson " + nextLesson.getSubject() + " in " + nextLesson.getRoom() + " at " + nextLesson.getStartTime());
         this.dijkstra = dijkstraMaps.get(nextLesson.getRoom().getName());
         if(dijkstra == null) System.out.println("Error: no map found for " + nextLesson.getRoom().getName());}
+        this.finalDestination = new Point2D.Double(dijkstra.getStartingTile().getxPos(),dijkstra.getStartingTile().getyPos());
     }
 
 

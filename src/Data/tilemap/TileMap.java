@@ -4,6 +4,8 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class TileMap {
@@ -26,6 +28,7 @@ public class TileMap {
     private int width;
     private Layer collision;
     private Layer target;
+    private ArrayList<Point2D> chairPositions = new ArrayList<>();
 
     public TileMap(String fileName) {
         JsonIO jsonIO = new JsonIO(fileName);
@@ -168,5 +171,31 @@ public class TileMap {
             }
         }
         return xyList;
+    }
+
+    public ArrayList<Point2D> getChairPositions(){
+        if (this.chairPositions.isEmpty()){
+            ArrayList<Integer> data = layers.get(1).getData();
+            for (int i = 0; i < data.size(); i++){
+                int id = data.get(i);
+                if (id == 150 || id == 151){
+                    this.chairPositions.add(new Point2D.Double(i%this.width, i/this.width));
+                }
+            }
+            return this.chairPositions;
+        } else {
+            return this.chairPositions;
+        }
+    }
+
+    public ArrayList<Point2D> getChairPositionsFromBoundries(Point2D upperLeftCorner, Point2D lowerRightCorner){
+        Rectangle2D rect = new Rectangle2D.Double(upperLeftCorner.getX(), upperLeftCorner.getY(), lowerRightCorner.getX() - upperLeftCorner.getX(),lowerRightCorner.getY() - upperLeftCorner.getY());
+        ArrayList<Point2D> points = new ArrayList<>();
+        for (Point2D point : getChairPositions()){
+            if (rect.contains(point)){
+                points.add(point);
+            }
+        }
+        return points;
     }
 }

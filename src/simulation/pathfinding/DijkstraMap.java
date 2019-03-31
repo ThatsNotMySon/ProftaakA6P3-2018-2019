@@ -256,4 +256,7 @@ public class DijkstraMap {
         return isTileAWall((xPos/16), (yPos/16));
     }
 
+    public int getValueFromTile(int xPosTile, int yPosTile){
+        return tiles2D[yPosTile][xPosTile].getValue();
+    }
 }

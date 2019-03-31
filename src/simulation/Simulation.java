@@ -11,6 +11,8 @@ import simulation.simulationgui.ChooseLocationUpdate;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -84,7 +86,7 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
                 Student newStudent;
-                newStudent = new Student(group, dataController, sprites, null, 30);
+                newStudent = new Student(group, dataController, sprites, null, 30, tileMap);
                 newStudent.chooseDestination(timeControl.getTime(),dijkstraMaps);
                 boolean hasCollision = false;
                 for (Actor a : actors){
@@ -116,13 +118,15 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
         tileMap.draw(graphics);
 
         for (Actor actor : actors) {
-            actor.draw(graphics, showDirection);
-             }
+            //actor.draw(graphics, showDirection);
+        }
         this.clock.draw(graphics);
 
         graphics.setColor(Color.BLACK);
 
-
+        for (Point2D point : tileMap.getChairPositions()){
+            graphics.draw(new Rectangle2D.Double(point.getX() * 16, point.getY() * 16, 16,16));
+        }
 
     }
 

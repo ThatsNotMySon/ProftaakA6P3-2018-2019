@@ -10,6 +10,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 abstract class Actor {
@@ -24,7 +25,8 @@ abstract class Actor {
     protected BufferedImage[] sprites;
     protected DijkstraMap dijkstra = null;
     private int collisionPerimeter = 16;
-
+    private boolean arrived = false;
+    public Point2D finalDestination;
     /**
      * Auteur: Sebastiaan
      */
@@ -49,58 +51,71 @@ abstract class Actor {
      * De overige code over collision zijn gemaakt door Marleen en Rümeysa
      */
     public void update(double deltaTime, ArrayList<Actor> actors) {
-        this.destination = this.dijkstra.getDirection(this.position.getX(), this.position.getY());
 
-        turnTimer += deltaTime;
-        Point2D nextLocation = new Point2D.Double(this.getLocation().getX() + deltaTime * speed * Math.cos(this.angle), this.getLocation().getY() + deltaTime * speed * Math.sin(this.angle));
+        if (this.dijkstra.getValueFromTile((int)this.position.getX()/16,(int)this.position.getY()/16) <=2){
+            this.arrived = true;
+        } else {
+            this.arrived = false;
+        }
 
-        Boolean hasCollision = false;
-        for (Actor act : actors) {
-            if (act != this && act.hasCollision(nextLocation)) {
+        if (arrived){
+            arrivedAtDestination();
+        } else {
+            this.destination = this.dijkstra.getDirection(this.position.getX(), this.position.getY());
+
+            turnTimer += deltaTime;
+            Point2D nextLocation = new Point2D.Double(this.getLocation().getX() + deltaTime * speed * Math.cos(this.angle), this.getLocation().getY() + deltaTime * speed * Math.sin(this.angle));
+
+            Boolean hasCollision = false;
+            for (Actor act : actors) {
+                if (act != this && act.hasCollision(nextLocation)) {
+                    hasCollision = true;
+                    break;
+                }
+            }
+
+            if (dijkstra.isLocationAWall(nextLocation.getX(), nextLocation.getY())) {
                 hasCollision = true;
-                break;
-            }
-        }
-
-        if(dijkstra.isLocationAWall(nextLocation.getX(), nextLocation.getY())){
-            hasCollision = true;
-        }
-
-
-        Point2D difference = new Point2D.Double(this.destination.getX() - nextLocation.getX(), this.destination.getY() - nextLocation.getY());
-        double targetAngle = Math.atan2(difference.getY(), difference.getX());
-
-        double differenceAngle = targetAngle - this.angle;
-        if (!hasCollision) {
-
-            this.setLocation(nextLocation);
-
-            while (differenceAngle > Math.PI) {
-                differenceAngle -= 2 * Math.PI;
-            }
-            while (differenceAngle < -Math.PI) {
-                differenceAngle += 2 * Math.PI;
             }
 
-            if (differenceAngle < -0.3) {
-                this.angle -= 0.3;
-            } else if (differenceAngle > 0.3) {
-                this.angle += 0.3;
-            } else {
-                this.angle = targetAngle;
-            }
-            // keep angle in range 0 to 2pi
-            angle += 2*Math.PI;
-            angle %= 2*Math.PI;
+
+            Point2D difference = new Point2D.Double(this.destination.getX() - nextLocation.getX(), this.destination.getY() - nextLocation.getY());
+            double targetAngle = Math.atan2(difference.getY(), difference.getX());
+
+            double differenceAngle = targetAngle - this.angle;
+            if (!hasCollision) {
+
+                this.setLocation(nextLocation);
+
+                while (differenceAngle > Math.PI) {
+                    differenceAngle -= 2 * Math.PI;
+                }
+                while (differenceAngle < -Math.PI) {
+                    differenceAngle += 2 * Math.PI;
+                }
+
+                if (differenceAngle < -0.3) {
+                    this.angle -= 0.3;
+                } else if (differenceAngle > 0.3) {
+                    this.angle += 0.3;
+                } else {
+                    this.angle = targetAngle;
+                }
+                // keep angle in range 0 to 2pi
+                angle += 2 * Math.PI;
+                angle %= 2 * Math.PI;
 //        if(turnTimer > 0.25){
 //
 //            this.angle += 0.1;
 //        turnTimer=0;}
 //        this.angle = this.angle%(2*Math.PI);
-        } else {
-            this.angle += 0.1;
+            } else {
+                this.angle += 0.1;
+            }
         }
     }
+
+    protected abstract void arrivedAtDestination();
 
 
     /**
