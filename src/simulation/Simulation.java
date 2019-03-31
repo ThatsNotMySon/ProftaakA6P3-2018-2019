@@ -11,6 +11,10 @@ import simulation.simulationgui.ChooseLocationUpdate;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -110,11 +114,24 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
 
         graphics.setTransform(camera.getTransform( SimulationPane.WIDTH, SimulationPane.HEIGHT));
 
+        AffineTransform inverseTransform = camera.getTransform(SimulationPane.WIDTH, SimulationPane.HEIGHT);
+        try {
+            inverseTransform.invert();
+        } catch (NoninvertibleTransformException e) {
+            e.printStackTrace();
+        }
         tileMap.draw(graphics);
 
         for (Actor actor : actors) {
             actor.draw(graphics, showDirection);
-             }
+        }
+
+        inverseTransform.translate(50, 50);
+        this.clock.setLocation(new Point2D.Double(inverseTransform.getTranslateX(), inverseTransform.getTranslateY()));
+        inverseTransform.translate(-15, -15);
+        this.clock.setClock(this.clock.getClock().createTransformedArea(inverseTransform));
+        inverseTransform.translate(-35, -35);
+        this.clock.setClockBackground(new Ellipse2D.Double(inverseTransform.getTranslateX(), inverseTransform.getTranslateY(), 100 * inverseTransform.getScaleX(), 100 * inverseTransform.getScaleY()));
         this.clock.draw(graphics);
 
         graphics.setColor(Color.BLACK);

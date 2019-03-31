@@ -52,4 +52,36 @@ public class Clock {
         graphics.fill(clock);
         graphics.fill(arms);
     }
+
+    public TimeControl getTimeControl() {
+        return timeControl;
+    }
+
+    public void setTimeControl(TimeControl timeControl) {
+        this.timeControl = timeControl;
+    }
+
+    public Point2D getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point2D location) {
+        this.location = location;
+    }
+
+    public Shape getClockBackground() {
+        return clockBackground;
+    }
+
+    public void setClockBackground(Shape clockBackground) {
+        this.clockBackground = clockBackground;
+    }
+
+    public Area getClock() {
+        return clock;
+    }
+
+    public void setClock(Area clock) {
+        this.clock = clock;
+    }
 }
