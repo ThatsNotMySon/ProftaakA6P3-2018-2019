@@ -11,10 +11,15 @@ public class Clock {
     private Point2D location = new Point2D.Double(50,50);
     Shape clockBackground = new Ellipse2D.Double(0,0,100,100);
     Area clock = new Area();
+    private AffineTransform transform = new AffineTransform();
 
 
     public Clock(TimeControl timecontrol){
         this.timeControl = timecontrol;
+        createNotches();
+    }
+
+    private void createNotches() {
         for(int i = 0; i < 12; i++){
             Shape notch = new Rectangle2D.Double(-1,0,2,10);
             AffineTransform tx = new AffineTransform();
@@ -27,8 +32,6 @@ public class Clock {
     }
 
     public void draw(Graphics2D graphics){
-
-
         Area arms = new Area();
         //small arm
         AffineTransform arm = new AffineTransform();
@@ -45,11 +48,19 @@ public class Clock {
         arm.rotate(theta);
         arms.add(new Area(arm.createTransformedShape(new Rectangle2D.Double(-1,0,2,45))));
 
+
         graphics.setColor(Color.WHITE);
-        graphics.fill(clockBackground);
+        graphics.fill(transform.createTransformedShape(clockBackground));
         graphics.setColor(Color.BLACK);
-        graphics.draw(clockBackground);
-        graphics.fill(clock);
-        graphics.fill(arms);
+        graphics.draw(transform.createTransformedShape(clockBackground));
+        graphics.fill(transform.createTransformedShape(clock));
+        graphics.fill(transform.createTransformedShape(arms));
+
+    }
+
+
+    public void setTransform(AffineTransform transform)
+    {
+        this.transform = transform;
     }
 }

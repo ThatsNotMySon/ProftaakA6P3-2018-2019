@@ -11,6 +11,9 @@ import simulation.simulationgui.ChooseLocationUpdate;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -117,11 +120,20 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
 
         graphics.setTransform(camera.getTransform( SimulationPane.WIDTH, SimulationPane.HEIGHT));
 
+        AffineTransform inverseTransform = camera.getTransform(SimulationPane.WIDTH, SimulationPane.HEIGHT);
+        try {
+            inverseTransform.invert();
+        } catch (NoninvertibleTransformException e) {
+            e.printStackTrace();
+        }
         tileMap.draw(graphics);
 
         for (Actor actor : actors) {
             actor.draw(graphics, showDirection);
         }
+
+
+        this.clock.setTransform(inverseTransform);
         this.clock.draw(graphics);
 
         graphics.setColor(Color.BLACK);
