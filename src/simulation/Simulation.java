@@ -15,6 +15,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -35,6 +36,9 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
     private boolean showDirection = false;
     private Map<String, DijkstraMap> dijkstraMaps = new HashMap<String, DijkstraMap>();
     private ArrayList<Actor> spawnwaitlist;
+    private boolean spedUp = false;
+    private int speedfactor = 3;
+    public Map<String, Room> rooms = null;
 
     public Simulation(DataController dataController, Camera camera) {
         this.timeControl = new TimeControl(this);
@@ -44,8 +48,9 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
 
         locations = new ArrayList<>();
         actors = new ArrayList<>();
-        tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Versie4.5.json");
+        tileMap = new TileMap("resources/tilemaps/TI13-schoolSimulatieMapMetTiles-Versie5.json");
         this.camera = camera;
+        this.rooms = new HashMap<>();
         createSprite();
 
 
@@ -65,7 +70,7 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
 
             DijkstraMap dijkstraMap = new DijkstraMap(setPathFindingTiles, tileMap.getWidth(), tileMap.getHeight(), tileSize, coords.get(0), coords.get(1));
             dijkstraMaps.put(dataController.getAllRooms().get(roomCounter).getName(), dijkstraMap);
-            System.out.println(dijkstraMaps);
+            rooms.put(dataController.getAllRooms().get(roomCounter).getName(), new Room(tileMap.getRoomObject(dataController.getAllRooms().get(roomCounter).getName())));
             roomCounter++;
 //            this.pathFindingLists.add(setPathFindingTiles);
 //            dijkstraMapArrayList.add(dijkstraMap);
@@ -85,8 +90,9 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
         for (Group group : dataController.getAllGroups()) {
             System.out.println(group.getAmountOfStudents());
             for (int i = 0; i < group.getAmountOfStudents(); i++) {
-                Student newStudent = new Student(group, dataController, sprites, null);
-                newStudent.chooseDestination(timeControl.getTime(),dijkstraMaps);
+                Student newStudent;
+                newStudent = new Student(group, dataController, sprites, null, 30, tileMap);
+                newStudent.chooseDestination(timeControl.getTime(), dijkstraMaps, rooms);
                 boolean hasCollision = false;
                 for (Actor a : actors){
                     if (a.hasCollision(newStudent))
@@ -108,7 +114,7 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
 
 
     public void draw(FXGraphics2D graphics) {
-        graphics.setBackground(Color.WHITE);
+        graphics.setBackground(Color.BLACK);
         graphics.clearRect(-20, -20, SimulationPane.WIDTH*2, SimulationPane.HEIGHT*2);
         graphics.setColor(Color.RED);
 
@@ -132,7 +138,9 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
 
         graphics.setColor(Color.BLACK);
 
-
+        for (Point2D point : tileMap.getChairPositions()){
+            graphics.draw(new Rectangle2D.Double(point.getX() * 16, point.getY() * 16, 16,16));
+        }
 
     }
 
@@ -237,10 +245,27 @@ public class Simulation implements Resizable, ChooseLocationUpdate {
     public void chooseLocations() {
         LocalTime now = timeControl.getTime();
         for(Actor actor: actors){
-            actor.chooseDestination(now, dijkstraMaps);
+            actor.chooseDestination(now, dijkstraMaps, rooms);
         }
         for(Actor actor: spawnwaitlist){
-            actor.chooseDestination(now,dijkstraMaps);
+            actor.chooseDestination(now,dijkstraMaps, rooms);
+        }
+    }
+
+    public void speedUp() {
+        if (spawnwaitlist.isEmpty()) {
+            this.spedUp = !this.spedUp;
+            if (this.spedUp) {
+                this.timeControl.setSpeedFactor(speedfactor);
+                for (Actor actor : actors) {
+                    actor.setSpeed(actor.getSpeed() * speedfactor);
+                }
+            } else {
+                this.timeControl.setSpeedFactor(1);
+                for (Actor actor : actors) {
+                    actor.setSpeed(actor.getSpeed() / speedfactor);
+                }
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
@@ -56,10 +57,15 @@ public class SimulationPane extends BorderPane {
         directionButton.setText("Show Direction");
         directionButton.setOnMousePressed(e-> simulation.showDirections());
 
+       Button speedUpButton = new Button();
+        speedUpButton.setText("Speed up");
+        speedUpButton.setOnMousePressed(e -> simulation.speedUp());
+
         FlowPane GuiPane = new FlowPane();
         GuiPane.getChildren().add(playPauseButton);
         GuiPane.getChildren().add(refreshButton);
         GuiPane.getChildren().add(directionButton);
+        GuiPane.getChildren().add(speedUpButton);
 
 
 

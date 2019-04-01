@@ -10,23 +10,29 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 abstract class Actor {
 
     Point2D position;
     Point2D destination;
-    private double speed = 30;
-    private double angle = 1.5*Math.PI;
+    double speed = 30;
+    protected double angle = 1.5*Math.PI;
     BufferedImage sprite;
     double turnTimer;
     private final int animationStep = 0;
     protected BufferedImage[] sprites;
     protected DijkstraMap dijkstra = null;
-
+    private int collisionPerimeter = 16;
+    protected boolean arrived = false;
+    public Point2D finalDestination;
+    public Room room;
     /**
      * Auteur: Sebastiaan
      */
+
+
     public void setSprite(BufferedImage sprite) {
         this.sprite = sprite;
     }
@@ -46,58 +52,75 @@ abstract class Actor {
      * De overige code over collision zijn gemaakt door Marleen en Rümeysa
      */
     public void update(double deltaTime, ArrayList<Actor> actors) {
-        this.destination = this.dijkstra.getDirection(this.position.getX(), this.position.getY());
 
-        turnTimer += deltaTime;
-        Point2D nextLocation = new Point2D.Double(this.getLocation().getX() + deltaTime * speed * Math.cos(this.angle), this.getLocation().getY() + deltaTime * speed * Math.sin(this.angle));
-
-        Boolean hasCollision = false;
-        for (Actor act : actors) {
-            if (act != this && act.hasCollision(nextLocation)) {
-                //hasCollision = true;
-                break;
-            }
+        if (this.dijkstra.getValueFromTile((int)this.position.getX()/16,(int)this.position.getY()/16) <=2){
+            this.arrived = true;
         }
-        Point2D difference = new Point2D.Double(this.destination.getX() - nextLocation.getX(), this.destination.getY() - nextLocation.getY());
-        double targetAngle = Math.atan2(difference.getY(), difference.getX());
 
-        double differenceAngle = targetAngle - this.angle;
-        if (!hasCollision) {
+        if (arrived){
+            arrivedAtDestination(deltaTime);
+        } else {
+            this.destination = this.dijkstra.getDirection(this.position.getX(), this.position.getY());
 
-            this.setLocation(nextLocation);
+            turnTimer += deltaTime;
+            Point2D nextLocation = new Point2D.Double(this.getLocation().getX() + deltaTime * speed * Math.cos(this.angle), this.getLocation().getY() + deltaTime * speed * Math.sin(this.angle));
 
-            while (differenceAngle > Math.PI) {
-                differenceAngle -= 2 * Math.PI;
+            Boolean hasCollision = false;
+            for (Actor act : actors) {
+                if (act != this && act.hasCollision(nextLocation)) {
+                    hasCollision = true;
+                    break;
+                }
             }
-            while (differenceAngle < -Math.PI) {
-                differenceAngle += 2 * Math.PI;
+
+            if (dijkstra.isLocationAWall(nextLocation.getX(), nextLocation.getY())) {
+                hasCollision = true;
             }
 
-            if (differenceAngle < -0.3) {
-                this.angle -= 0.3;
-            } else if (differenceAngle > 0.3) {
-                this.angle += 0.3;
-            } else {
-                this.angle = targetAngle;
-            }
-            // keep angle in range 0 to 2pi
-            angle += 2*Math.PI;
-            angle %= 2*Math.PI;
+
+            Point2D difference = new Point2D.Double(this.destination.getX() - nextLocation.getX(), this.destination.getY() - nextLocation.getY());
+            double targetAngle = Math.atan2(difference.getY(), difference.getX());
+
+            double differenceAngle = targetAngle - this.angle;
+            if (!hasCollision) {
+
+                this.setLocation(nextLocation);
+
+                while (differenceAngle > Math.PI) {
+                    differenceAngle -= 2 * Math.PI;
+                }
+                while (differenceAngle < -Math.PI) {
+                    differenceAngle += 2 * Math.PI;
+                }
+
+                if (differenceAngle < -0.3) {
+                    this.angle -= 0.3;
+                } else if (differenceAngle > 0.3) {
+                    this.angle += 0.3;
+                } else {
+                    this.angle = targetAngle;
+                }
+                // keep angle in range 0 to 2pi
+                angle += 2 * Math.PI;
+                angle %= 2 * Math.PI;
 //        if(turnTimer > 0.25){
 //
 //            this.angle += 0.1;
 //        turnTimer=0;}
 //        this.angle = this.angle%(2*Math.PI);
-        } else {
-            this.angle += 0.1;
+            } else {
+                this.angle += 0.1;
+            }
         }
     }
+
+    protected abstract void arrivedAtDestination(double deltaTime);
 
 
     /**
      * Auteur: Sebastiaan
      */
-    public abstract void chooseDestination(LocalTime time, Map<String, DijkstraMap> dijkstraMaps);
+    public abstract void chooseDestination(LocalTime time, Map<String, DijkstraMap> dijkstraMaps, Map<String, Room> roomMap);
 
     public double getAngle() {
         return angle;
@@ -128,11 +151,15 @@ abstract class Actor {
      * Auteur: Marleen
      */
     public boolean hasCollision(Point2D otherPosition){
-        return otherPosition.distance(position) < 32;
+        return otherPosition.distance(position) < collisionPerimeter;
     }
 
     public boolean hasCollision(Actor otherPerson){
-        return otherPerson.position.distance(position) < 32;
+        return otherPerson.position.distance(position) < collisionPerimeter;
+    }
+
+    public boolean hasCollisionWithWall(Point2D position){
+        return dijkstra.isTileAWall(position.getX()/16, position.getY()/16);
     }
 
     /**
@@ -156,6 +183,7 @@ abstract class Actor {
             graphics.draw(new Line2D.Double(getLocation().getX(), getLocation().getY(), getLocation().getX() + Math.cos(getAngle()) * 10, getLocation().getY() + Math.sin(getAngle()) * 10));
         }
         this.draw(graphics);
+
     }
 
     public void draw(Graphics2D graphics) {
@@ -163,5 +191,13 @@ abstract class Actor {
         tx.translate(getLocation().getX() + 8, getLocation().getY() + 8);
         tx.translate(-16, -16);
         graphics.drawImage(sprites[getSpriteIndex()], tx, null);
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 }

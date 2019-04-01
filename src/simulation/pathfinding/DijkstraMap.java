@@ -248,4 +248,15 @@ public class DijkstraMap {
         this.startingTile = startingTile;
     }
 
+    public boolean isTileAWall(double xPosTile, double yPosTile){
+        return tiles2D[(int)yPosTile][(int)xPosTile].isWall();
+    }
+
+    public boolean isLocationAWall(double xPos, double yPos){
+        return isTileAWall((xPos/16), (yPos/16));
+    }
+
+    public int getValueFromTile(int xPosTile, int yPosTile){
+        return tiles2D[yPosTile][xPosTile].getValue();
+    }
 }
