@@ -12,64 +12,64 @@ endLesson
 
 Lesson#15:00#60#Jessica#P&OC#
 Room#Lokaal 7#30#
-Group#A1#6#
+Group#A1#20#
 endLesson
 
 Lesson#16:00#60#Peter#AGV#
 Room#Lokaal 8#30#
-Group#A1#6#
+Group#A1#20#
 endLesson
 
 Lesson#17:00#30#Paul#AGV#
 Room#Lokaal 9#30#
-Group#A1#6#
+Group#A1#20#
 endLesson
 
 
 Timetable
 Lesson#7:00#90#Cloud#Omnislash#
 Room#MarioKartCircuit#35#
-Group#A6#5#
+Group#A6#20#
 endLesson
 
 Lesson#8:45#120#Wii Fit Trainer#Yoga#
 Room#Gym#60#
-Group#A1#5#
+Group#A1#20#
 endLesson
 
 Lesson#11:00#120#Kirby#UltraSword#
 Room#Melee#35#
-Group#A6#5#
+Group#A6#20#
 endLesson
 
 Lesson#13:15#120#Snake#Hide And Seek#
 Room#Melee#35#
-Group#B2#5#
+Group#B2#20#
 endLesson
 
 Lesson#10:00#90#Waluigi#Omnislash#
 Room#MarioKartCircuit#35#
-Group#A3#5#
+Group#A3#20#
 endLesson
 
 Lesson#11:00#120#Incineroar#MMMoonsault#
 Room#Gym#60#
-Group#B2#5#
+Group#B2#20#
 endLesson
 
 Lesson#09:45#60#Borfy#Smash#
 Room#LA029#60#
-Group#A6#6#
+Group#A6#20#
 endLesson
 
 Lesson#14:00#60#Borfy#Smash#
 Room#MarioKartCircuit#60#
-Group#A6#6#
+Group#A6#20#
 endLesson
 
 Lesson#06:45#120#Link#Split Personality#
 Room#LA029#60#
-Group#B7#6#
+Group#B7#20#
 endLesson
 
 Lesson#16:00#90#Peach#Peach Blossom#
